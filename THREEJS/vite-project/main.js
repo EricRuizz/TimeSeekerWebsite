@@ -4,9 +4,16 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
-import { mx_hash_int_3 } from 'three/src/nodes/materialx/lib/mx_noise.js';
 
-import vertexShader from './project/shaders/GerstnerVertex.glsl'
+import CustomShaderMaterial from "three-custom-shader-material/vanilla";
+
+import GerstnerVertexShader from './project/shaders/GerstnerVertex.glsl';
+import GerstnerFragmentShader from './project/shaders/GerstnerFragment.glsl';
+
+import {
+  patchShadersCSM
+} from "gl-noise"
+
 
 
 // Setup
@@ -34,9 +41,11 @@ composer.addPass(renderScene);
 // Moon (StandardMaterial = Affected by light  /  BasicMaterial = Not affected by light)
 
 const moonGeometry = new THREE.SphereGeometry(10, 30, 30);
-const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('./project/textures/MoonTexture_Red.png') });
+const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('./project/textures/MoonTexture.jpg') });
 const moon = new THREE.Mesh(moonGeometry, moonMaterial);
 moon.position.set(0, 100, 200);
+moon.rotateX(THREE.MathUtils.degToRad(-40));
+moon.rotateY(THREE.MathUtils.degToRad(90));
 
 const cameraLookTarget = new THREE.Vector3().subVectors(moon.position, new THREE.Vector3(0, 50, 0));
 
@@ -86,6 +95,19 @@ function AddStar()
 
 
 
+// Wave CSM Setup
+
+const CSM_Shaders_= {
+  defines: `...`,
+  header: `...`,
+  main: `...`,
+};
+
+//const patchedGerstnerVertexShader = document.getElementById( 'fragmentShader' ).textContent;
+const patchedGerstnerVertexShader = await patchShadersCSM(CSM_Shaders_, []);
+const patchedGerstnerFragmentShader = await patchShadersCSM(GerstnerFragmentShader.textContent, []);
+
+
 // Waves
 
 const wavePlaneWidth = 100;
@@ -94,7 +116,19 @@ const wavePlaneWidthSegments = 10;
 const wavePlaneLengthSegments = 10;
 
 const wavePlane = new THREE.PlaneGeometry(wavePlaneWidth, wavePlaneLength, wavePlaneWidthSegments, wavePlaneLengthSegments);
-const waveMaterial = new THREE.ShaderMaterial({ vertexShader: , fragmentShader: });
+const waveMaterial = new CustomShaderMaterial({
+  baseMaterial: THREE.MeshStandardMaterial,
+  vertexShader: patchedGerstnerVertexShader,
+  fragmentShader: patchedGerstnerFragmentShader,
+  // Uniforms
+  uniforms: {
+    uTime: { value: 0 },
+    uHeight: { value: 0 },
+  },
+  // Base material properties
+  flatShading: false,
+  color: 0x0000ff
+});
 const waves = new THREE.Mesh(wavePlane, waveMaterial);
 waves.position.set(0, 0, wavePlaneLength / 2);
 waves.rotateX(THREE.MathUtils.degToRad(270));
@@ -131,7 +165,7 @@ const bloomPassLow = new UnrealBloomPass(
   0.1,  //Radius
   0.1   //Which pixels are affected
 );
-composer.addPass(bloomPassLow);
+//composer.addPass(bloomPassLow);
 
 const bloomPass = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
@@ -139,13 +173,15 @@ const bloomPass = new UnrealBloomPass(
   0.1,  //Radius
   2.5   //Which pixels are affected
 );
-composer.addPass(bloomPass);
+//composer.addPass(bloomPass);
 
 
 
-// Normal map example
+// Examples
 
 /*
+// Normal map
+
 const exampleTexture = new THREE.TextureLoader().load('example.png');
 const exampleNormalTexture = new THREE.TextureLoader().load('exampleNormal.png');
 
@@ -155,6 +191,18 @@ const exampleMesh = new THREE.Mesh(
 );
 
 scene.Add(exampleMesh);
+
+
+// Textures to Shaders
+const waveMaterial = new THREE.ShaderMaterial(
+{
+  vertexShader: GerstnerVertexShader,
+  fragmentShader: GerstnerFragmentShader, 
+  uniforms:
+  {
+    value: new THREE.TextureLoader().load('./project/textures/NightSkyTexture_Dark.png')
+  }
+});
 */
 
 
@@ -172,10 +220,6 @@ scene.Add(exampleMesh);
 
 function animationUpdates()
 {
-  moon.rotation.x += 0.01;
-  moon.rotation.y += 0.005;
-  moon.rotation.z += 0.01;
-
   camera.lookAt(cameraLookTarget);
 
   skybox.rotation.y += 0.0001;
