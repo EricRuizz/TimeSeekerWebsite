@@ -7,11 +7,13 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
-import GerstnerVertexShader from './project/shaders/GerstnerVertex.glsl';
-import GerstnerFragmentShader from './project/shaders/GerstnerFragment.glsl';
+import GerstnerVS from './project/shaders/GerstnerVertex.glsl';
+import GerstnerFS from './project/shaders/GerstnerFragment.glsl';
 
 import {
-  patchShadersCSM
+  patchShadersCSM,
+  GerstnerWave,
+  Perlin
 } from "gl-noise"
 
 
@@ -97,37 +99,39 @@ function AddStar()
 
 // Wave CSM Setup
 
-const CSM_Shaders_= {
-  defines: `...`,
-  header: `...`,
-  main: `...`,
+const o_GerstnerVS = {
+     defines: "",
+     header: "",
+     main: GerstnerVS,
 };
-
-//const patchedGerstnerVertexShader = document.getElementById( 'fragmentShader' ).textContent;
-const patchedGerstnerVertexShader = await patchShadersCSM(CSM_Shaders_, []);
-const patchedGerstnerFragmentShader = await patchShadersCSM(GerstnerFragmentShader.textContent, []);
+const { defines, header, main } = await patchShadersCSM(o_GerstnerVS, [GerstnerWave, Perlin]);
+const s_GerstnerVS = `${defines}${header}${main}`;
 
 
 // Waves
 
-const wavePlaneWidth = 100;
-const wavePlaneLength = 100;
-const wavePlaneWidthSegments = 10;
-const wavePlaneLengthSegments = 10;
+const wavePlaneWidth = 1;
+const wavePlaneLength = 1;
+const wavePlaneWidthSegments = 30;
+const wavePlaneLengthSegments = 30;
 
 const wavePlane = new THREE.PlaneGeometry(wavePlaneWidth, wavePlaneLength, wavePlaneWidthSegments, wavePlaneLengthSegments);
 const waveMaterial = new CustomShaderMaterial({
   baseMaterial: THREE.MeshStandardMaterial,
-  vertexShader: patchedGerstnerVertexShader,
-  fragmentShader: patchedGerstnerFragmentShader,
+  vertexShader: s_GerstnerVS,
+  fragmentShader: GerstnerFS,
   // Uniforms
   uniforms: {
     uTime: { value: 0 },
     uHeight: { value: 0 },
+    waterColor: { value: new THREE.Vector3(1.0, 0.5, 0.2) },
+    waterHighlight: { value: new THREE.Vector3(1.0, 0.5, 0.2) },
+    offset: { value: 0 },
+    contrast: { value: 0.5 },
+    brightness: { value: 0.5 },
   },
   // Base material properties
-  flatShading: false,
-  color: 0x0000ff
+  flatShading: false
 });
 const waves = new THREE.Mesh(wavePlane, waveMaterial);
 waves.position.set(0, 0, wavePlaneLength / 2);
@@ -220,8 +224,9 @@ const waveMaterial = new THREE.ShaderMaterial(
 
 function animationUpdates()
 {
-  camera.lookAt(cameraLookTarget);
+  //camera.lookAt(cameraLookTarget);
 
+  waveMaterial.uniforms.uTime += 1;
   skybox.rotation.y += 0.0001;
 }
 
@@ -230,7 +235,6 @@ function animate() {
 
   animationUpdates();
 
-  //renderer.render(scene, camera);
   composer.render();
   requestAnimationFrame(animate);
 }
