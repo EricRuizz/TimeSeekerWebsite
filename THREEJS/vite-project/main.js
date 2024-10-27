@@ -69,13 +69,22 @@ scene.add(skybox);
 // Lights
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
+scene.add(ambientLight);
+
+const moonLight = new THREE.SpotLight(0x00afff);
+moonLight.position.set(0, 10, 20);
+moonLight.rotateX(THREE.MathUtils.degToRad(180));
+moonLight.intensity = 250;
+moonLight.angle = THREE.MathUtils.degToRad(0.5);
+moonLight.penumbra = 1;
+const moonLightHelper = new THREE.SpotLightHelper(moonLight);
+scene.add(moonLight, moonLightHelper);
 
 const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(0, 0, -20);
 pointLight.intensity = 250;
 pointLight.color = new THREE.Color(1, 0.75, 0.75);
-
-scene.add(ambientLight, pointLight);
+//scene.add(pointLight);
 
 
 
@@ -110,8 +119,8 @@ const s_GerstnerVS = `${defines}${header}${main}`;
 
 // Waves
 
-const wavePlaneWidth = 1;
-const wavePlaneLength = 1;
+const wavePlaneWidth = 100;
+const wavePlaneLength = 100;
 const wavePlaneWidthSegments = 30;
 const wavePlaneLengthSegments = 30;
 
@@ -124,8 +133,8 @@ const waveMaterial = new CustomShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
     uHeight: { value: 0 },
-    waterColor: { value: new THREE.Vector3(1.0, 0.5, 0.2) },
-    waterHighlight: { value: new THREE.Vector3(1.0, 0.5, 0.2) },
+    waterColor: { value: new THREE.Vector3(0.2, 0.5, 0.9) },
+    waterHighlight: { value: new THREE.Vector3(0.5, 0.8, 1) },
     offset: { value: 0 },
     contrast: { value: 0.5 },
     brightness: { value: 0.5 },
@@ -169,7 +178,7 @@ const bloomPassLow = new UnrealBloomPass(
   0.1,  //Radius
   0.1   //Which pixels are affected
 );
-//composer.addPass(bloomPassLow);
+composer.addPass(bloomPassLow);
 
 const bloomPass = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
@@ -177,7 +186,7 @@ const bloomPass = new UnrealBloomPass(
   0.1,  //Radius
   2.5   //Which pixels are affected
 );
-//composer.addPass(bloomPass);
+composer.addPass(bloomPass);
 
 
 
@@ -224,10 +233,13 @@ const waveMaterial = new THREE.ShaderMaterial(
 
 function animationUpdates()
 {
-  //camera.lookAt(cameraLookTarget);
+  camera.lookAt(cameraLookTarget);
 
-  waveMaterial.uniforms.uTime += 1;
+  waveMaterial.uniforms.uTime.value += 0.001;
   skybox.rotation.y += 0.0001;
+
+  moonLight.rotation.z += 0.1;
+  moonLightHelper.update();
 }
 
 function animate() {
