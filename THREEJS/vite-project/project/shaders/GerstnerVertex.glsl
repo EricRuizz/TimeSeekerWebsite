@@ -8,8 +8,13 @@ vec3 displace(vec3 point) {
 
   p.y += uTime * 2.0;
 
-  gln_tFBMOpts fbmOpts = gln_tFBMOpts(1.0, 0.4, 2.3, 0.4, 1.0, 5, false, false);
+  //                                  seed, persistance,  lacunarity, scale,  redistribution, octaves,  terbulance, ridge
+  gln_tFBMOpts fbmOpts = gln_tFBMOpts(1.0,  0.4,          2.3,        0.4,    1.0,            5,        false,      false);
 
+  //gln_tGerstnerWaveOpts A = gln_tGerstnerWaveOpts(vec2(0.0, -1.0), 0.0, 0.0);
+  //gln_tGerstnerWaveOpts B = gln_tGerstnerWaveOpts(vec2(3.0, -3.0), 0.25, 4.0);
+  
+  //                                                Direction, steepness, wavelength
   gln_tGerstnerWaveOpts A = gln_tGerstnerWaveOpts(vec2(0.0, -1.0), 0.5, 2.0);
   gln_tGerstnerWaveOpts B = gln_tGerstnerWaveOpts(vec2(0.0, 1.0), 0.25, 4.0);
   gln_tGerstnerWaveOpts C = gln_tGerstnerWaveOpts(vec2(1.0, 1.0), 0.15, 6.0);

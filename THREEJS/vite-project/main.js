@@ -30,7 +30,7 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.set(0, 0.5, 0);
+camera.position.set(0, 1, 0);
 
 renderer.render(scene, camera);
 
@@ -45,11 +45,11 @@ composer.addPass(renderScene);
 const moonGeometry = new THREE.SphereGeometry(10, 30, 30);
 const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('./project/textures/MoonTexture.jpg') });
 const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-moon.position.set(0, 100, 200);
+moon.position.set(0, 40, 200);
 moon.rotateX(THREE.MathUtils.degToRad(-40));
 moon.rotateY(THREE.MathUtils.degToRad(90));
 
-const cameraLookTarget = new THREE.Vector3().subVectors(moon.position, new THREE.Vector3(0, 50, 0));
+const cameraLookTarget = new THREE.Vector3().subVectors(moon.position, new THREE.Vector3(0, 10, 0));
 
 scene.add(moon);
 
@@ -71,20 +71,24 @@ scene.add(skybox);
 const ambientLight = new THREE.AmbientLight(0xffffff);
 scene.add(ambientLight);
 
-const moonLight = new THREE.SpotLight(0x00afff);
-moonLight.position.set(0, 10, 20);
-moonLight.rotateX(THREE.MathUtils.degToRad(180));
-moonLight.intensity = 250;
+const moonLight = new THREE.SpotLight();
+moonLight.position.set(0, 20, 100);
+moonLight.intensity = 250000;
 moonLight.angle = THREE.MathUtils.degToRad(0.5);
 moonLight.penumbra = 1;
+moonLight.color = new THREE.Color(1, 0.75, 0.75);
 const moonLightHelper = new THREE.SpotLightHelper(moonLight);
 scene.add(moonLight, moonLightHelper);
 
-const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(0, 0, -20);
+const moonLightTarget = new THREE.Object3D();
+moonLightTarget.position.set(0, -1.0, 0);
+moonLight.target = moonLightTarget;
+
+const pointLight = new THREE.PointLight();
+pointLight.position.set(0, 0, 20);
 pointLight.intensity = 250;
 pointLight.color = new THREE.Color(1, 0.75, 0.75);
-//scene.add(pointLight);
+scene.add(pointLight);
 
 
 
@@ -119,10 +123,10 @@ const s_GerstnerVS = `${defines}${header}${main}`;
 
 // Waves
 
-const wavePlaneWidth = 100;
-const wavePlaneLength = 100;
-const wavePlaneWidthSegments = 30;
-const wavePlaneLengthSegments = 30;
+const wavePlaneWidth = 20;
+const wavePlaneLength = 20;
+const wavePlaneWidthSegments = 1000;
+const wavePlaneLengthSegments = 1000;
 
 const wavePlane = new THREE.PlaneGeometry(wavePlaneWidth, wavePlaneLength, wavePlaneWidthSegments, wavePlaneLengthSegments);
 const waveMaterial = new CustomShaderMaterial({
@@ -133,8 +137,8 @@ const waveMaterial = new CustomShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
     uHeight: { value: 0 },
-    waterColor: { value: new THREE.Vector3(0.2, 0.5, 0.9) },
-    waterHighlight: { value: new THREE.Vector3(0.5, 0.8, 1) },
+    waterColor: { value: new THREE.Vector3(0.0, 0.0, 0.0) },
+    waterHighlight: { value: new THREE.Vector3(0.0, 0.0, 0.025) },
     offset: { value: 0 },
     contrast: { value: 0.5 },
     brightness: { value: 0.5 },
@@ -235,10 +239,10 @@ function animationUpdates()
 {
   camera.lookAt(cameraLookTarget);
 
-  waveMaterial.uniforms.uTime.value += 0.001;
+  waveMaterial.uniforms.uTime.value += 0.0025;
   skybox.rotation.y += 0.0001;
 
-  moonLight.rotation.z += 0.1;
+  moonLight.rotation.y += 0.1;
   moonLightHelper.update();
 }
 
