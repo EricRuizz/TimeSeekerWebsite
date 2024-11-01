@@ -15,6 +15,7 @@ import {
   GerstnerWave,
   Perlin
 } from "gl-noise"
+import { cameraPosition } from 'three/webgpu';
 
 
 
@@ -22,7 +23,7 @@ import {
 
 const scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 1000);
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
@@ -62,7 +63,7 @@ const skyboxMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoade
 const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
 skybox.position.set(0, 0, 0);
 
-scene.add(skybox);
+//scene.add(skybox);
 
 
 
@@ -72,13 +73,15 @@ const ambientLight = new THREE.AmbientLight(0xffffff);
 scene.add(ambientLight);
 
 const moonLight = new THREE.SpotLight();
-moonLight.position.set(0, 20, 100);
+moonLight.position.set(0, 20, 200);
 moonLight.intensity = 250000;
 moonLight.angle = THREE.MathUtils.degToRad(0.5);
 moonLight.penumbra = 1;
 moonLight.color = new THREE.Color(1, 0.75, 0.75);
+scene.add(moonLight);
+
 const moonLightHelper = new THREE.SpotLightHelper(moonLight);
-scene.add(moonLight, moonLightHelper);
+//scene.add(moonLightHelper);
 
 const moonLightTarget = new THREE.Object3D();
 moonLightTarget.position.set(0, -1.0, 0);
@@ -100,13 +103,12 @@ function AddStar()
   const material = new THREE.MeshStandardMaterial( { color:0xffffff } )
   const star = new THREE.Mesh(geometry, material);
 
-  const x = 1;
-  const [y, z] = Array(2).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+  const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(200));
 
   star.position.set(x, y, z);
-  //scene.add(star);
+  scene.add(star);
 }
-//Array(200).fill().forEach(AddStar);
+Array(300).fill().forEach(AddStar);
 
 
 
@@ -123,10 +125,10 @@ const s_GerstnerVS = `${defines}${header}${main}`;
 
 // Waves
 
-const wavePlaneWidth = 20;
-const wavePlaneLength = 20;
-const wavePlaneWidthSegments = 1000;
-const wavePlaneLengthSegments = 1000;
+const wavePlaneWidth = 10;
+const wavePlaneLength = 10;
+const wavePlaneWidthSegments = 200;
+const wavePlaneLengthSegments = 200;
 
 const wavePlane = new THREE.PlaneGeometry(wavePlaneWidth, wavePlaneLength, wavePlaneWidthSegments, wavePlaneLengthSegments);
 const waveMaterial = new CustomShaderMaterial({
@@ -137,6 +139,7 @@ const waveMaterial = new CustomShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
     uHeight: { value: 0 },
+    //cameraPos: { value: cameraPosition }
     waterColor: { value: new THREE.Vector3(0.0, 0.0, 0.0) },
     waterHighlight: { value: new THREE.Vector3(0.0, 0.0, 0.025) },
     offset: { value: 0 },
@@ -237,9 +240,11 @@ const waveMaterial = new THREE.ShaderMaterial(
 
 function animationUpdates()
 {
+  //camera.position = module
+
   camera.lookAt(cameraLookTarget);
 
-  waveMaterial.uniforms.uTime.value += 0.0025;
+  waveMaterial.uniforms.uTime.value += 0.002;
   skybox.rotation.y += 0.0001;
 
   moonLight.rotation.y += 0.1;

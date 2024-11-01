@@ -1,5 +1,6 @@
 uniform float uTime;
 uniform float uHeight;
+//uniform vec3 cameraPos;
 varying float vHeight;
 
 vec3 displace(vec3 point) {
@@ -15,24 +16,32 @@ vec3 displace(vec3 point) {
   //gln_tGerstnerWaveOpts B = gln_tGerstnerWaveOpts(vec2(3.0, -3.0), 0.25, 4.0);
   
   //                                                Direction, steepness, wavelength
-  gln_tGerstnerWaveOpts A = gln_tGerstnerWaveOpts(vec2(0.0, -1.0), 0.5, 2.0);
-  gln_tGerstnerWaveOpts B = gln_tGerstnerWaveOpts(vec2(0.0, 1.0), 0.25, 4.0);
-  gln_tGerstnerWaveOpts C = gln_tGerstnerWaveOpts(vec2(1.0, 1.0), 0.15, 6.0);
-  gln_tGerstnerWaveOpts D = gln_tGerstnerWaveOpts(vec2(1.0, 1.0), 0.4, 2.0);
+  gln_tGerstnerWaveOpts A = gln_tGerstnerWaveOpts(vec2(0.5, -0.5), 0.3, 0.5);
+  gln_tGerstnerWaveOpts B = gln_tGerstnerWaveOpts(vec2(0.0, 1.0), 0.25, 1.0);
+  gln_tGerstnerWaveOpts C = gln_tGerstnerWaveOpts(vec2(-0.5, 0.5), 0.15, 1.25);
+  gln_tGerstnerWaveOpts D = gln_tGerstnerWaveOpts(vec2(1.0, 0.0), 0.25, 0.75);
+  gln_tGerstnerWaveOpts E = gln_tGerstnerWaveOpts(vec2(0.5, 0.25), 0.30, 1.0);
+  gln_tGerstnerWaveOpts F = gln_tGerstnerWaveOpts(vec2(0.25, -0.5), 0.15, 0.5);
 
   vec3 n = vec3(0.0);
 
   if(p.z >= uHeight / 2.0) {
-      n.z += gln_normalize(gln_pfbm(p.xy + (uTime * 0.5), fbmOpts));
+      n.z += gln_normalize(gln_pfbm(p.xy + (uTime * 1.5), fbmOpts));
       n += gln_GerstnerWave(p, A, uTime).xzy;
-      n += gln_GerstnerWave(p, B, uTime).xzy * 0.5;
-      n += gln_GerstnerWave(p, C, uTime).xzy * 0.25;
-      n += gln_GerstnerWave(p, D, uTime).xzy * 0.2;
+      n += gln_GerstnerWave(p, B, uTime).xzy;
+      n += gln_GerstnerWave(p, C, uTime).xzy;
+      n += gln_GerstnerWave(p, D, uTime).xzy;
+      n += gln_GerstnerWave(p, E, uTime).xzy;
+      n += gln_GerstnerWave(p, F, uTime).xzy;
   }
 
   vHeight = n.z;
 
-  return point + n;
+  point += n;
+
+  point.z *= 0.4;
+
+  return point;
 }  
 
 vec3 orthogonal(vec3 v) {
