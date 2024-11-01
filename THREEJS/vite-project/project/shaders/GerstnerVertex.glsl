@@ -1,6 +1,5 @@
 uniform float uTime;
 uniform float uHeight;
-//uniform vec3 cameraPos;
 varying float vHeight;
 
 vec3 displace(vec3 point) {
@@ -10,7 +9,7 @@ vec3 displace(vec3 point) {
   p.y += uTime * 2.0;
 
   //                                  seed, persistance,  lacunarity, scale,  redistribution, octaves,  terbulance, ridge
-  gln_tFBMOpts fbmOpts = gln_tFBMOpts(1.0,  0.4,          2.3,        0.4,    1.0,            5,        false,      false);
+  gln_tFBMOpts fbmOpts = gln_tFBMOpts(1.0,  0.4,          2.3,        0.1,    1.0,            5,        false,      false);
 
   //gln_tGerstnerWaveOpts A = gln_tGerstnerWaveOpts(vec2(0.0, -1.0), 0.0, 0.0);
   //gln_tGerstnerWaveOpts B = gln_tGerstnerWaveOpts(vec2(3.0, -3.0), 0.25, 4.0);
@@ -39,7 +38,26 @@ vec3 displace(vec3 point) {
 
   point += n;
 
+  vec2 pos = vec2(0, 4);
+
+  //Camera sink
+  float maxSink = 1.5;
+  float effectRadius = 3.0;
+  float deepnessCoef = 1.0;
+  float offset = 1.0;
+  vec2 distanceToCam = point.xy - pos;
+
+  float cameraClosenessCoef = length(distanceToCam * deepnessCoef) * effectRadius;
+
+  point.z += length(clamp(distanceToCam, -effectRadius, effectRadius)) * 1.0;
+
+  //point.z *= 0.4;
+
+  //point.z += cameraClosenessCoef;
   point.z *= 0.4;
+  point.z -= offset;
+
+  //point.z = cameraClosenessCoef;
 
   return point;
 }  
