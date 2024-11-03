@@ -209,7 +209,9 @@ const exampleMesh = new THREE.Mesh(
 scene.Add(exampleMesh);
 
 
+
 // Textures to Shaders
+
 const waveMaterial = new THREE.ShaderMaterial(
 {
   vertexShader: GerstnerVertexShader,
@@ -218,6 +220,32 @@ const waveMaterial = new THREE.ShaderMaterial(
   {
     value: new THREE.TextureLoader().load('./project/textures/NightSkyTexture_Dark.png')
   }
+});
+
+
+
+// GUI
+
+const params = {
+  focus: 1.0,
+  aperture: 0.25,
+  maxblur: 0.01,
+};
+
+// Initialize dat.GUI
+const gui = new dat.GUI();
+
+// Add controls for each parameter
+gui.add(params, 'focus', 10.0, 3000.0, 10).onChange(value => {
+  bokehPass.uniforms['focus'] = value;
+});
+
+gui.add(params, 'aperture', 0, 10, 0.1).onChange(value => {
+  bokehPass.uniforms['aperture'] = value * 0.00001;
+});
+
+gui.add(params, 'maxblur', 0.0, 0.01, 0.001).onChange(value => {
+  bokehPass.uniforms['maxblur'] = value;
 });
 */
 
@@ -255,7 +283,9 @@ document.body.onscroll = MoveCamera;
 
 // Mouse movement
 
-var mousePosition = new THREE.Vector2();
+var mousePosition = new THREE.Vector2(0.0, 0.0);
+var currentMouseFollowPosX = 0;
+var currentMouseFollowPosY = 0;
 
 function OnMouseMove(event)
 {
@@ -267,15 +297,11 @@ document.addEventListener("mousemove", OnMouseMove, false);
 const mouseXCoef = 0.16;
 const mouseYCoef = 0.09;
 
-var currentMouseFollowXPos = 0.0;
-var currentMouseFollowYPos = 0.0;
-
-const mouseFollowAccelerationX = 1;
-const mouseFollowAccelerationY = 1;
-
 
 
 // Animation Variables
+
+var cameraRotOffsetIdle = new THREE.Vector2(0.0, 0.0);
 
 // Camera idle position
 const cameraYMovementSpeed = 1.0;
@@ -292,62 +318,33 @@ const cameraIdleYRotationOffset = cameraIdleYRotationRange / 2.0 * -1;
 
 
 
-// TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE 
-
-const params = {
-  focus: 1.0,
-  aperture: 0.25,
-  maxblur: 0.01,
-};
-
-// Initialize dat.GUI
-const gui = new dat.GUI();
-
-// Add controls for each parameter
-gui.add(params, 'focus', 10.0, 3000.0, 10).onChange(value => {
-  bokehPass.uniforms['focus'] = value;
-});
-
-gui.add(params, 'aperture', 0, 10, 0.1).onChange(value => {
-  bokehPass.uniforms['aperture'] = value * 0.00001;
-});
-
-gui.add(params, 'maxblur', 0.0, 0.01, 0.001).onChange(value => {
-  bokehPass.uniforms['maxblur'] = value;
-});
-// TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE 
-
-
-
 // General
 
 function animationUpdates()
 {
-  //Camera Y movement
+  // Camera Y movement
   camera.position.y = Math.sin(clock.getElapsedTime() * cameraYMovementSpeed) * cameraYMovementRange + cameraYOffset;
 
-  //Camera rotation
-  var cameraRotXOffsetIdle = Math.sin(clock.getElapsedTime() * cameraIdleXRotationSpeed) * cameraIdleXRotationRange + cameraIdleXRotationOffset;
-  var cameraRotYOffsetIdle = Math.sin(clock.getElapsedTime() * cameraIdleYRotationSpeed) * cameraIdleYRotationRange + cameraIdleYRotationOffset;
+  // Camera rotation
+  cameraRotOffsetIdle.x = Math.sin(clock.getElapsedTime() * cameraIdleXRotationSpeed) * cameraIdleXRotationRange + cameraIdleXRotationOffset;
+  cameraRotOffsetIdle.y = Math.sin(clock.getElapsedTime() * cameraIdleYRotationSpeed) * cameraIdleYRotationRange + cameraIdleYRotationOffset;
 
-  currentMouseFollowXPos = -mousePosition.x * mouseXCoef;// * (currentMouseFollowXPos - (-mousePosition.x * mouseXCoef));
-  currentMouseFollowYPos = mousePosition.y * mouseYCoef;
+  currentMouseFollowPosX = -mousePosition.x * mouseXCoef;
+  currentMouseFollowPosY = mousePosition.y * mouseYCoef;
 
-  //console.log(currentMouseFollowXVel);
-
-  var cameraRotXOffset = cameraRotXOffsetIdle + currentMouseFollowXPos;
-  var cameraRotYOffset = cameraRotYOffsetIdle + currentMouseFollowYPos;
+  var cameraRotXOffset = cameraRotOffsetIdle.x + currentMouseFollowPosX;
+  var cameraRotYOffset = cameraRotOffsetIdle.y + currentMouseFollowPosY;
 
   camera.rotation.x = cameraBaseRotX + cameraRotYOffset;
   camera.rotation.y = cameraBaseRotY + cameraRotXOffset;
 
-  //Uniforms
+  // Uniforms
   waveMaterial.uniforms.uTime.value += 0.002;
 
-  //Skybox
+  // Skybox
   skybox.rotation.y += 0.0001;
 
-  //Helpers
+  // Helpers
   moonLightHelper.update();
 }
 
