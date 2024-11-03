@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "dat.gui": "^0.7.9",
     "gl-noise": "^1.6.1",
     "three": "^0.167.1",
     "three-custom-shader-material": "^6.0.13",

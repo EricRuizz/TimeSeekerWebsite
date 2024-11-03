@@ -4,6 +4,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
+import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
@@ -164,15 +166,16 @@ scene.add(waves);
 
 
 
-// Bloom
+// Post-Processing
 
+// Bloom
 const bloomPassLow = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
   0.5,  //Intensity
   0.1,  //Radius
   0.1   //Which pixels are affected
 );
-composer.addPass(bloomPassLow);
+//composer.addPass(bloomPassLow);
 
 const bloomPass = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
@@ -180,7 +183,20 @@ const bloomPass = new UnrealBloomPass(
   0.1,  //Radius
   2.5   //Which pixels are affected
 );
-composer.addPass(bloomPass);
+//composer.addPass(bloomPass);
+
+// Film
+const filmPass = new FilmPass(1, false);
+composer.addPass(filmPass);
+
+// Bokeh
+const bokehPass = new BokehPass(scene, camera, {
+  focus: 1.0,
+  aperture: 0.025,
+  maxblur: 0.01
+});
+composer.addPass(bokehPass);
+
 
 
 
@@ -255,8 +271,17 @@ function OnMouseMove(event)
 }
 document.addEventListener("mousemove", OnMouseMove, false);
 
-const mouseXCoef = 0.1;
-const mouseYCoef = 0.1;
+const mouseXCoef = 1;
+const mouseYCoef = 1;
+
+var currentMouseFollowXPos = 0.0;
+var currentMouseFollowYPos = 0.0;
+
+var currentMouseFollowXVel = 0.0;
+var currentMouseFollowYVel = 0.0;
+
+const mouseFollowAccelerationX = 1000;
+const mouseFollowAccelerationY = 1000;
 
 
 
@@ -283,20 +308,21 @@ function animationUpdates()
 {
   //Camera Y movement
   camera.position.y = Math.sin(clock.getElapsedTime() * cameraYMovementSpeed) * cameraYMovementRange + cameraYOffset;
-  if(clock.getElapsedTime() < 1.0)
-  {
-    //camera.lookAt(cameraLookTarget);
-  }
 
   //Camera rotation
   var cameraRotXOffsetIdle = Math.sin(clock.getElapsedTime() * cameraIdleXRotationSpeed) * cameraIdleXRotationRange + cameraIdleXRotationOffset;
   var cameraRotYOffsetIdle = Math.sin(clock.getElapsedTime() * cameraIdleYRotationSpeed) * cameraIdleYRotationRange + cameraIdleYRotationOffset;
 
-  var cameraRotXOffsetMouse = -mousePosition.x * mouseXCoef;
-  var cameraRotYOffsetMouse = mousePosition.y * mouseYCoef;
+  currentMouseFollowXPos += clock.getDelta() * currentMouseFollowXVel;
+  currentMouseFollowYPos += clock.getDelta() * currentMouseFollowYVel;
 
-  var cameraRotXOffset = cameraRotXOffsetIdle + cameraRotXOffsetMouse;
-  var cameraRotYOffset = cameraRotYOffsetIdle + cameraRotYOffsetMouse;
+  currentMouseFollowXVel += clock.getDelta() * mouseFollowAccelerationX;
+  currentMouseFollowXVel += clock.getDelta() * mouseFollowAccelerationY;
+
+  console.log(currentMouseFollowXVel);
+
+  var cameraRotXOffset = cameraRotXOffsetIdle + currentMouseFollowXPos;
+  var cameraRotYOffset = cameraRotYOffsetIdle + currentMouseFollowYPos;
 
   camera.rotation.x = cameraBaseRotX + cameraRotYOffset;
   camera.rotation.y = cameraBaseRotY + cameraRotXOffset;
