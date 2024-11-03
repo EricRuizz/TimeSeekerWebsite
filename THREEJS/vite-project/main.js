@@ -262,9 +262,18 @@ const mouseYCoef = 0.1;
 
 // Animation Variables
 
+// Camera idle position
 const cameraYMovementSpeed = 1.0;
 const cameraYMovementRange = 0.025;
 const cameraYOffset = 0.2 + cameraYMovementRange;
+
+// Camera idle rotation
+const cameraIdleYRotationSpeed = 1.0;
+const cameraIdleXRotationSpeed = cameraIdleYRotationSpeed / 2.0;
+const cameraIdleXRotationRange = 0.025;
+const cameraIdleYRotationRange = 0.025;
+const cameraIdleXRotationOffset = cameraIdleXRotationRange / 2.0 * -1;
+const cameraIdleYRotationOffset = cameraIdleYRotationRange / 2.0 * -1;
 
 
 
@@ -280,8 +289,8 @@ function animationUpdates()
   }
 
   //Camera rotation
-  var cameraRotXOffsetIdle = 0.0;
-  var cameraRotYOffsetIdle = 0.0;
+  var cameraRotXOffsetIdle = Math.sin(clock.getElapsedTime() * cameraIdleXRotationSpeed) * cameraIdleXRotationRange + cameraIdleXRotationOffset;
+  var cameraRotYOffsetIdle = Math.sin(clock.getElapsedTime() * cameraIdleYRotationSpeed) * cameraIdleYRotationRange + cameraIdleYRotationOffset;
 
   var cameraRotXOffsetMouse = -mousePosition.x * mouseXCoef;
   var cameraRotYOffsetMouse = mousePosition.y * mouseYCoef;
