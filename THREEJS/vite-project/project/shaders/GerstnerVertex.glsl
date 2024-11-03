@@ -42,7 +42,7 @@ vec3 displace(vec3 point) {
 
   //Camera sink
   float maxSink = 1.5;
-  float effectRadius = 3.0;
+  float effectRadius = 4.0;
   float deepnessCoef = 1.0;
   float offset = 1.0;
   vec2 distanceToCam = point.xy - pos;

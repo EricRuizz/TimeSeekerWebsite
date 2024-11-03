@@ -5,7 +5,9 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
-import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
+//TODO: Bokeh2, 
+
+import * as dat from 'dat.gui';
 
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
@@ -33,7 +35,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.set(0, 0, 0);
-const cameraBaseRotX = THREE.MathUtils.degToRad(-10);
+const cameraBaseRotX = THREE.MathUtils.degToRad(-20);
 const cameraBaseRotY = THREE.MathUtils.degToRad(180);
 
 renderer.render(scene, camera);
@@ -55,7 +57,7 @@ const clock = new THREE.Clock(true);
 const moonGeometry = new THREE.SphereGeometry(10, 30, 30);
 const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('./project/textures/MoonTexture.jpg') });
 const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-moon.position.set(0, 40, 200);
+moon.position.set(0, 100, 200); //was 40
 moon.rotateX(THREE.MathUtils.degToRad(-40));
 moon.rotateY(THREE.MathUtils.degToRad(90));
 
@@ -99,7 +101,8 @@ moonLight.target = moonLightTarget;
 
 const pointLightA = new THREE.PointLight();
 pointLightA.position.set(0, 10, 20);
-pointLightA.intensity = 250;
+//pointLightA.intensity = 250;
+pointLightA.intensity = 2500;
 pointLightA.color = new THREE.Color(1, 0.75, 0.75);
 scene.add(pointLightA);
 
@@ -135,7 +138,7 @@ const s_GerstnerVS = `${defines}${header}${main}`;
 
 // Waves
 
-const wavePlaneWidth = 4;
+const wavePlaneWidth = 6;
 const wavePlaneLength = 4;
 const wavePlaneWidthSegments = 200;
 const wavePlaneLengthSegments = 200;
@@ -175,7 +178,7 @@ const bloomPassLow = new UnrealBloomPass(
   0.1,  //Radius
   0.1   //Which pixels are affected
 );
-//composer.addPass(bloomPassLow);
+composer.addPass(bloomPassLow);
 
 const bloomPass = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
@@ -183,21 +186,11 @@ const bloomPass = new UnrealBloomPass(
   0.1,  //Radius
   2.5   //Which pixels are affected
 );
-//composer.addPass(bloomPass);
+composer.addPass(bloomPass);
 
 // Film
 const filmPass = new FilmPass(1, false);
 composer.addPass(filmPass);
-
-// Bokeh
-const bokehPass = new BokehPass(scene, camera, {
-  focus: 1.0,
-  aperture: 0.025,
-  maxblur: 0.01
-});
-composer.addPass(bokehPass);
-
-
 
 
 // Examples
@@ -271,17 +264,14 @@ function OnMouseMove(event)
 }
 document.addEventListener("mousemove", OnMouseMove, false);
 
-const mouseXCoef = 1;
-const mouseYCoef = 1;
+const mouseXCoef = 0.16;
+const mouseYCoef = 0.09;
 
 var currentMouseFollowXPos = 0.0;
 var currentMouseFollowYPos = 0.0;
 
-var currentMouseFollowXVel = 0.0;
-var currentMouseFollowYVel = 0.0;
-
-const mouseFollowAccelerationX = 1000;
-const mouseFollowAccelerationY = 1000;
+const mouseFollowAccelerationX = 1;
+const mouseFollowAccelerationY = 1;
 
 
 
@@ -302,6 +292,33 @@ const cameraIdleYRotationOffset = cameraIdleYRotationRange / 2.0 * -1;
 
 
 
+// TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE 
+
+const params = {
+  focus: 1.0,
+  aperture: 0.25,
+  maxblur: 0.01,
+};
+
+// Initialize dat.GUI
+const gui = new dat.GUI();
+
+// Add controls for each parameter
+gui.add(params, 'focus', 10.0, 3000.0, 10).onChange(value => {
+  bokehPass.uniforms['focus'] = value;
+});
+
+gui.add(params, 'aperture', 0, 10, 0.1).onChange(value => {
+  bokehPass.uniforms['aperture'] = value * 0.00001;
+});
+
+gui.add(params, 'maxblur', 0.0, 0.01, 0.001).onChange(value => {
+  bokehPass.uniforms['maxblur'] = value;
+});
+// TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE TODELETE 
+
+
+
 // General
 
 function animationUpdates()
@@ -313,13 +330,10 @@ function animationUpdates()
   var cameraRotXOffsetIdle = Math.sin(clock.getElapsedTime() * cameraIdleXRotationSpeed) * cameraIdleXRotationRange + cameraIdleXRotationOffset;
   var cameraRotYOffsetIdle = Math.sin(clock.getElapsedTime() * cameraIdleYRotationSpeed) * cameraIdleYRotationRange + cameraIdleYRotationOffset;
 
-  currentMouseFollowXPos += clock.getDelta() * currentMouseFollowXVel;
-  currentMouseFollowYPos += clock.getDelta() * currentMouseFollowYVel;
+  currentMouseFollowXPos = -mousePosition.x * mouseXCoef;// * (currentMouseFollowXPos - (-mousePosition.x * mouseXCoef));
+  currentMouseFollowYPos = mousePosition.y * mouseYCoef;
 
-  currentMouseFollowXVel += clock.getDelta() * mouseFollowAccelerationX;
-  currentMouseFollowXVel += clock.getDelta() * mouseFollowAccelerationY;
-
-  console.log(currentMouseFollowXVel);
+  //console.log(currentMouseFollowXVel);
 
   var cameraRotXOffset = cameraRotXOffsetIdle + currentMouseFollowXPos;
   var cameraRotYOffset = cameraRotYOffsetIdle + currentMouseFollowYPos;
