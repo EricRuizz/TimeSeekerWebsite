@@ -284,8 +284,7 @@ document.body.onscroll = MoveCamera;
 // Mouse movement
 
 var mousePosition = new THREE.Vector2(0.0, 0.0);
-var currentMouseFollowPosX = 0;
-var currentMouseFollowPosY = 0;
+var currentMouseFollowPos = new THREE.Vector2(0.0, 0.0);
 
 function OnMouseMove(event)
 {
@@ -329,11 +328,21 @@ function animationUpdates()
   cameraRotOffsetIdle.x = Math.sin(clock.getElapsedTime() * cameraIdleXRotationSpeed) * cameraIdleXRotationRange + cameraIdleXRotationOffset;
   cameraRotOffsetIdle.y = Math.sin(clock.getElapsedTime() * cameraIdleYRotationSpeed) * cameraIdleYRotationRange + cameraIdleYRotationOffset;
 
-  currentMouseFollowPosX = -mousePosition.x * mouseXCoef;
-  currentMouseFollowPosY = mousePosition.y * mouseYCoef;
+  var goalMouseFollowPos = mousePosition.clone();
+  goalMouseFollowPos.x = -mousePosition.x * mouseXCoef;
+  goalMouseFollowPos.y = mousePosition.y * mouseYCoef;
 
-  var cameraRotXOffset = cameraRotOffsetIdle.x + currentMouseFollowPosX;
-  var cameraRotYOffset = cameraRotOffsetIdle.y + currentMouseFollowPosY;
+  var direction = new THREE.Vector2().subVectors(goalMouseFollowPos, currentMouseFollowPos);
+  var distance = direction.length();
+  direction.normalize();
+
+  var speed = Math.min(distance * 0.2, 1);
+
+  direction.multiplyScalar(speed);
+  currentMouseFollowPos.add(direction);
+
+  var cameraRotXOffset = cameraRotOffsetIdle.x + currentMouseFollowPos.x;
+  var cameraRotYOffset = cameraRotOffsetIdle.y + currentMouseFollowPos.y;
 
   camera.rotation.x = cameraBaseRotX + cameraRotYOffset;
   camera.rotation.y = cameraBaseRotY + cameraRotXOffset;
