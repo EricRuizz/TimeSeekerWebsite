@@ -26,7 +26,10 @@ import {
 
 const scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 1000);
+const cameraBaseFov = 75;
+const cameraFovRange = -2.5;
+const cameraFovSpeed = 0.25;
+const camera = new THREE.PerspectiveCamera(cameraBaseFov, window.innerWidth / window.innerHeight, 0.01, 1000);
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
@@ -57,13 +60,24 @@ const clock = new THREE.Clock(true);
 const moonGeometry = new THREE.SphereGeometry(10, 30, 30);
 const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('./project/textures/MoonTexture.jpg') });
 const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-moon.position.set(0, 100, 200); //was 40
+moon.position.set(0, 100, 200);
 moon.rotateX(THREE.MathUtils.degToRad(-40));
 moon.rotateY(THREE.MathUtils.degToRad(90));
 
 const cameraLookTarget = new THREE.Vector3().subVectors(moon.position, new THREE.Vector3(0, 10, 0));
 
 scene.add(moon);
+
+
+
+// Text
+
+const textplaneGeometry = new THREE.PlaneGeometry(0.75, 0.75, 5, 5);
+const textPlaneMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('./project/textures/TimeSeeker_Transparent.png'), transparent: true });
+const textplane = new THREE.Mesh(textplaneGeometry, textPlaneMaterial);
+textplane.position.set(0, 1.5, 2.5);
+textplane.lookAt(camera.position);
+scene.add(textplane);
 
 
 
@@ -74,7 +88,7 @@ const skyboxMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoade
 const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
 skybox.position.set(0, 0, 0);
 
-scene.add(skybox);
+//scene.add(skybox);
 
 
 
@@ -267,6 +281,14 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 
 
+// Raycasting
+
+var raycaster = new THREE.Raycaster();
+var scribbleRaycastTargets = [];
+scribbleRaycastTargets.push(textplane);
+
+
+
 // Scroll
 
 function MoveCamera()
@@ -289,7 +311,14 @@ var currentMouseFollowPos = new THREE.Vector2(0.0, 0.0);
 function OnMouseMove(event)
 {
   mousePosition.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mousePosition.y = (event.clientY / window.innerHeight) * 2 - 1;
+  mousePosition.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mousePosition, camera);
+  const intersects = raycaster.intersectObjects(scribbleRaycastTargets, true);
+    
+  if (intersects.length > 0) {
+    console.log(intersects);
+  }
 }
 document.addEventListener("mousemove", OnMouseMove, false);
 
@@ -321,6 +350,9 @@ const cameraIdleYRotationOffset = cameraIdleYRotationRange / 2.0 * -1;
 
 function animationUpdates()
 {
+  // Camera FOV
+  camera.fov = Math.sin(clock.getElapsedTime() * cameraFovSpeed) * cameraFovRange + cameraBaseFov;
+
   // Camera Y movement
   camera.position.y = Math.sin(clock.getElapsedTime() * cameraYMovementSpeed) * cameraYMovementRange + cameraYOffset;
 
@@ -330,7 +362,7 @@ function animationUpdates()
 
   var goalMouseFollowPos = mousePosition.clone();
   goalMouseFollowPos.x = -mousePosition.x * mouseXCoef;
-  goalMouseFollowPos.y = mousePosition.y * mouseYCoef;
+  goalMouseFollowPos.y = -mousePosition.y * mouseYCoef;
 
   var direction = new THREE.Vector2().subVectors(goalMouseFollowPos, currentMouseFollowPos);
   var distance = direction.length();
@@ -346,6 +378,8 @@ function animationUpdates()
 
   camera.rotation.x = cameraBaseRotX + cameraRotYOffset;
   camera.rotation.y = cameraBaseRotY + cameraRotXOffset;
+
+  camera.updateProjectionMatrix();
 
   // Uniforms
   waveMaterial.uniforms.uTime.value += 0.002;
