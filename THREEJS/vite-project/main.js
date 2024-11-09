@@ -11,6 +11,7 @@ import * as dat from 'dat.gui';
 
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
+// Shaders
 import GerstnerVS from './project/shaders/GerstnerVertex.glsl';
 import GerstnerFS from './project/shaders/GerstnerFragment.glsl';
 import ScrabbleVS from './project/shaders/ScrabbleVertex.glsl';
@@ -98,14 +99,16 @@ async function InitScrabble()
     uniforms: {
       uTime: { value: 0 },
       displayAlpha: { value: 0 },
+      displacementScale: { value: 15 },
+      displacementStrength: { value: 0.01 },
       //texture: { value: new THREE.TextureLoader().load('./project/textures/TimeSeeker_Transparent.png') }
     },
     //transparent: true
     map: new THREE.TextureLoader().load('./project/textures/TimeSeeker_Transparent.png'),
-    transparent: true 
+    transparent: true
   });
 
-  const scrabbleLogo = new THREE.Mesh(scrabbleLogoGeometry, scrabbleLogoMaterial);
+  scrabbleLogo = new THREE.Mesh(scrabbleLogoGeometry, scrabbleLogoMaterial);
   scrabbleLogo.position.set(0, 1.5, 2.5);
   scrabbleLogo.lookAt(camera.position);
   scene.add(scrabbleLogo);
@@ -122,7 +125,7 @@ const skyboxMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoade
 const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
 skybox.position.set(0, 0, 0);
 
-//scene.add(skybox);
+scene.add(skybox);
 
 
 
@@ -236,7 +239,7 @@ composer.addPass(bloomPass);
 
 // Film
 const filmPass = new FilmPass(1, false);
-composer.addPass(filmPass);
+//composer.addPass(filmPass);
 
 
 // Examples
@@ -314,14 +317,10 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 
 // Raycasting
+
 var raycaster = new THREE.Raycaster();
 var scribbleRaycastTargets = [];
-
-function ScrabbleRaycasting()
-{
-  scribbleRaycastTargets.push(scrabbleLogo);
-}
-
+scribbleRaycastTargets.push(scrabbleLogo);
 
 
 
@@ -330,10 +329,6 @@ function ScrabbleRaycasting()
 function MoveCamera()
 {
   const t = document.body.getBoundingClientRect().top;
-
-  //camera.position.z = t * 1;
-  //camera.position.x = t * 0.002;
-  //camera.position.y = t * 0.002;
 }
 document.body.onscroll = MoveCamera;
 
@@ -418,7 +413,7 @@ function animationUpdates()
   camera.updateProjectionMatrix();
 
   // Uniforms
-  waveMaterial.uniforms.uTime.value += 0.002;
+  waves.material.uniforms.uTime.value += 0.002;
 
   // Skybox
   skybox.rotation.y += 0.0001;
@@ -439,5 +434,4 @@ function animate() {
 // USAGE
 
 InitScrabble();
-ScrabbleRaycasting();
 animate();
