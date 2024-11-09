@@ -13,12 +13,15 @@ import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 import GerstnerVS from './project/shaders/GerstnerVertex.glsl';
 import GerstnerFS from './project/shaders/GerstnerFragment.glsl';
+import ScrabbleVS from './project/shaders/ScrabbleVertex.glsl';
+import ScrabbleFS from './project/shaders/ScrabbleFragment.glsl';
 
 import {
   patchShadersCSM,
   GerstnerWave,
   Perlin
 } from "gl-noise"
+//import { CSM } from 'three/examples/jsm/Addons.js';
 
 
 
@@ -70,14 +73,45 @@ scene.add(moon);
 
 
 
-// Text
+// Wave CSM Setup
 
-const textplaneGeometry = new THREE.PlaneGeometry(0.75, 0.75, 5, 5);
-const textPlaneMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('./project/textures/TimeSeeker_Transparent.png'), transparent: true });
-const textplane = new THREE.Mesh(textplaneGeometry, textPlaneMaterial);
-textplane.position.set(0, 1.5, 2.5);
-textplane.lookAt(camera.position);
-scene.add(textplane);
+let scrabbleLogo;
+
+async function InitScrabble()
+{
+  const o_ScrabbleFS = {
+    defines: "",
+    header: "",
+    main: ScrabbleFS,
+  };
+  const { defines, header, main } = await patchShadersCSM(o_ScrabbleFS, [Perlin]);
+  const s_ScrabbleFS = `${defines}${header}${main}`;
+  
+  // Text
+  
+  const scrabbleLogoGeometry = new THREE.PlaneGeometry(0.75, 0.75, 1, 1);
+  const scrabbleLogoMaterial = new CustomShaderMaterial({
+    baseMaterial: THREE.MeshBasicMaterial,
+    vertexShader: ScrabbleVS,
+    fragmentShader: s_ScrabbleFS,
+    transparent: true,
+    uniforms: {
+      uTime: { value: 0 },
+      displayAlpha: { value: 0 },
+      //texture: { value: new THREE.TextureLoader().load('./project/textures/TimeSeeker_Transparent.png') }
+    },
+    //transparent: true
+    map: new THREE.TextureLoader().load('./project/textures/TimeSeeker_Transparent.png'),
+    transparent: true 
+  });
+
+  const scrabbleLogo = new THREE.Mesh(scrabbleLogoGeometry, scrabbleLogoMaterial);
+  scrabbleLogo.position.set(0, 1.5, 2.5);
+  scrabbleLogo.lookAt(camera.position);
+  scene.add(scrabbleLogo);
+}
+
+
 
 
 
@@ -172,8 +206,6 @@ const waveMaterial = new CustomShaderMaterial({
     contrast: { value: 0.5 },
     brightness: { value: 0.5 },
   },
-  // Base material properties
-  flatShading: false
 });
 const waves = new THREE.Mesh(wavePlane, waveMaterial);
 waves.position.set(0, 0, wavePlaneLength / 2);
@@ -196,7 +228,7 @@ composer.addPass(bloomPassLow);
 
 const bloomPass = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
-  10.5,  //Intensity
+  10.5, //Intensity
   0.1,  //Radius
   2.5   //Which pixels are affected
 );
@@ -282,10 +314,14 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 
 // Raycasting
-
 var raycaster = new THREE.Raycaster();
 var scribbleRaycastTargets = [];
-scribbleRaycastTargets.push(textplane);
+
+function ScrabbleRaycasting()
+{
+  scribbleRaycastTargets.push(scrabbleLogo);
+}
+
 
 
 
@@ -316,9 +352,9 @@ function OnMouseMove(event)
   raycaster.setFromCamera(mousePosition, camera);
   const intersects = raycaster.intersectObjects(scribbleRaycastTargets, true);
     
-  if (intersects.length > 0) {
-    console.log(intersects);
-  }
+  //if (intersects.length > 0) {
+  //  console.log(intersects);
+  //}
 }
 document.addEventListener("mousemove", OnMouseMove, false);
 
@@ -400,4 +436,8 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
+// USAGE
+
+InitScrabble();
+ScrabbleRaycasting();
 animate();
