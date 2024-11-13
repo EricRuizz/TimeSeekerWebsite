@@ -1,28 +1,35 @@
 import './style.css';
 import * as THREE from 'three';
+
+//Debug
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import * as dat from 'dat.gui';
+
+//PostProcessing
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
 //TODO: Bokeh2, 
 
-import * as dat from 'dat.gui';
-
-import CustomShaderMaterial from "three-custom-shader-material/vanilla";
+//Classes
+import * as Page from './project/scripts/Page';
 
 // Shaders
-import GerstnerVS from './project/shaders/GerstnerVertex.glsl';
-import GerstnerFS from './project/shaders/GerstnerFragment.glsl';
-import ScrabbleVS from './project/shaders/ScrabbleVertex.glsl';
-import ScrabbleFS from './project/shaders/ScrabbleFragment.glsl';
+import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 import {
   patchShadersCSM,
   GerstnerWave,
   Perlin
 } from "gl-noise"
-//import { CSM } from 'three/examples/jsm/Addons.js';
+
+import GerstnerVS from './project/shaders/GerstnerVertex.glsl';
+import GerstnerFS from './project/shaders/GerstnerFragment.glsl';
+import ScrabbleVS from './project/shaders/ScrabbleVertex.glsl';
+import ScrabbleFS from './project/shaders/ScrabbleFragment.glsl';
+
+
 
 
 
@@ -59,6 +66,14 @@ const clock = new THREE.Clock(true);
 
 
 
+//TEST
+
+const homePage = new Page.HomePage(scene, camera, clock);
+homePage.init();
+//scene.add(cTest);
+
+
+
 // Moon (StandardMaterial = Affected by light  /  BasicMaterial = Not affected by light)
 
 const moonGeometry = new THREE.SphereGeometry(10, 30, 30);
@@ -74,7 +89,7 @@ scene.add(moon);
 
 
 
-// Wave CSM Setup
+// Scrabble Logo
 
 let scrabbleLogo;
 
@@ -111,7 +126,7 @@ async function InitScrabble()
   scrabbleLogo = new THREE.Mesh(scrabbleLogoGeometry, scrabbleLogoMaterial);
   scrabbleLogo.position.set(0, 1.5, 2.5);
   scrabbleLogo.lookAt(camera.position);
-  scene.add(scrabbleLogo);
+  //scene.add(scrabbleLogo);
 }
 
 
@@ -120,7 +135,7 @@ async function InitScrabble()
 
 // Skybox
 
-const skyboxGeometry = new THREE.SphereGeometry(500, 500, 500);
+const skyboxGeometry = new THREE.SphereGeometry(500, 32, 32);
 const skyboxMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('./project/textures/NightSkyTexture_Dark.png'), side: THREE.BackSide });
 const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
 skybox.position.set(0, 0, 0);
@@ -214,7 +229,7 @@ const waves = new THREE.Mesh(wavePlane, waveMaterial);
 waves.position.set(0, 0, wavePlaneLength / 2);
 waves.rotateX(THREE.MathUtils.degToRad(270));
 
-scene.add(waves);
+//scene.add(waves);
 
 
 
@@ -344,8 +359,9 @@ function OnMouseMove(event)
   mousePosition.x = (event.clientX / window.innerWidth) * 2 - 1;
   mousePosition.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-  raycaster.setFromCamera(mousePosition, camera);
-  const intersects = raycaster.intersectObjects(scribbleRaycastTargets, true);
+  //TODO - Uncomment when fixed
+  //raycaster.setFromCamera(mousePosition, camera);
+  //const intersects = raycaster.intersectObjects(scribbleRaycastTargets, true);
     
   //if (intersects.length > 0) {
   //  console.log(intersects);
