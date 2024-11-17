@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 export default class APage
 {
     pageMeshes = [];
@@ -16,7 +15,7 @@ export default class APage
     sceneAdditions()
     {
         console.log("FFFFFF");
-        pageMeshes.forEach(mesh => {
+        this.pageMeshes.forEach(mesh => {
             console.log("ASDASD");
             this.scene.add(mesh);
         });
@@ -24,7 +23,7 @@ export default class APage
 
     enter()
     {
-        pageMeshes.forEach(mesh => {
+        this.pageMeshes.forEach(mesh => {
             mesh.visible = true;
         });
         
@@ -33,7 +32,7 @@ export default class APage
 
     exit()
     {
-        pageMeshes.forEach(mesh => {
+        this.pageMeshes.forEach(mesh => {
             mesh.visible = false;
         });
 

@@ -445,6 +445,7 @@ function animate() {
 
   composer.render();
   requestAnimationFrame(animate);
+  //renderer.render(scene, camera);
 }
 
 // USAGE
