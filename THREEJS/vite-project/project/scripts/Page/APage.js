@@ -1,7 +1,7 @@
 export default class APage
 {
     pageMeshes = [];
-
+    finishedLoading = false;
 
     constructor(scene, camera, clock)
     {
@@ -19,6 +19,8 @@ export default class APage
             console.log("Mesh added to scene");
             this.scene.add(mesh);
         });
+
+        this.finishedLoading = true;
     }
 
     enter()
@@ -41,4 +43,16 @@ export default class APage
 
     doEnter() {}
     doExit() {}
+
+    doUpdate() {}
+
+    update()
+    {
+        if(this.finishedLoading)
+        {
+            this.doUpdate();
+        }
+    }
+
+    onMouseMove() {}
 }
