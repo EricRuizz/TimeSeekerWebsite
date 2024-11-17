@@ -14,9 +14,9 @@ export default class APage
 
     sceneAdditions()
     {
-        console.log("FFFFFF");
+        console.log("Scene Additions");
         this.pageMeshes.forEach(mesh => {
-            console.log("ASDASD");
+            console.log("Mesh added to scene");
             this.scene.add(mesh);
         });
     }
