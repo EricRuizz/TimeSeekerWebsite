@@ -1,12 +1,15 @@
 import './style.css';
 import * as THREE from 'three';
 
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
 //PostProcessing
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
-//TODO: Bokeh2, 
+import { BokehPass } from 'three/examples/jsm/Addons.js';
+//TODO: Bokeh2, FFXA
 
 //Classes
 import * as Page from './project/scripts/Page';
@@ -59,26 +62,11 @@ const ambientLight = new THREE.AmbientLight(0xffffff);
 ambientLight.intensity = 1;
 scene.add(ambientLight);
 
-const moonLight = new THREE.SpotLight();
-moonLight.position.set(0, 20, 200);
-moonLight.intensity = 250000;
-moonLight.angle = THREE.MathUtils.degToRad(0.5);
-moonLight.penumbra = 1;
-moonLight.color = new THREE.Color(1, 0.75, 0.75);
-//scene.add(moonLight);
-
-const moonLightHelper = new THREE.SpotLightHelper(moonLight);
-//scene.add(moonLightHelper);
-
-const moonLightTarget = new THREE.Object3D();
-moonLightTarget.position.set(0, -1.0, 0);
-moonLight.target = moonLightTarget;
-
 const pointLightA = new THREE.PointLight();
 pointLightA.position.set(0, 10, 20);
 //pointLightA.intensity = 250;
 pointLightA.intensity = 2500;
-pointLightA.color = new THREE.Color(1, 0.75, 0.75);
+pointLightA.color = new THREE.Color(0.75, 0.75, 1);
 scene.add(pointLightA);
 
 
@@ -87,6 +75,8 @@ scene.add(pointLightA);
 
 
 // Post-Processing
+
+const postprocessing = {};
 
 // Bloom
 const bloomPassLow = new UnrealBloomPass(
@@ -107,8 +97,38 @@ composer.addPass(bloomPass);
 
 // Film
 const filmPass = new FilmPass(1, false);
-//composer.addPass(filmPass);
+composer.addPass(filmPass);
 
+// Bokeh
+const bokehPass = new BokehPass( scene, camera, {
+  focus: 1.0,
+  aperture: 0.025,
+  maxblur: 0.01
+} );
+composer.addPass(bokehPass);
+postprocessing.bokeh = bokehPass;
+
+const effectController = {
+
+  focus: 250.0,
+  aperture: 1.5,
+  maxblur: 0.01
+
+};
+const matChanger = function ( )
+{
+  postprocessing.bokeh.uniforms[ 'focus' ].value = effectController.focus;
+  postprocessing.bokeh.uniforms[ 'aperture' ].value = effectController.aperture * 0.00001;
+  postprocessing.bokeh.uniforms[ 'maxblur' ].value = effectController.maxblur;
+};
+
+const gui = new GUI();
+gui.add( effectController, 'focus', 0.0, 3000.0, 10 ).onChange( matChanger );
+gui.add( effectController, 'aperture', 0, 10, 0.1 ).onChange( matChanger );
+gui.add( effectController, 'maxblur', 0.0, 1, 0.01 ).onChange( matChanger );
+gui.close();
+
+matChanger();
 
 
 
@@ -134,6 +154,24 @@ function OnMouseMove(event)
   currentPage.onMouseMove(mousePosition);
 }
 document.addEventListener("mousemove", OnMouseMove, false);
+
+// TODO - APPLY THIS
+function onWindowResize()
+{
+  windowHalfX = window.innerWidth / 2;
+  windowHalfY = window.innerHeight / 2;
+
+  width = window.innerWidth;
+  height = window.innerHeight;
+
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize( width, height );
+  postprocessing.composer.setSize( width, height );
+}
+window.addEventListener('resize', onWindowResize);
+// TODO - APPLY THIS
 
 
 

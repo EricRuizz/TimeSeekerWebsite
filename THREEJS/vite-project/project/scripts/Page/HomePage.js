@@ -51,7 +51,7 @@ export default class HomePage extends APage
       const moonGeometry = new THREE.SphereGeometry(10, 30, 30);
       const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('./project/textures/MoonTexture.jpg') });
       this.moon = new THREE.Mesh(moonGeometry, moonMaterial);
-      this.moon.position.set(0, 100, 200);
+      this.moon.position.set(0, 150, 200);
       this.moon.rotateX(THREE.MathUtils.degToRad(-40));
       this.moon.rotateY(THREE.MathUtils.degToRad(90));
 
@@ -137,7 +137,7 @@ export default class HomePage extends APage
       this.scrabbleLogo.position.set(0, 1.5, 2.5);
       this.scrabbleLogo.lookAt(this.camera.position);
       
-      this.pageMeshes.push(this.scrabbleLogo);
+      //this.pageMeshes.push(this.scrabbleLogo);
     }
 
     intiRayasting()
@@ -177,7 +177,7 @@ export default class HomePage extends APage
       this.currentMouseFollowPos = new THREE.Vector2(0.0, 0.0);
             
       this.mouseXCoef = 0.16;
-      this.mouseYCoef = 0.09;
+      this.mouseYCoef = 0.20;
     }
 
     doUpdate()
@@ -190,7 +190,7 @@ export default class HomePage extends APage
 
     updateWaves()
     {
-      this.waves.material.uniforms.uTime.value += 0.002;
+      this.waves.material.uniforms.uTime.value += 0.0025;
     }
 
     updateScrabbles()
@@ -200,7 +200,7 @@ export default class HomePage extends APage
 
     updateSkybox()
     {
-      this.skybox.rotation.y += 0.0001;
+      this.skybox.rotation.y += 0.0002;
     }
 
     updateCamera()
