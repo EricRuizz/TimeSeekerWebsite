@@ -1,3 +1,4 @@
+uniform sampler2D myTexture;
 varying float vHeight;
 
 uniform vec3 waterColor;

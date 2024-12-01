@@ -14,6 +14,8 @@ import GerstnerVS from '../../shaders/GerstnerVertex.glsl';
 import GerstnerFS from '../../shaders/GerstnerFragment.glsl';
 import ScrabbleVS from '../../shaders/ScrabbleVertex.glsl';
 import ScrabbleFS from '../../shaders/ScrabbleFragment.glsl';
+import PopupTextVS from '../../shaders/PopupTextFragment.glsl';
+import PopupTextFS from '../../shaders/PopupTextFragment.glsl';
 
 export default class HomePage extends APage
 {
@@ -27,7 +29,8 @@ export default class HomePage extends APage
       await this.initMoon();
       await this.initSkybox();
       await this.initWaves();
-      await this.initScribbleLogo();
+      //await this.initScribbleLogo();
+      await this.initPopupText();
 
       this.intiRayasting();
       this.initCamera();
@@ -137,7 +140,42 @@ export default class HomePage extends APage
       this.scrabbleLogo.position.set(0, 1.5, 2.5);
       this.scrabbleLogo.lookAt(this.camera.position);
       
-      //this.pageMeshes.push(this.scrabbleLogo);
+      this.pageMeshes.push(this.scrabbleLogo);
+    }
+
+    async initPopupText()
+    {
+      //TODO: TURN INTO SPRITE
+
+      const oFS = {
+        defines: "",
+        header: "",
+        main: PopupTextFS,
+      };
+      const { defines, header, main } = await patchShadersCSM(oFS, [Perlin]);
+      const sPopupTextFS = `${defines}${header}${main}`;
+      
+      const scrabbleLogoGeometry = new THREE.PlaneGeometry(0.75, 0.75, 1, 1);
+      const scrabbleLogoMaterial = new CustomShaderMaterial({
+        baseMaterial: THREE.MeshBasicMaterial,
+        vertexShader: PopupTextVS,
+        fragmentShader: sPopupTextFS,
+        transparent: true,
+        uniforms: {
+          uTime: { value: 0 },
+          displayAlpha: { value: 0 },
+          displacementScale: { value: 15 },
+          displacementStrength: { value: 0.01 },
+        },
+        map: new THREE.TextureLoader().load('./project/textures/ClickToEnter.png'),
+        transparent: true
+      });
+      
+      this.scrabbleLogo = new THREE.Mesh(scrabbleLogoGeometry, scrabbleLogoMaterial);
+      this.scrabbleLogo.position.set(0, 1.5, 2.5);
+      this.scrabbleLogo.lookAt(this.camera.position);
+      
+      this.pageMeshes.push(this.scrabbleLogo);
     }
 
     intiRayasting()
@@ -176,14 +214,14 @@ export default class HomePage extends APage
       this.mousePosition = new THREE.Vector2(0.0, 0.0);
       this.currentMouseFollowPos = new THREE.Vector2(0.0, 0.0);
             
-      this.mouseXCoef = 0.16;
-      this.mouseYCoef = 0.20;
+      this.mouseXCoef = 0.30;
+      this.mouseYCoef = 0.30;
     }
 
     doUpdate()
     {
       this.updateWaves()
-      this.updateScrabbles();
+      //this.updateScrabbles();
       this.updateSkybox();
       this.updateCamera();
     }
