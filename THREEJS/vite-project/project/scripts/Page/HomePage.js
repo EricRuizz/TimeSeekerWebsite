@@ -14,7 +14,7 @@ import GerstnerVS from '../../shaders/GerstnerVertex.glsl';
 import GerstnerFS from '../../shaders/GerstnerFragment.glsl';
 import ScrabbleVS from '../../shaders/ScrabbleVertex.glsl';
 import ScrabbleFS from '../../shaders/ScrabbleFragment.glsl';
-import PopupTextVS from '../../shaders/PopupTextFragment.glsl';
+import PopupTextVS from '../../shaders/PopupTextVertex.glsl';
 import PopupTextFS from '../../shaders/PopupTextFragment.glsl';
 
 export default class HomePage extends APage
@@ -29,7 +29,6 @@ export default class HomePage extends APage
       await this.initMoon();
       await this.initSkybox();
       await this.initWaves();
-      //await this.initScribbleLogo();
       await this.initPopupText();
 
       this.intiRayasting();
@@ -110,60 +109,25 @@ export default class HomePage extends APage
       this.pageMeshes.push(this.waves);
     }
 
-    async initScribbleLogo()
-    {
-      const o_ScrabbleFS = {
-        defines: "",
-        header: "",
-        main: ScrabbleFS,
-      };
-      const { defines, header, main } = await patchShadersCSM(o_ScrabbleFS, [Perlin]);
-      const s_ScrabbleFS = `${defines}${header}${main}`;
-      
-      const scrabbleLogoGeometry = new THREE.PlaneGeometry(0.75, 0.75, 1, 1);
-      const scrabbleLogoMaterial = new CustomShaderMaterial({
-        baseMaterial: THREE.MeshBasicMaterial,
-        vertexShader: ScrabbleVS,
-        fragmentShader: s_ScrabbleFS,
-        transparent: true,
-        uniforms: {
-          uTime: { value: 0 },
-          displayAlpha: { value: 0 },
-          displacementScale: { value: 15 },
-          displacementStrength: { value: 0.01 },
-        },
-        map: new THREE.TextureLoader().load('./project/textures/TimeSeeker_Transparent.png'),
-        transparent: true
-      });
-      
-      this.scrabbleLogo = new THREE.Mesh(scrabbleLogoGeometry, scrabbleLogoMaterial);
-      this.scrabbleLogo.position.set(0, 1.5, 2.5);
-      this.scrabbleLogo.lookAt(this.camera.position);
-      
-      this.pageMeshes.push(this.scrabbleLogo);
-    }
-
     async initPopupText()
     {
-      //TODO: TURN INTO SPRITE
-
       const oFS = {
         defines: "",
         header: "",
         main: PopupTextFS,
       };
       const { defines, header, main } = await patchShadersCSM(oFS, [Perlin]);
-      const sPopupTextFS = `${defines}${header}${main}`;
+      const sFS = `${defines}${header}${main}`;
       
-      const scrabbleLogoGeometry = new THREE.PlaneGeometry(0.75, 0.75, 1, 1);
-      const scrabbleLogoMaterial = new CustomShaderMaterial({
+      const geometry = new THREE.PlaneGeometry(1.8, 0.3, 1, 1);
+      const material = new CustomShaderMaterial({
         baseMaterial: THREE.MeshBasicMaterial,
         vertexShader: PopupTextVS,
-        fragmentShader: sPopupTextFS,
+        fragmentShader: sFS,
         transparent: true,
         uniforms: {
           uTime: { value: 0 },
-          displayAlpha: { value: 0 },
+          displayAlpha: { value: 1 },
           displacementScale: { value: 15 },
           displacementStrength: { value: 0.01 },
         },
@@ -171,11 +135,15 @@ export default class HomePage extends APage
         transparent: true
       });
       
-      this.scrabbleLogo = new THREE.Mesh(scrabbleLogoGeometry, scrabbleLogoMaterial);
-      this.scrabbleLogo.position.set(0, 1.5, 2.5);
-      this.scrabbleLogo.lookAt(this.camera.position);
+      this.popupText = new THREE.Mesh(geometry, material);
+      this.popupText.position.set(0, 1.1, 2.5);
+      this.popupText.lookAt(this.camera.position);
       
-      this.pageMeshes.push(this.scrabbleLogo);
+      this.pageMeshes.push(this.popupText);
+
+
+      this.popupTextMouseY = 0.75;
+      this.isPopupTextShown = false;
     }
 
     intiRayasting()
@@ -221,19 +189,14 @@ export default class HomePage extends APage
     doUpdate()
     {
       this.updateWaves()
-      //this.updateScrabbles();
       this.updateSkybox();
       this.updateCamera();
+      this.updatePopupText();
     }
 
     updateWaves()
     {
       this.waves.material.uniforms.uTime.value += 0.0025;
-    }
-
-    updateScrabbles()
-    {
-      //TODO
     }
 
     updateSkybox()
@@ -273,6 +236,31 @@ export default class HomePage extends APage
       this.camera.rotation.y = this.cameraBaseRotY + cameraRotXOffset;
 
       this.camera.updateProjectionMatrix();
+    }
+
+    updatePopupText()
+    {
+      console.log(this.mousePosition.y);
+      if(this.mousePosition.y > this.popupTextMouseY && !this.isPopupTextShown)
+      {
+        this.showPopupText();
+      }
+      else if(this.isPopupTextShown)
+      {
+        this.hidePopupText();
+      }
+    }
+
+    showPopupText()
+    {
+      this.isPopupTextShown = true;
+      //TODO - LERP
+    }
+
+    hidePopupText()
+    {
+      this.isPopupTextShown = false;
+      //TODO - A
     }
 
     onMouseMove(mousePosition)
