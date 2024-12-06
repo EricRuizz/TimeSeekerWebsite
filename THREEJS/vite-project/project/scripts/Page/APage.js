@@ -54,5 +54,7 @@ export default class APage
         }
     }
 
-    onMouseMove() {}
+    onMouseMove(mousePosition) {}
+    onMouseDown(event) {}
+    onMouseUp(event) {}
 }

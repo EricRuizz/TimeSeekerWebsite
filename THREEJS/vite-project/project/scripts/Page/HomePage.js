@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import APage from "./APage";
 
+import TWEEN from '@tweenjs/tween.js'
+
 // Shader imports
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
@@ -12,8 +14,6 @@ import {
 
 import GerstnerVS from '../../shaders/GerstnerVertex.glsl';
 import GerstnerFS from '../../shaders/GerstnerFragment.glsl';
-import ScrabbleVS from '../../shaders/ScrabbleVertex.glsl';
-import ScrabbleFS from '../../shaders/ScrabbleFragment.glsl';
 import PopupTextVS from '../../shaders/PopupTextVertex.glsl';
 import PopupTextFS from '../../shaders/PopupTextFragment.glsl';
 
@@ -34,6 +34,7 @@ export default class HomePage extends APage
       this.intiRayasting();
       this.initCamera();
       this.initMouseMovement();
+      this.initHoldTransition();
 
       super.sceneAdditions();
     }
@@ -47,6 +48,8 @@ export default class HomePage extends APage
     {
       console.log("doExit");
     }
+
+
 
     async initMoon()
     {
@@ -66,8 +69,24 @@ export default class HomePage extends APage
       const skyboxMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('./project/textures/NightSkyTexture_Dark.png'), side: THREE.BackSide });
       this.skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
       this.skybox.position.set(0, 0, 0);
+      this.skybox.rotation.y = 180;
 
       this.pageMeshes.push(this.skybox);
+    }
+
+    initHoldTransition()
+    {
+      this.holdTimeToTransition = 3;
+      this.currentHoldTimeToTransition = 0;
+      
+      this.isHoldTransitioning = false;
+
+      this.initTransitionClock();
+    }
+
+    initTransitionClock()
+    {
+      this.holdTransitionClock = new THREE.Clock(false);
     }
 
     async initWaves()
@@ -107,6 +126,8 @@ export default class HomePage extends APage
       this.waves.rotateX(THREE.MathUtils.degToRad(270));
 
       this.pageMeshes.push(this.waves);
+
+      this.waveSpeed = 1;
     }
 
     async initPopupText()
@@ -131,19 +152,26 @@ export default class HomePage extends APage
           displacementScale: { value: 15 },
           displacementStrength: { value: 0.01 },
         },
-        map: new THREE.TextureLoader().load('./project/textures/ClickToEnter.png'),
+        map: new THREE.TextureLoader().load('./project/textures/HoldToEnter.png'),
         transparent: true
       });
       
       this.popupText = new THREE.Mesh(geometry, material);
-      this.popupText.position.set(0, 1.1, 2.5);
+      this.popupText.position.set(0, 0.6, 2.5);
       this.popupText.lookAt(this.camera.position);
       
       this.pageMeshes.push(this.popupText);
 
+      this.popupTextShowPosition = new THREE.Vector3(0, 1.1, 2.5);
+      this.popupTextHidePosition = new THREE.Vector3(0, 0.6, 2.5);
 
-      this.popupTextMouseY = 0.75;
+      this.popupTextMouseY = 0.55;
       this.isPopupTextShown = false;
+
+      this.popupTextSpeed = 2000.0;
+
+      this.updateShowPopupTextTween();
+      this.updateHidePopupTextTween();
     }
 
     intiRayasting()
@@ -186,6 +214,8 @@ export default class HomePage extends APage
       this.mouseYCoef = 0.30;
     }
 
+
+
     doUpdate()
     {
       this.updateWaves()
@@ -196,12 +226,16 @@ export default class HomePage extends APage
 
     updateWaves()
     {
-      this.waves.material.uniforms.uTime.value += 0.0025;
+      this.waves.material.uniforms.uTime.value += 0.0025; //TODO - use    this.waveSpeed
     }
 
     updateSkybox()
     {
-      this.skybox.rotation.y += 0.0002;
+      const skyboxTransitionRotation = THREE.MathUtils.clamp((this.holdTransitionClock.getElapsedTime() * 2) ** 3, 0, 0.1);
+      const skyboxDefaultRotationOffset = 0.5 * this.clock.getDelta();
+
+      const skyboxRotationOffset = skyboxDefaultRotationOffset + skyboxTransitionRotation;
+      this.skybox.rotation.y += skyboxRotationOffset;
     }
 
     updateCamera()
@@ -240,12 +274,23 @@ export default class HomePage extends APage
 
     updatePopupText()
     {
-      console.log(this.mousePosition.y);
+      this.popupTextChangeStateCheck();
+
+      if(this.isPopupTextShown)
+      {
+        this.popupText_showTween.update();
+      } else {
+        this.popupText_hideTween.update();
+      }
+    }
+
+    popupTextChangeStateCheck()
+    {
       if(this.mousePosition.y > this.popupTextMouseY && !this.isPopupTextShown)
       {
         this.showPopupText();
       }
-      else if(this.isPopupTextShown)
+      else if(this.mousePosition.y <= this.popupTextMouseY && this.isPopupTextShown)
       {
         this.hidePopupText();
       }
@@ -254,14 +299,55 @@ export default class HomePage extends APage
     showPopupText()
     {
       this.isPopupTextShown = true;
-      //TODO - LERP
+      
+      this.updateShowPopupTextTween();
+      this.popupText_showTween.start();
     }
 
     hidePopupText()
     {
       this.isPopupTextShown = false;
-      //TODO - A
+
+      this.updateHidePopupTextTween();
+      this.popupText_hideTween.start();
     }
+
+    updateShowPopupTextTween()
+    {
+      const completionTime = this.popupText.position.distanceTo(this.popupTextShowPosition) * this.popupTextSpeed;
+      this.popupText_showTween = new TWEEN.Tween(this.popupText.position)
+      .to(this.popupTextShowPosition, completionTime)
+      .easing(TWEEN.Easing.Cubic.Out);
+    }
+
+    updateHidePopupTextTween()
+    {
+      const completionTime = this.popupText.position.distanceTo(this.popupTextHidePosition) * this.popupTextSpeed;
+      this.popupText_hideTween = new TWEEN.Tween(this.popupText.position)
+      .to(this.popupTextHidePosition, completionTime)
+      .easing(TWEEN.Easing.Cubic.Out);
+    }
+
+
+
+    startHoldTransition()
+    {
+      this.isHoldTransitioning = true;
+
+      this.holdTransitionClock.start();
+    }
+
+    stopHoldTransition()
+    {
+      this.isHoldTransitioning = false;
+
+      this.holdTransitionClock.stop();
+      this.initTransitionClock();
+
+      console.log(this.holdTransitionClock.getElapsedTime());
+    }
+
+
 
     onMouseMove(mousePosition)
     {
@@ -274,5 +360,21 @@ export default class HomePage extends APage
       //if (intersects.length > 0) {
       //  console.log(intersects);
       //}
+    }
+
+    onMouseDown(event)
+    {
+      if(this.isPopupTextShown && !this.isHoldTransitioning)
+      {
+        this.startHoldTransition();
+      }
+    }
+
+    onMouseUp(event)
+    {
+      if(this.isPopupTextShown && this.isHoldTransitioning)
+      {
+        this.stopHoldTransition();
+      }
     }
 }

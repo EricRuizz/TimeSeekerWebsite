@@ -155,6 +155,20 @@ function OnMouseMove(event)
 }
 document.addEventListener("mousemove", OnMouseMove, false);
 
+function OnMouseDown(event)
+{
+  currentPage.onMouseDown(event);
+}
+document.addEventListener('mousedown', OnMouseDown, false);
+
+function OnMouseUp(event)
+{
+  currentPage.onMouseUp(event);
+}
+document.addEventListener('mouseup', OnMouseUp, false);
+
+
+
 // TODO - APPLY THIS
 function onWindowResize()
 {
