@@ -165,7 +165,7 @@ export default class HomePage extends APage
       this.popupTextShowPosition = new THREE.Vector3(0, 1.1, 2.5);
       this.popupTextHidePosition = new THREE.Vector3(0, 0.6, 2.5);
 
-      this.popupTextMouseY = 0.55;
+      this.popupTextMouseY = 0.25;
       this.isPopupTextShown = false;
 
       this.popupTextSpeed = 2000.0;
@@ -231,8 +231,8 @@ export default class HomePage extends APage
 
     updateSkybox()
     {
-      const skyboxTransitionRotation = THREE.MathUtils.clamp((this.holdTransitionClock.getElapsedTime() * 2) ** 3, 0, 0.1);
-      const skyboxDefaultRotationOffset = 0.5 * this.clock.getDelta();
+      const skyboxTransitionRotation = THREE.MathUtils.clamp((this.holdTransitionClock.getElapsedTime() * 0.2) ** 3, 0, 0.1);
+      const skyboxDefaultRotationOffset = this.clock.getDelta() * 0.01;
 
       const skyboxRotationOffset = skyboxDefaultRotationOffset + skyboxTransitionRotation;
       this.skybox.rotation.y += skyboxRotationOffset;
@@ -263,8 +263,15 @@ export default class HomePage extends APage
       direction.multiplyScalar(speed);
       this.currentMouseFollowPos.add(direction);
 
-      var cameraRotXOffset = this.cameraRotOffsetIdle.x + this.currentMouseFollowPos.x;
-      var cameraRotYOffset = this.cameraRotOffsetIdle.y + this.currentMouseFollowPos.y;
+      var cameraRotXIdleOffset = this.cameraRotOffsetIdle.x + this.currentMouseFollowPos.x;
+      var cameraRotYIdleOffset = this.cameraRotOffsetIdle.y + this.currentMouseFollowPos.y;
+
+      //TODO - calculate Transition rotation - use this.transitionTimeClock.getElapsedTime();
+      var cameraRotXTransition = 0;
+      var cameraRotYTransition = 0;
+
+      var cameraRotXOffset = cameraRotXIdleOffset + cameraRotXTransition;
+      var cameraRotYOffset = cameraRotYIdleOffset + cameraRotYTransition;
 
       this.camera.rotation.x = this.cameraBaseRotX + cameraRotYOffset;
       this.camera.rotation.y = this.cameraBaseRotY + cameraRotXOffset;
@@ -276,8 +283,7 @@ export default class HomePage extends APage
     {
       this.popupTextChangeStateCheck();
 
-      if(this.isPopupTextShown)
-      {
+      if(this.isPopupTextShown) {
         this.popupText_showTween.update();
       } else {
         this.popupText_hideTween.update();
@@ -343,8 +349,6 @@ export default class HomePage extends APage
 
       this.holdTransitionClock.stop();
       this.initTransitionClock();
-
-      console.log(this.holdTransitionClock.getElapsedTime());
     }
 
 
