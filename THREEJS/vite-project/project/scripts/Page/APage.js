@@ -3,11 +3,12 @@ export default class APage
     pageMeshes = [];
     finishedLoading = false;
 
-    constructor(scene, camera, clock)
+    constructor(scene, camera, clock, composer)
     {
         this.scene = scene;
         this.camera = camera;
         this.clock = clock;
+        this.composer = composer;
     }
 
     init() {}

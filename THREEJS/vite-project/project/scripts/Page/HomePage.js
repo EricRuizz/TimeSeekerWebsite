@@ -19,9 +19,9 @@ import PopupTextFS from '../../shaders/PopupTextFragment.glsl';
 
 export default class HomePage extends APage
 {
-    constructor(scene, camera, clock)
+    constructor(scene, camera, clock, composer)
     {
-      super(scene, camera, clock);
+      super(scene, camera, clock, composer);
     }
 
     async init()
@@ -77,11 +77,21 @@ export default class HomePage extends APage
     initHoldTransition()
     {
       this.holdTimeToTransition = 3;
-      this.currentHoldTimeToTransition = 0;
-      
       this.isHoldTransitioning = false;
+      this.inTransitionAnimation = false;
 
       this.initTransitionClock();
+
+      // Animation
+      this.transitionAnimationClock = new THREE.Clock(false);
+      this.TACameraRotSpeed = 1;
+      this.TACameraRotationGoal = THREE.MathUtils.DEG2RAD * 75;
+
+      this.TARegularCameraRotationFadeClock = new THREE.Clock(false);
+      
+      this.cameraTransitionTween = new TWEEN.Tween(this.camera.rotation)
+      .to(new THREE.Vector3(-75, this.cameraBaseRotY, 0), 1)
+      .easing(TWEEN.Easing.Cubic.Out);
     }
 
     initTransitionClock()
@@ -197,8 +207,8 @@ export default class HomePage extends APage
       this.cameraYOffset = 0.2 + this.cameraYMovementRange;
 
       // Camera idle rotation
-      this.cameraIdleYRotationSpeed = 1.0;
-      this.cameraIdleXRotationSpeed = this.cameraIdleYRotationSpeed / 2.0;
+      this.cameraIdleXRotationSpeed = 1.0;
+      this.cameraIdleYRotationSpeed = this.cameraIdleXRotationSpeed / 2.0;
       this.cameraIdleXRotationRange = 0.025;
       this.cameraIdleYRotationRange = 0.025;
       this.cameraIdleXRotationOffset = this.cameraIdleXRotationRange / 2.0 * -1;
@@ -218,10 +228,31 @@ export default class HomePage extends APage
 
     doUpdate()
     {
+      this.updateTransition();
       this.updateWaves()
       this.updateSkybox();
       this.updateCamera();
       this.updatePopupText();
+    }
+
+    updateTransition()
+    {
+      if(this.holdTransitionClock.getElapsedTime() >= this.holdTimeToTransition && !this.inTransitionAnimation)
+      {
+        this.startTransitionAnimation();
+      }
+    }
+
+    startTransitionAnimation()
+    {
+      this.inTransitionAnimation = true;
+      this.transitionAnimationClock.start();
+      this.TARegularCameraRotationFadeClock.start();
+
+      this.hidePopupText();
+
+      //this tween does not work
+      this.cameraTransitionTween.start();
     }
 
     updateWaves()
@@ -246,13 +277,24 @@ export default class HomePage extends APage
       // Camera Y movement
       this.camera.position.y = Math.sin(this.clock.getElapsedTime() * this.cameraYMovementSpeed) * this.cameraYMovementRange + this.cameraYOffset;
 
+      if(!this.inTransitionAnimation)
+      {
+        this.updateCameraRotation();
+      }
+      
+
+      this.camera.updateProjectionMatrix();
+    }
+
+    updateCameraRotation()
+    {
       // Camera rotation
       this.cameraRotOffsetIdle.x = Math.sin(this.clock.getElapsedTime() * this.cameraIdleXRotationSpeed) * this.cameraIdleXRotationRange + this.cameraIdleXRotationOffset;
       this.cameraRotOffsetIdle.y = Math.sin(this.clock.getElapsedTime() * this.cameraIdleYRotationSpeed) * this.cameraIdleYRotationRange + this.cameraIdleYRotationOffset;
 
       var goalMouseFollowPos = this.mousePosition.clone();
-      goalMouseFollowPos.x = -this.mousePosition.x * this.mouseXCoef;
-      goalMouseFollowPos.y = -this.mousePosition.y * this.mouseYCoef;
+      goalMouseFollowPos.y = -this.mousePosition.x * this.mouseXCoef;
+      goalMouseFollowPos.x = -this.mousePosition.y * this.mouseYCoef;
 
       var direction = new THREE.Vector2().subVectors(goalMouseFollowPos, this.currentMouseFollowPos);
       var distance = direction.length();
@@ -266,17 +308,15 @@ export default class HomePage extends APage
       var cameraRotXIdleOffset = this.cameraRotOffsetIdle.x + this.currentMouseFollowPos.x;
       var cameraRotYIdleOffset = this.cameraRotOffsetIdle.y + this.currentMouseFollowPos.y;
 
-      //TODO - calculate Transition rotation - use this.transitionTimeClock.getElapsedTime();
-      var cameraRotXTransition = 0;
+      var cameraRotXTransition = -THREE.MathUtils.clamp(this.transitionAnimationClock.getElapsedTime() * this.TACameraRotSpeed, 0, this.TACameraRotationGoal);
       var cameraRotYTransition = 0;
 
-      var cameraRotXOffset = cameraRotXIdleOffset + cameraRotXTransition;
-      var cameraRotYOffset = cameraRotYIdleOffset + cameraRotYTransition;
+      var transitionIdleOffsetCoef = THREE.MathUtils.clamp(1 - this.TARegularCameraRotationFadeClock.getElapsedTime(), 0, 1);
+      var cameraRotXOffset = (cameraRotXIdleOffset * transitionIdleOffsetCoef) + cameraRotXTransition;
+      var cameraRotYOffset = (cameraRotYIdleOffset * transitionIdleOffsetCoef) + cameraRotYTransition;
 
-      this.camera.rotation.x = this.cameraBaseRotX + cameraRotYOffset;
-      this.camera.rotation.y = this.cameraBaseRotY + cameraRotXOffset;
-
-      this.camera.updateProjectionMatrix();
+      this.camera.rotation.x = this.cameraBaseRotX + cameraRotXOffset;
+      this.camera.rotation.y = this.cameraBaseRotY + cameraRotYOffset;
     }
 
     updatePopupText()
@@ -292,6 +332,7 @@ export default class HomePage extends APage
 
     popupTextChangeStateCheck()
     {
+      if(this.inTransitionAnimation) return;
       if(this.mousePosition.y > this.popupTextMouseY && !this.isPopupTextShown)
       {
         this.showPopupText();
@@ -368,7 +409,7 @@ export default class HomePage extends APage
 
     onMouseDown(event)
     {
-      if(this.isPopupTextShown && !this.isHoldTransitioning)
+      if(this.isPopupTextShown && !this.isHoldTransitioning && !this.inTransitionAnimation)
       {
         this.startHoldTransition();
       }
@@ -376,7 +417,7 @@ export default class HomePage extends APage
 
     onMouseUp(event)
     {
-      if(this.isPopupTextShown && this.isHoldTransitioning)
+      if(this.isHoldTransitioning && !this.inTransitionAnimation)
       {
         this.stopHoldTransition();
       }
