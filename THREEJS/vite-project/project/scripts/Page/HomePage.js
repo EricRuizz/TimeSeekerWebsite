@@ -88,10 +88,6 @@ export default class HomePage extends APage
       this.TACameraRotationGoal = THREE.MathUtils.DEG2RAD * 75;
 
       this.TARegularCameraRotationFadeClock = new THREE.Clock(false);
-      
-      this.cameraTransitionTween = new TWEEN.Tween(this.camera.rotation)
-      .to(new THREE.Vector3(-75, this.cameraBaseRotY, 0), 1)
-      .easing(TWEEN.Easing.Cubic.Out);
     }
 
     initTransitionClock()
@@ -229,7 +225,7 @@ export default class HomePage extends APage
     doUpdate()
     {
       this.updateTransition();
-      this.updateWaves()
+      this.updateWaves();
       this.updateSkybox();
       this.updateCamera();
       this.updatePopupText();
@@ -251,7 +247,13 @@ export default class HomePage extends APage
 
       this.hidePopupText();
 
-      //this tween does not work
+      const completionTime = 2500.0;
+      const finalRotation = new THREE.Vector3(THREE.MathUtils.DEG2RAD * -90, this.cameraBaseRotY, 0);
+
+      this.cameraTransitionTween = new TWEEN.Tween(this.camera.rotation)
+      .to(finalRotation, completionTime)
+      .easing(TWEEN.Easing.Cubic.Out);
+
       this.cameraTransitionTween.start();
     }
 
@@ -281,8 +283,11 @@ export default class HomePage extends APage
       {
         this.updateCameraRotation();
       }
+      else
+      {
+        this.cameraTransitionTween.update();
+      }
       
-
       this.camera.updateProjectionMatrix();
     }
 
