@@ -1,7 +1,13 @@
 import * as THREE from 'three';
 import APage from "./APage";
 
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import TWEEN from '@tweenjs/tween.js'
+
+// PostProcessing
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
+import { BokehPass } from 'three/examples/jsm/Addons.js';
 
 // Shader imports
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
@@ -17,39 +23,107 @@ import GerstnerFS from '../../shaders/GerstnerFragment.glsl';
 import PopupTextVS from '../../shaders/PopupTextVertex.glsl';
 import PopupTextFS from '../../shaders/PopupTextFragment.glsl';
 
-export default class HomePage extends APage
+export default class BreathPage extends APage
 {
     constructor(scene, camera, clock, composer)
     {
       super(scene, camera, clock, composer);
     }
 
-    async init()
+    async init(autoEnter)
     {
-      await this.initMoon();
-      await this.initSkybox();
-      await this.initWaves();
-      await this.initPopupText();
+      super.initPageIndex(1);
+
+      this.initPostProcessing();
+
+      await Promise.all([
+        this.initMoon(),
+        this.initSkybox(),
+        this.initWaves(),
+        this.initPopupText(),
+      ]);
 
       this.intiRayasting();
+      this.initLights();
       this.initCamera();
       this.initMouseMovement();
       this.initHoldTransition();
 
       super.sceneAdditions();
+
+      if(autoEnter) super.enter();
+
+      return super.pageIndex;
     }
 
     doEnter()
     {
-      console.log("doEnter");
+      this.enterAniamtion();
     }
 
     doExit()
     {
-      console.log("doExit");
+      
     }
 
 
+
+    initPostProcessing()
+    {
+      this.guiPostprocessing = {};
+      
+      // Bloom
+      this.bloomPassLow = new UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
+        0.5,  //Intensity
+        0.1,  //Radius
+        0.1   //Which pixels are affected
+      );
+      this.composer.addPass(this.bloomPassLow);
+      
+      this.bloomPass = new UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
+        10.5, //Intensity
+        0.1,  //Radius
+        2.5   //Which pixels are affected
+      );
+      this.composer.addPass(this.bloomPass);
+      
+      // Film
+      this.filmPass = new FilmPass(1, false);
+      this.composer.addPass(this.filmPass);
+      
+      // Bokeh
+      this.bokehPass = new BokehPass( this.scene, this.camera, {
+        focus: 1.0,
+        aperture: 0.025,
+        maxblur: 0.01
+      } );
+      this.composer.addPass(this.bokehPass);
+      this.guiPostprocessing.bokeh = this.bokehPass;
+      
+      this.effectController = {
+      
+        focus: 250.0,
+        aperture: 1.5,
+        maxblur: 0.01
+      
+      };
+      this.matChanger = ( ) =>
+      {
+        this.guiPostprocessing.bokeh.uniforms[ 'focus' ].value = this.effectController.focus;
+        this.guiPostprocessing.bokeh.uniforms[ 'aperture' ].value = this.effectController.aperture * 0.00001;
+        this.guiPostprocessing.bokeh.uniforms[ 'maxblur' ].value = this.effectController.maxblur;
+      };
+      
+      this.gui = new GUI();
+      this.gui.add( this.effectController, 'focus', 0.0, 3000.0, 10 ).onChange( this.matChanger );
+      this.gui.add( this.effectController, 'aperture', 0, 10, 0.1 ).onChange( this.matChanger );
+      this.gui.add( this.effectController, 'maxblur', 0.0, 1, 0.01 ).onChange( this.matChanger );
+      this.gui.close();
+      
+      this.matChanger();
+    }
 
     async initMoon()
     {
@@ -187,6 +261,20 @@ export default class HomePage extends APage
       this.scrabbleRaycastTargets.push(this.scrabbleLogo);
     }
 
+    initLights()
+    {
+      this.ambientLight = new THREE.AmbientLight(0xffffff);
+      this.ambientLight.intensity = 1;
+      this.scene.add(this.ambientLight);
+
+      this.pointLightA = new THREE.PointLight();
+      this.pointLightA.position.set(0, 10, 20);
+      //this.pointLightA.intensity = 250;
+      this.pointLightA.intensity = 2500;
+      this.pointLightA.color = new THREE.Color(0.75, 0.75, 1);
+      this.scene.add(this.pointLightA);
+    }
+
     initCamera()
     {
       this.cameraBaseFov = this.camera.fov;
@@ -229,6 +317,8 @@ export default class HomePage extends APage
       this.updateSkybox();
       this.updateCamera();
       this.updatePopupText();
+
+      return this.nextPageIndex;
     }
 
     updateTransition()
@@ -426,5 +516,18 @@ export default class HomePage extends APage
       {
         this.stopHoldTransition();
       }
+    }
+
+
+
+    enterAniamtion()
+    {
+      //TODO - 
+      this.composer = this.composer;
+    }
+
+    exitAnimation()
+    {
+
     }
 }

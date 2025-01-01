@@ -1,14 +1,9 @@
 import './style.css';
 import * as THREE from 'three';
 
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-
 //PostProcessing
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
-import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
-import { BokehPass } from 'three/examples/jsm/Addons.js';
 //TODO: Bokeh2, FFXA
 
 //Classes
@@ -16,6 +11,40 @@ import * as Page from './project/scripts/Page';
 
 
 
+
+
+
+// Generic - TODO (use this in loadingPage)
+
+function isHardwareAccelerationEnabled() {
+  const canvas = document.createElement("canvas");
+  const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+  if (!gl) {
+      console.warn("WebGL not supported. 'Hardware acceleration'/'Graphics rendering' might be off.");
+      return false;
+  }
+
+  const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+  const renderer = debugInfo
+      ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
+      : "Unknown Renderer";
+
+  console.log("Renderer:", renderer);
+
+  // Check for typical software renderers
+  const isSoftwareRenderer =
+      renderer.toLowerCase().includes("software") ||
+      renderer.toLowerCase().includes("swiftshader") ||
+      renderer.toLowerCase().includes("llvmpipe");
+
+  if (isSoftwareRenderer) {
+      console.warn("Software rendering detected. 'Hardware acceleration'/'Graphics rendering' might be off.");
+      return false;
+  }
+
+  return true;
+}
 
 
 
@@ -50,85 +79,23 @@ const clock = new THREE.Clock(true);
 
 // Pages
 
-const homePage = new Page.HomePage(scene, camera, clock);
-homePage.init();
+//Loading page
+//TODO - use isHardwareAccelerationEnabled() in order to bring the user to breathPage or to hubPage - OR not? since it is not done in US
 
-const currentPage = homePage;
+// Home page
+//const loadingPage = new Page.LoadingPage(scene, camera, clock, composer);
+//var loadingPageIndex = loadingPage.init(false);
+const breathPage = new Page.BreathPage(scene, camera, clock, composer);
+var breathPageIndex = breathPage.init(true);
+//const hubPage = new Page.HubPage(scene, camera, clock, composer);
+//var hubPageIndex = hubPage.init(false);
 
-
-// Lights
-
-const ambientLight = new THREE.AmbientLight(0xffffff);
-ambientLight.intensity = 1;
-scene.add(ambientLight);
-
-const pointLightA = new THREE.PointLight();
-pointLightA.position.set(0, 10, 20);
-//pointLightA.intensity = 250;
-pointLightA.intensity = 2500;
-pointLightA.color = new THREE.Color(0.75, 0.75, 1);
-scene.add(pointLightA);
+var currentPageIndex = breathPageIndex;
+const currentPage = breathPage;
 
 
 
 
-
-
-// Post-Processing
-
-const postprocessing = {};
-
-// Bloom
-const bloomPassLow = new UnrealBloomPass(
-  new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
-  0.5,  //Intensity
-  0.1,  //Radius
-  0.1   //Which pixels are affected
-);
-composer.addPass(bloomPassLow);
-
-const bloomPass = new UnrealBloomPass(
-  new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
-  10.5, //Intensity
-  0.1,  //Radius
-  2.5   //Which pixels are affected
-);
-composer.addPass(bloomPass);
-
-// Film
-const filmPass = new FilmPass(1, false);
-composer.addPass(filmPass);
-
-// Bokeh
-const bokehPass = new BokehPass( scene, camera, {
-  focus: 1.0,
-  aperture: 0.025,
-  maxblur: 0.01
-} );
-composer.addPass(bokehPass);
-postprocessing.bokeh = bokehPass;
-
-const effectController = {
-
-  focus: 250.0,
-  aperture: 1.5,
-  maxblur: 0.01
-
-};
-const matChanger = function ( )
-{
-  postprocessing.bokeh.uniforms[ 'focus' ].value = effectController.focus;
-  postprocessing.bokeh.uniforms[ 'aperture' ].value = effectController.aperture * 0.00001;
-  postprocessing.bokeh.uniforms[ 'maxblur' ].value = effectController.maxblur;
-};
-
-const gui = new GUI();
-gui.add( effectController, 'focus', 0.0, 3000.0, 10 ).onChange( matChanger );
-gui.add( effectController, 'aperture', 0, 10, 0.1 ).onChange( matChanger );
-gui.add( effectController, 'maxblur', 0.0, 1, 0.01 ).onChange( matChanger );
-gui.close();
-
-matChanger();
 
 
 
@@ -189,9 +156,30 @@ window.addEventListener('resize', onWindowResize);
 
 
 
+function switchCurrentScene(pageIndexResult)
+{
+  //TODO - scene switching - CALL EXIT() end ENTER() and all that kind of stuff
+  if(pageIndexResult == 0)
+  {
+
+  }
+  else if(pageIndexResult == 1)
+  {
+
+  }
+  else if(pageIndexResult == 2)
+  {
+
+  }
+}
+
 function animate()
 {
-  currentPage.update();
+  var pageIndexResult = currentPage.update()
+  if(pageIndexResult != currentPageIndex)
+  {
+    switchCurrentScene(pageIndexResult);
+  }
 
   composer.render();
   requestAnimationFrame(animate);

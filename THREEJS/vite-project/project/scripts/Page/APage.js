@@ -2,6 +2,7 @@ export default class APage
 {
     pageMeshes = [];
     finishedLoading = false;
+    pageIndex = -1;
 
     constructor(scene, camera, clock, composer)
     {
@@ -11,14 +12,19 @@ export default class APage
         this.composer = composer;
     }
 
-    init() {}
+    init(autoEnter) {}
+
+    initPageIndex(index)
+    {
+        this.pageIndex = index; 
+        this.nextPageIndex = this.pageIndex; 
+    }
 
     sceneAdditions()
     {
-        console.log("Scene Additions");
         this.pageMeshes.forEach(mesh => {
-            console.log("Mesh added to scene");
             this.scene.add(mesh);
+            mesh.visible = false;
         });
 
         this.finishedLoading = true;
@@ -51,7 +57,7 @@ export default class APage
     {
         if(this.finishedLoading)
         {
-            this.doUpdate();
+            return this.doUpdate();
         }
     }
 
