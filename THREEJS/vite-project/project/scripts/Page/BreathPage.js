@@ -36,6 +36,10 @@ export default class BreathPage extends APage
 
       this.initPostProcessing();
 
+      console.log("FFFF");
+      this.initEnterAniamtion();
+      this.initExitAnimation();
+
       await Promise.all([
         this.initMoon(),
         this.initSkybox(),
@@ -58,7 +62,8 @@ export default class BreathPage extends APage
 
     doEnter()
     {
-      this.enterAniamtion();
+      console.log("AASDS");
+      this.EAApertureUp.start();
     }
 
     doExit()
@@ -94,6 +99,7 @@ export default class BreathPage extends APage
       this.composer.addPass(this.filmPass);
       
       // Bokeh
+      this.appertureCoef = 0.00001;
       this.bokehPass = new BokehPass( this.scene, this.camera, {
         focus: 1.0,
         aperture: 0.025,
@@ -106,13 +112,13 @@ export default class BreathPage extends APage
       
         focus: 250.0,
         aperture: 1.5,
-        maxblur: 0.01
+        maxblur: 0.03
       
       };
       this.matChanger = ( ) =>
       {
         this.guiPostprocessing.bokeh.uniforms[ 'focus' ].value = this.effectController.focus;
-        this.guiPostprocessing.bokeh.uniforms[ 'aperture' ].value = this.effectController.aperture * 0.00001;
+        this.guiPostprocessing.bokeh.uniforms[ 'aperture' ].value = this.effectController.aperture * this.appertureCoef;
         this.guiPostprocessing.bokeh.uniforms[ 'maxblur' ].value = this.effectController.maxblur;
       };
       
@@ -312,13 +318,33 @@ export default class BreathPage extends APage
 
     doUpdate()
     {
+      this.updateTweens();
+
       this.updateTransition();
       this.updateWaves();
       this.updateSkybox();
       this.updateCamera();
       this.updatePopupText();
+      //this.guiPostprocessing.bokeh.uniforms[ 'aperture' ].value = 0;
 
       return this.nextPageIndex;
+    }
+
+    updateTweens()
+    {
+      if(this.enterAnimationPlaying)
+      {
+        if(this.EAApertureUp.isPlaying())
+        {
+          console.log("DDDDD");
+          this.EAApertureUp.update();
+        }
+        else if(this.EAApertureDown.isPlaying())
+        {
+          console.log("CCCCC");
+          this.EAApertureDown.update();
+        }
+      }
     }
 
     updateTransition()
@@ -519,14 +545,33 @@ export default class BreathPage extends APage
     }
 
 
-
-    enterAniamtion()
+  
+    initEnterAniamtion()
     {
-      //TODO - 
-      this.composer = this.composer;
+      this.enterAnimationPlaying = true;
+
+      this.apertureObject = { value: this.guiPostprocessing.bokeh.uniforms['aperture'].value };
+
+      //second tween
+      this.EAApertureDown = new TWEEN.Tween(this.apertureObject)
+      .to({value: 0}, 1.5 * 1000)
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onUpdate(() => { this.guiPostprocessing.bokeh.uniforms['aperture'].value = this.apertureObject.value })
+      .onComplete(() => {
+        this.enterAnimationPlaying = false;
+      });
+
+      //first tween
+      this.EAApertureUp = new TWEEN.Tween(this.apertureObject)
+      .to({value: 5 * this.appertureCoef}, 0.5 * 1000)
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onUpdate(() => { this.guiPostprocessing.bokeh.uniforms['aperture'].value = this.apertureObject.value })
+      .onComplete(() => {
+        this.EAApertureDown.start();
+      });
     }
 
-    exitAnimation()
+    initExitAnimation()
     {
 
     }
