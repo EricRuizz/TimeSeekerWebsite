@@ -5,6 +5,8 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import TWEEN from '@tweenjs/tween.js'
 
 // PostProcessing
+import { ShaderMaterial, Uniform } from 'three';
+import { ShaderPass } from 'three/examples/jsm/Addons.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
 import { BokehPass } from 'three/examples/jsm/Addons.js';
@@ -18,6 +20,8 @@ import {
   Perlin
 } from "gl-noise"
 
+import ContrastTransitionVS from '../../shaders/ContrastTransitionVertex.glsl';
+import ContrastTransitionFS from '../../shaders/ContrastTransitionFragment.glsl';
 import GerstnerVS from '../../shaders/GerstnerVertex.glsl';
 import GerstnerFS from '../../shaders/GerstnerFragment.glsl';
 import PopupTextVS from '../../shaders/PopupTextVertex.glsl';
@@ -36,7 +40,6 @@ export default class BreathPage extends APage
 
       this.initPostProcessing();
 
-      console.log("FFFF");
       this.initEnterAniamtion();
       this.initExitAnimation();
 
@@ -62,8 +65,8 @@ export default class BreathPage extends APage
 
     doEnter()
     {
-      console.log("AASDS");
       this.EAApertureUp.start();
+      this.contrastEnterTween.start();
     }
 
     doExit()
@@ -108,7 +111,7 @@ export default class BreathPage extends APage
       this.composer.addPass(this.bokehPass);
       this.guiPostprocessing.bokeh = this.bokehPass;
       
-      this.effectController = {
+      /*this.effectController = {
       
         focus: 250.0,
         aperture: 1.5,
@@ -128,7 +131,21 @@ export default class BreathPage extends APage
       this.gui.add( this.effectController, 'maxblur', 0.0, 1, 0.01 ).onChange( this.matChanger );
       this.gui.close();
       
-      this.matChanger();
+      this.matChanger();*/
+
+      this.contrastTransitionMaterial = new ShaderMaterial(
+      {
+        defines: { LABEL: "value" },
+        uniforms: { tDiffuse: new Uniform(null),
+          uContrast: { value: 1.0 },
+          uSubtraction: { value: 0.0 }
+         },
+        vertexShader: ContrastTransitionVS,
+        fragmentShader: ContrastTransitionFS
+      });
+      
+      this.contrastTransitionPass = new ShaderPass(this.contrastTransitionMaterial, "tDiffuse");
+      this.composer.addPass(this.contrastTransitionPass);
     }
 
     async initMoon()
@@ -325,8 +342,6 @@ export default class BreathPage extends APage
       this.updateSkybox();
       this.updateCamera();
       this.updatePopupText();
-      //this.guiPostprocessing.bokeh.uniforms[ 'aperture' ].value = 0;
-
       return this.nextPageIndex;
     }
 
@@ -334,14 +349,17 @@ export default class BreathPage extends APage
     {
       if(this.enterAnimationPlaying)
       {
+        if(this.contrastEnterTween.isPlaying())
+        {
+          this.contrastEnterTween.update();
+        }
+
         if(this.EAApertureUp.isPlaying())
         {
-          console.log("DDDDD");
           this.EAApertureUp.update();
         }
         else if(this.EAApertureDown.isPlaying())
         {
-          console.log("CCCCC");
           this.EAApertureDown.update();
         }
       }
@@ -563,11 +581,21 @@ export default class BreathPage extends APage
 
       //first tween
       this.EAApertureUp = new TWEEN.Tween(this.apertureObject)
-      .to({value: 5 * this.appertureCoef}, 0.5 * 1000)
+      .to({value: 5 * this.appertureCoef}, 1.0 * 1000)
       .easing(TWEEN.Easing.Cubic.Out)
       .onUpdate(() => { this.guiPostprocessing.bokeh.uniforms['aperture'].value = this.apertureObject.value })
       .onComplete(() => {
         this.EAApertureDown.start();
+      });
+
+      //Postprocessing tween
+      this.contrastParamObject = { value: 0.0 };
+      this.contrastEnterTween = new TWEEN.Tween(this.contrastParamObject)
+      .to({ value: 1.0 }, 1.5 * 1000)
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onUpdate(() => {
+        this.contrastTransitionMaterial.uniforms.uContrast = { value: this.contrastParamObject.value };
+        this.contrastTransitionMaterial.uniforms.uSubtraction = { value: 1.0 - this.contrastParamObject.value };
       });
     }
 
