@@ -198,6 +198,7 @@ export default class BreathPage extends APage
     initTransitionClock()
     {
       this.holdTransitionClock = new THREE.Clock(false);
+      this.stopHoldTransitionClock = new THREE.Clock(false);
     }
 
     async initWaves()
@@ -328,6 +329,8 @@ export default class BreathPage extends APage
       this.cameraIdleYRotationRange = 0.025;
       this.cameraIdleXRotationOffset = this.cameraIdleXRotationRange / 2.0 * -1;
       this.cameraIdleYRotationOffset = this.cameraIdleYRotationRange / 2.0 * -1;
+
+      this.transitionFOVCoef = 0.0;
     }
 
     initMouseMovement()
@@ -375,8 +378,6 @@ export default class BreathPage extends APage
 
     updateTransition()
     {
-
-
       if(this.holdTransitionClock.getElapsedTime() >= this.holdTimeToTransition && !this.inTransitionAnimation)
       {
         this.startTransitionAnimation();
@@ -388,7 +389,7 @@ export default class BreathPage extends APage
 
       if(this.isHoldTransitioning)
       {
-        this.afterImagePass.uniforms.damp = { value: 0.9 };
+        this.afterImageExitTween.update();
       }
     }
 
@@ -397,20 +398,7 @@ export default class BreathPage extends APage
       this.inTransitionAnimation = true;
       this.transitionAnimationClock.start();
       this.TARegularCameraRotationFadeClock.start();
-
-      const completionTime = 1500.0;
-      const finalRotation = new THREE.Vector3(THREE.MathUtils.DEG2RAD * -90, this.cameraBaseRotY, 0);
-
-      this.cameraTransitionTween = new TWEEN.Tween(this.camera.rotation)
-      .to(finalRotation, completionTime)
-      .easing(TWEEN.Easing.Cubic.Out)
-      .onComplete(() =>
-        {
-          this.contrastExitTween.start();
-        }
-      );
-
-      this.cameraTransitionTween.start();
+      
       this.contrastExitTween.start();
     }
 
@@ -421,7 +409,7 @@ export default class BreathPage extends APage
 
     updateSkybox()
     {
-      const skyboxTransitionRotation = THREE.MathUtils.clamp((this.holdTransitionClock.getElapsedTime() * 0.2) ** 3, 0, 0.1);
+      const skyboxTransitionRotation = 0.0;//THREE.MathUtils.clamp((this.holdTransitionClock.getElapsedTime() * 0.1) ** 3, 0, 0.05);
       const skyboxDefaultRotationOffset = this.clock.getDelta() * 0.01;
 
       const skyboxRotationOffset = skyboxDefaultRotationOffset + skyboxTransitionRotation;
@@ -431,7 +419,9 @@ export default class BreathPage extends APage
     updateCamera()
     {
       // Camera FOV
-      this.camera.fov = Math.sin(this.clock.getElapsedTime() * this.cameraFovSpeed) * this.cameraFovRange + this.cameraBaseFov;
+      this.transitionFOVCoef = this.isHoldTransitioning ? this.holdTransitionClock.getElapsedTime() : this.holdTransitionClock.getElapsedTime() - this.stopHoldTransitionClock.getElapsedTime();
+      this.transitionFOVCoef = THREE.MathUtils.clamp((this.transitionFOVCoef * 1.0) ** 3.0, 0.0, 40.0);
+      this.camera.fov = Math.sin(this.clock.getElapsedTime() * this.cameraFovSpeed) * this.cameraFovRange + this.cameraBaseFov + this.transitionFOVCoef;
 
       // Camera Y movement
       this.camera.position.y = Math.sin(this.clock.getElapsedTime() * this.cameraYMovementSpeed) * this.cameraYMovementRange + this.cameraYOffset;
@@ -439,10 +429,6 @@ export default class BreathPage extends APage
       if(!this.inTransitionAnimation)
       {
         this.updateCameraRotation();
-      }
-      else
-      {
-        //this.cameraTransitionTween.update();
       }
       
       this.camera.updateProjectionMatrix();
@@ -541,9 +527,20 @@ export default class BreathPage extends APage
 
     startHoldTransition()
     {
+      this.initTransitionClock();
       this.isHoldTransitioning = true;
 
       this.holdTransitionClock.start();
+      this.stopHoldTransitionClock.stop();
+
+      this.afterImageExitObject = { value: 0.0 };
+      this.afterImageExitTween = new TWEEN.Tween(this.afterImageExitObject)
+      .to({ value: 0.95 }, 1.0 * 1000)
+      .easing(TWEEN.Easing.Cubic.out)
+      .onUpdate(() => {
+        this.afterImagePass.uniforms.damp = { value: this.afterImageExitObject.value };
+      });
+      this.afterImageExitTween.start();
     }
 
     stopHoldTransition()
@@ -551,8 +548,10 @@ export default class BreathPage extends APage
       this.isHoldTransitioning = false;
       this.afterImagePass.uniforms.damp = { value: 0.0 };
 
+      this.stopHoldTransitionClock.start();
       this.holdTransitionClock.stop();
-      this.initTransitionClock();
+      this.afterImageExitTween.stop();
+      //TODO - TOCHECK - this.initTransitionCLock(); used to be called here
     }
 
 
