@@ -10,6 +10,7 @@ import { ShaderPass } from 'three/examples/jsm/Addons.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
 import { BokehPass } from 'three/examples/jsm/Addons.js';
+import { AfterimagePass } from 'three/addons/postprocessing/AfterimagePass.js';
 
 // Shader imports
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
@@ -110,6 +111,11 @@ export default class BreathPage extends APage
       } );
       this.composer.addPass(this.bokehPass);
       this.guiPostprocessing.bokeh = this.bokehPass;
+
+      // Afterimage
+      this.afterImagePass = new AfterimagePass();
+      this.afterImagePass.uniforms.damp = { value: 0.0 };
+      this.composer.addPass(this.afterImagePass);
       
       /*this.effectController = {
       
@@ -133,12 +139,14 @@ export default class BreathPage extends APage
       
       this.matChanger();*/
 
+      this.i_uContrast = 1.0;
+      this.i_uSubtraction = 0.0;
       this.contrastTransitionMaterial = new ShaderMaterial(
       {
         defines: { LABEL: "value" },
         uniforms: { tDiffuse: new Uniform(null),
-          uContrast: { value: 1.0 },
-          uSubtraction: { value: 0.0 }
+          uContrast: { value: this.i_uContrast },
+          uSubtraction: { value: this.i_uSubtraction }
          },
         vertexShader: ContrastTransitionVS,
         fragmentShader: ContrastTransitionFS
@@ -367,9 +375,20 @@ export default class BreathPage extends APage
 
     updateTransition()
     {
+
+
       if(this.holdTransitionClock.getElapsedTime() >= this.holdTimeToTransition && !this.inTransitionAnimation)
       {
         this.startTransitionAnimation();
+      }
+      else if(this.inTransitionAnimation)
+      {
+        this.contrastExitTween.update();
+      }
+
+      if(this.isHoldTransitioning)
+      {
+        this.afterImagePass.uniforms.damp = { value: 0.9 };
       }
     }
 
@@ -379,16 +398,20 @@ export default class BreathPage extends APage
       this.transitionAnimationClock.start();
       this.TARegularCameraRotationFadeClock.start();
 
-      this.hidePopupText();
-
-      const completionTime = 2500.0;
+      const completionTime = 1500.0;
       const finalRotation = new THREE.Vector3(THREE.MathUtils.DEG2RAD * -90, this.cameraBaseRotY, 0);
 
       this.cameraTransitionTween = new TWEEN.Tween(this.camera.rotation)
       .to(finalRotation, completionTime)
-      .easing(TWEEN.Easing.Cubic.Out);
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onComplete(() =>
+        {
+          this.contrastExitTween.start();
+        }
+      );
 
       this.cameraTransitionTween.start();
+      this.contrastExitTween.start();
     }
 
     updateWaves()
@@ -419,7 +442,7 @@ export default class BreathPage extends APage
       }
       else
       {
-        this.cameraTransitionTween.update();
+        //this.cameraTransitionTween.update();
       }
       
       this.camera.updateProjectionMatrix();
@@ -526,6 +549,7 @@ export default class BreathPage extends APage
     stopHoldTransition()
     {
       this.isHoldTransitioning = false;
+      this.afterImagePass.uniforms.damp = { value: 0.0 };
 
       this.holdTransitionClock.stop();
       this.initTransitionClock();
@@ -601,6 +625,14 @@ export default class BreathPage extends APage
 
     initExitAnimation()
     {
-
+      //Postprocessing tween
+      this.contrastExitParamObject = { value: 0.0 };
+      this.contrastExitTween = new TWEEN.Tween(this.contrastExitParamObject)
+      .to({ value: 1.0 }, 1.0 * 1000)
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onUpdate(() => {
+        this.contrastTransitionMaterial.uniforms.uContrast = { value: 1.0 - this.contrastExitParamObject.value };
+        this.contrastTransitionMaterial.uniforms.uSubtraction = { value: this.contrastExitParamObject.value };
+      });
     }
 }
