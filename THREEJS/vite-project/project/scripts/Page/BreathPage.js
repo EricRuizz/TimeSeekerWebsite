@@ -23,6 +23,8 @@ import {
 
 import ContrastTransitionVS from '../../shaders/ContrastTransitionVertex.glsl';
 import ContrastTransitionFS from '../../shaders/ContrastTransitionFragment.glsl';
+import TopFadeVS from '../../shaders/TopFadeVertex.glsl';
+import TopFadeFS from '../../shaders/TopFadeFragment.glsl';
 import GerstnerVS from '../../shaders/GerstnerVertex.glsl';
 import GerstnerFS from '../../shaders/GerstnerFragment.glsl';
 import PopupTextVS from '../../shaders/PopupTextVertex.glsl';
@@ -139,6 +141,7 @@ export default class BreathPage extends APage
       
       this.matChanger();*/
 
+      // Contrast & Subtraction (Custom)
       this.i_uContrast = 1.0;
       this.i_uSubtraction = 0.0;
       this.contrastTransitionMaterial = new ShaderMaterial(
@@ -154,6 +157,39 @@ export default class BreathPage extends APage
       
       this.contrastTransitionPass = new ShaderPass(this.contrastTransitionMaterial, "tDiffuse");
       this.composer.addPass(this.contrastTransitionPass);
+
+      // Top fade (Custon)
+      this.i_uTopFadeCoef = 0.0;
+      this.topFadeMaterial = new ShaderMaterial(
+      {
+        defines: { LABEL: "value" },
+        uniforms: { tDiffuse: new Uniform(null),
+          uTopFadeCoef: { value: this.i_uTopFadeCoef }
+         },
+        vertexShader: TopFadeVS,
+        fragmentShader: TopFadeFS
+      });
+      
+      this.topFadePass = new ShaderPass(this.topFadeMaterial, "tDiffuse");
+      this.composer.addPass(this.topFadePass);
+
+      // Tweens
+      // TopFade Enter
+      this.topFadeEnterParamObject = { value: 0.0 };
+      this.topFadeEnterTween = new TWEEN.Tween(this.topFadeEnterParamObject)
+      .to({ value: 1.0 }, 1.0 * 1000)
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onUpdate(() => {
+        this.topFadeMaterial.uniforms.uTopFadeCoef = { value: this.topFadeEnterParamObject.value };
+      });
+      // TopFade Exit
+      this.topFadeExitParamObject = { value: 1.0 };
+      this.topFadeExitTween = new TWEEN.Tween(this.topFadeExitParamObject)
+      .to({ value: 0.0 }, 1.0 * 1000)
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onUpdate(() => {
+        this.topFadeMaterial.uniforms.uTopFadeCoef = { value: this.topFadeExitParamObject.value };
+      });
     }
 
     async initMoon()
@@ -374,6 +410,15 @@ export default class BreathPage extends APage
           this.EAApertureDown.update();
         }
       }
+
+      if(this.topFadeEnterTween.isPlaying())
+      {
+        this.topFadeEnterTween.update();
+      }
+      else if(this.topFadeExitTween.isPlaying())
+      {
+        this.topFadeExitTween.update();
+      }
     }
 
     updateTransition()
@@ -497,6 +542,9 @@ export default class BreathPage extends APage
       
       this.updateShowPopupTextTween();
       this.popupText_showTween.start();
+
+      this.topFadeEnterTween.start();
+      this.topFadeExitTween.stop();
     }
 
     hidePopupText()
@@ -505,6 +553,9 @@ export default class BreathPage extends APage
 
       this.updateHidePopupTextTween();
       this.popupText_hideTween.start();
+
+      this.topFadeEnterTween.stop();
+      this.topFadeExitTween.start();
     }
 
     updateShowPopupTextTween()
@@ -632,6 +683,9 @@ export default class BreathPage extends APage
       .onUpdate(() => {
         this.contrastTransitionMaterial.uniforms.uContrast = { value: 1.0 - this.contrastExitParamObject.value };
         this.contrastTransitionMaterial.uniforms.uSubtraction = { value: this.contrastExitParamObject.value };
+      })
+      .onComplete(() => {
+        this.nextPageIndex = 2; //TODO - Change index
       });
     }
 }
