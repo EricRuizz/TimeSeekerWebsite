@@ -25,6 +25,8 @@ import ContrastTransitionVS from '../../shaders/ContrastTransitionVertex.glsl';
 import ContrastTransitionFS from '../../shaders/ContrastTransitionFragment.glsl';
 import TopFadeVS from '../../shaders/TopFadeVertex.glsl';
 import TopFadeFS from '../../shaders/TopFadeFragment.glsl';
+import BotFadeVS from '../../shaders/BotFadeVertex.glsl';
+import BotFadeFS from '../../shaders/BotFadeFragment.glsl';
 import GerstnerVS from '../../shaders/GerstnerVertex.glsl';
 import GerstnerFS from '../../shaders/GerstnerFragment.glsl';
 import PopupTextVS from '../../shaders/PopupTextVertex.glsl';
@@ -50,6 +52,7 @@ export default class BreathPage extends APage
         this.initMoon(),
         this.initSkybox(),
         this.initWaves(),
+        this.initBotFade(),
         this.initPopupText(),
       ]);
 
@@ -158,6 +161,7 @@ export default class BreathPage extends APage
       this.contrastTransitionPass = new ShaderPass(this.contrastTransitionMaterial, "tDiffuse");
       this.composer.addPass(this.contrastTransitionPass);
 
+      /*
       // Top fade (Custon)
       this.i_uTopFadeCoef = 0.0;
       this.topFadeMaterial = new ShaderMaterial(
@@ -172,23 +176,24 @@ export default class BreathPage extends APage
       
       this.topFadePass = new ShaderPass(this.topFadeMaterial, "tDiffuse");
       this.composer.addPass(this.topFadePass);
+      */
 
       // Tweens
       // TopFade Enter
       this.topFadeEnterParamObject = { value: 0.0 };
       this.topFadeEnterTween = new TWEEN.Tween(this.topFadeEnterParamObject)
-      .to({ value: 1.0 }, 1.0 * 1000)
+      .to({ value: 1.0 }, 0.5 * 1000)
       .easing(TWEEN.Easing.Cubic.Out)
       .onUpdate(() => {
-        this.topFadeMaterial.uniforms.uTopFadeCoef = { value: this.topFadeEnterParamObject.value };
+        //this.topFadeMaterial.uniforms.uTopFadeCoef = { value: this.topFadeEnterParamObject.value };
       });
       // TopFade Exit
       this.topFadeExitParamObject = { value: 1.0 };
       this.topFadeExitTween = new TWEEN.Tween(this.topFadeExitParamObject)
-      .to({ value: 0.0 }, 1.0 * 1000)
+      .to({ value: 0.0 }, 0.5 * 1000)
       .easing(TWEEN.Easing.Cubic.Out)
       .onUpdate(() => {
-        this.topFadeMaterial.uniforms.uTopFadeCoef = { value: this.topFadeExitParamObject.value };
+        //this.topFadeMaterial.uniforms.uTopFadeCoef = { value: this.topFadeExitParamObject.value };
       });
     }
 
@@ -275,7 +280,44 @@ export default class BreathPage extends APage
 
       this.pageMeshes.push(this.waves);
 
-      this.waveSpeed = 1;
+      this.waveSpeed = 1.0;
+    }
+
+    async initBotFade()
+    {
+      const o_BotFadeFS = {
+        defines: "",
+        header: "",
+        main: BotFadeFS,
+      };
+      const { defines, header, main } = await patchShadersCSM(o_BotFadeFS, [Perlin]);
+      const s_BotFadeFS = `${defines}${header}${main}`;
+
+      const botFadePlaneWidth = 200;
+      const botFadePlaneLength = 30;
+      const botFadePlaneWidthSegments = 1;
+      const botFadePlaneLengthSegments = 1;
+
+      const botFadePlane = new THREE.PlaneGeometry(botFadePlaneWidth, botFadePlaneLength, botFadePlaneWidthSegments, botFadePlaneLengthSegments);
+      const botFadeMaterial = new CustomShaderMaterial({
+        baseMaterial: THREE.MeshBasicMaterial,
+        vertexShader: BotFadeVS,
+        fragmentShader: s_BotFadeFS,
+        transparent: true,
+        // Uniforms
+        uniforms: {
+          uActive: { value: 0 },
+          uTime: { value: 0 },
+          uSpeed: { value: 0 },
+          uMainColor: { value: new THREE.Vector3(0.0, 1.0, 1.0) },
+        },
+      });
+
+      this.botFade = new THREE.Mesh(botFadePlane, botFadeMaterial);
+      this.botFade.position.set(0, 10, 50);
+      this.botFade.rotateX(THREE.MathUtils.degToRad(160));
+
+      this.pageMeshes.push(this.botFade);
     }
 
     async initPopupText()
@@ -301,7 +343,6 @@ export default class BreathPage extends APage
           displacementStrength: { value: 0.01 },
         },
         map: new THREE.TextureLoader().load('./project/textures/HoldToEnter.png'),
-        transparent: true
       });
       
       this.popupText = new THREE.Mesh(geometry, material);
@@ -382,10 +423,16 @@ export default class BreathPage extends APage
 
     doUpdate()
     {
+      //TODO - onComplete AnimationEnter
+      this.popupText.visible = false;
+      this.botFade.visible = false;
+      //TODO - onComplete AnimationEnter
+
       this.updateTweens();
 
       this.updateTransition();
       this.updateWaves();
+      this.updateBotFade();
       this.updateSkybox();
       this.updateCamera();
       this.updatePopupText();
@@ -450,6 +497,11 @@ export default class BreathPage extends APage
     updateWaves()
     {
       this.waves.material.uniforms.uTime.value += 0.0025; //TODO - use    this.waveSpeed
+    }
+
+    updateBotFade()
+    {
+      this.botFade.material.uniforms.uTime.value += this.clock.getDelta();
     }
 
     updateSkybox()
