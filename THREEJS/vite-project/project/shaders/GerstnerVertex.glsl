@@ -10,9 +10,6 @@ vec3 displace(vec3 point) {
 
   //                                  seed, persistance,  lacunarity, scale,  redistribution, octaves,  terbulance, ridge
   gln_tFBMOpts fbmOpts = gln_tFBMOpts(1.0,  0.4,          2.3,        0.1,    1.0,            5,        false,      false);
-
-  //gln_tGerstnerWaveOpts A = gln_tGerstnerWaveOpts(vec2(0.0, -1.0), 0.0, 0.0);
-  //gln_tGerstnerWaveOpts B = gln_tGerstnerWaveOpts(vec2(3.0, -3.0), 0.25, 4.0);
   
   //                                                Direction, steepness, wavelength
   gln_tGerstnerWaveOpts A = gln_tGerstnerWaveOpts(vec2(0.5, -0.5), 0.3, 0.5);
@@ -50,14 +47,9 @@ vec3 displace(vec3 point) {
   float cameraClosenessCoef = length(distanceToCam * deepnessCoef) * effectRadius;
 
   point.z += length(clamp(distanceToCam, -effectRadius, effectRadius)) * 1.0;
-
-  //point.z *= 0.4;
-
-  //point.z += cameraClosenessCoef;
+  
   point.z *= 0.4;
   point.z -= offset;
-
-  //point.z = cameraClosenessCoef;
 
   return point;
 }  

@@ -23,10 +23,10 @@ import {
 
 import ContrastTransitionVS from '../../shaders/ContrastTransitionVertex.glsl';
 import ContrastTransitionFS from '../../shaders/ContrastTransitionFragment.glsl';
-import TopFadeVS from '../../shaders/TopFadeVertex.glsl';
-import TopFadeFS from '../../shaders/TopFadeFragment.glsl';
-import BotFadeVS from '../../shaders/BotFadeVertex.glsl';
-import BotFadeFS from '../../shaders/BotFadeFragment.glsl';
+//import TopFadeVS from '../../shaders/TopFadeVertex.glsl';
+//import TopFadeFS from '../../shaders/TopFadeFragment.glsl';
+//import BotFadeVS from '../../shaders/BotFadeVertex.glsl';
+//import BotFadeFS from '../../shaders/BotFadeFragment.glsl';
 import GerstnerVS from '../../shaders/GerstnerVertex.glsl';
 import GerstnerFS from '../../shaders/GerstnerFragment.glsl';
 import PopupTextVS from '../../shaders/PopupTextVertex.glsl';
@@ -52,7 +52,7 @@ export default class BreathPage extends APage
         this.initMoon(),
         this.initSkybox(),
         this.initWaves(),
-        this.initBotFade(),
+        //this.initBotFade(),
         this.initPopupText(),
       ]);
 
@@ -63,21 +63,20 @@ export default class BreathPage extends APage
       this.initHoldTransition();
 
       super.sceneAdditions();
-
       if(autoEnter) super.enter();
-
       return super.pageIndex;
     }
 
     doEnter()
     {
+      //TODO - window.location.href = "/breath";
       this.EAApertureUp.start();
       this.contrastEnterTween.start();
     }
 
     doExit()
     {
-      
+      this.composer.passes = [];
     }
 
 
@@ -162,7 +161,7 @@ export default class BreathPage extends APage
       this.composer.addPass(this.contrastTransitionPass);
 
       /*
-      // Top fade (Custon)
+      // Top fade (Custom)
       this.i_uTopFadeCoef = 0.0;
       this.topFadeMaterial = new ShaderMaterial(
       {
@@ -283,6 +282,7 @@ export default class BreathPage extends APage
       this.waveSpeed = 1.0;
     }
 
+    /*
     async initBotFade()
     {
       const o_BotFadeFS = {
@@ -294,7 +294,7 @@ export default class BreathPage extends APage
       const s_BotFadeFS = `${defines}${header}${main}`;
 
       const botFadePlaneWidth = 200;
-      const botFadePlaneLength = 30;
+      const botFadePlaneLength = 10;
       const botFadePlaneWidthSegments = 1;
       const botFadePlaneLengthSegments = 1;
 
@@ -314,11 +314,12 @@ export default class BreathPage extends APage
       });
 
       this.botFade = new THREE.Mesh(botFadePlane, botFadeMaterial);
-      this.botFade.position.set(0, 10, 50);
+      this.botFade.position.set(0, 7, 20);
       this.botFade.rotateX(THREE.MathUtils.degToRad(160));
 
       this.pageMeshes.push(this.botFade);
     }
+    */
 
     async initPopupText()
     {
@@ -423,16 +424,11 @@ export default class BreathPage extends APage
 
     doUpdate()
     {
-      //TODO - onComplete AnimationEnter
-      this.popupText.visible = false;
-      this.botFade.visible = false;
-      //TODO - onComplete AnimationEnter
-
       this.updateTweens();
 
       this.updateTransition();
       this.updateWaves();
-      this.updateBotFade();
+      //this.updateBotFade();
       this.updateSkybox();
       this.updateCamera();
       this.updatePopupText();
@@ -496,7 +492,7 @@ export default class BreathPage extends APage
 
     updateWaves()
     {
-      this.waves.material.uniforms.uTime.value += 0.0025; //TODO - use    this.waveSpeed
+      this.waves.material.uniforms.uTime.value += this.clock.getDelta() * 0.15;
     }
 
     updateBotFade()

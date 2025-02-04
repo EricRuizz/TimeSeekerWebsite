@@ -85,13 +85,13 @@ const clock = new THREE.Clock(true);
 // Home page
 //const loadingPage = new Page.LoadingPage(scene, camera, clock, composer);
 //var loadingPageIndex = loadingPage.init(false);
-const breathPage = new Page.BreathPage(scene, camera, clock, composer);
-var breathPageIndex = breathPage.init(true);
-//const hubPage = new Page.HubPage(scene, camera, clock, composer);
-//var hubPageIndex = hubPage.init(false);
+//const breathPage = new Page.BreathPage(scene, camera, clock, composer);
+//var breathPageIndex = breathPage.init(true);
+const homePage = new Page.HomePage(scene, camera, clock, composer);
+var homePageIndex = homePage.init(false);
 
-var currentPageIndex = breathPageIndex;
-const currentPage = breathPage;
+var currentPageIndex = homePageIndex;
+const currentPage = homePage;
 
 
 
