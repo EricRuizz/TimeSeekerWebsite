@@ -4,7 +4,7 @@ import * as THREE from 'three';
 //PostProcessing
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-//TODO: Bokeh2, FFXA
+//TODO: FFXA
 
 //Classes
 import * as Page from './project/scripts/Page';
@@ -88,7 +88,7 @@ const clock = new THREE.Clock(true);
 //const breathPage = new Page.BreathPage(scene, camera, clock, composer);
 //var breathPageIndex = breathPage.init(true);
 const homePage = new Page.HomePage(scene, camera, clock, composer);
-var homePageIndex = homePage.init(false);
+var homePageIndex = homePage.init(true);
 
 var currentPageIndex = homePageIndex;
 const currentPage = homePage;

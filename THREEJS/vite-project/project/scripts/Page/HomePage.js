@@ -37,6 +37,10 @@ export default class HomePage extends APage
             this.initBackground(),
         ]);
 
+        // Test
+        this.TestPlane();
+        // Test
+
         this.initEnterAniamtion();
         this.initExitAnimation();
         
@@ -48,7 +52,10 @@ export default class HomePage extends APage
     doEnter()
     {
         //TODO - window.location.href = "/home";
-        this.backgroundEnterTween.start();
+        //TODO - this.backgroundEnterTween.start();
+
+        //this.camera.position.set(0, 0, 0);
+        //this.camera.rotation.set(0, 0, 0);
     }
 
     doExit()
@@ -76,9 +83,9 @@ export default class HomePage extends APage
 
     async initBackground()
     {
-        /*
         this.backgroundSpeed = 1.0;
 
+        /*
 
         const oFS = {
             defines: "",
@@ -103,31 +110,39 @@ export default class HomePage extends APage
         this.backgroundPass = new ShaderPass(this.backgroundMaterial, "tDiffuse");
         this.composer.addPass(this.topFadePass);
         */
-        this.test();
     }
 
-    test()
+    TestPlane()
     {
-        const geometry = new THREE.PlaneGeometry(2, 2);
+        const geometry = new THREE.PlaneGeometry(100, 100);
         const material = new THREE.ShaderMaterial({
         uniforms: {
-            uTime: { value: 0 }
+            uTime: { value: 0 },
+            uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
         },
         vertexShader: `
-            void main() {
-            gl_Position = vec4(position, 1.0);
-            }
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
         `,
         fragmentShader: `
             uniform float uTime;
+            uniform vec2 uResolution;
+            varying vec2 vUv;
+            
             void main() {
-            vec2 uv = gl_FragCoord.xy / vec2( window.innerWidth, window.innerHeight );
-            gl_FragColor = vec4(sin(uv.x + uTime), cos(uv.y - uTime), sin(uTime), 1.0);
+                vec2 uv = gl_FragCoord.xy / uResolution;
+                gl_FragColor = vec4(sin(uv.x + uTime), cos(uv.y - uTime), sin(uTime), 1.0);
             }
         `,
         });
-        const backgroundMesh = new THREE.Mesh(geometry, material);
-        this.pageMeshes.push(backgroundMesh);
+        
+        this.backgroundMesh = new THREE.Mesh(geometry, material);
+        this.backgroundMesh.position.set(0, 0, -10);
+        this.backgroundMesh.rotateX(THREE.MathUtils.degToRad(0));
+        this.pageMeshes.push(this.backgroundMesh);
     }
 
     initEnterAniamtion()
@@ -142,6 +157,15 @@ export default class HomePage extends APage
 
 
 
+    doUpdate()
+    {
+        this.updateTweens();
+
+        this.updateBackground();
+
+        return this.nextPageIndex;
+    }
+
     updateTweens()
     {
         //TODO
@@ -149,7 +173,7 @@ export default class HomePage extends APage
 
     updateBackground()
     {
-        this.backgroundMaterial.uniforms.uTime += this.clock.getDelta() * this.backgroundSpeed;
+        //this.backgroundMesh.material.uniforms.uTime.value += this.clock.getDelta() * this.backgroundSpeed;
     }
 
 
