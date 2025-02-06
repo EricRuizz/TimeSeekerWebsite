@@ -4,8 +4,6 @@ import APage from "./APage";
 import TWEEN from '@tweenjs/tween.js'
 
 // PostProcessing
-import { ShaderMaterial, Uniform } from 'three';
-import { ShaderPass } from 'three/examples/jsm/Addons.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
 
@@ -37,10 +35,6 @@ export default class HomePage extends APage
             this.initBackground(),
         ]);
 
-        // Test
-        this.TestPlane();
-        // Test
-
         this.initEnterAniamtion();
         this.initExitAnimation();
         
@@ -53,9 +47,6 @@ export default class HomePage extends APage
     {
         //TODO - window.location.href = "/home";
         //TODO - this.backgroundEnterTween.start();
-
-        //this.camera.position.set(0, 0, 0);
-        //this.camera.rotation.set(0, 0, 0);
     }
 
     doExit()
@@ -84,64 +75,28 @@ export default class HomePage extends APage
     async initBackground()
     {
         this.backgroundSpeed = 1.0;
-
-        /*
-
-        const oFS = {
+        
+        const o_FS = {
             defines: "",
             header: "",
             main: HomeBackgroundFS,
         };
-        const { defines, header, main } = await patchShadersCSM(oFS, [Perlin]);
-        const s_oFS = `${defines}${header}${main}`;
+        const { defines, header, main } = await patchShadersCSM(o_FS, [Perlin]);
+        const s_FS = `${defines}${header}${main}`;
 
-        this.backgroundMaterial = new CustomShaderMaterial({
+        const geometry = new THREE.PlaneGeometry(100, 100);
+        const material = new CustomShaderMaterial({
             baseMaterial: THREE.MeshBasicMaterial,
             vertexShader: HomeBackgroundVS,
-            fragmentShader: s_oFS,
-            transparent: false,
-            defines: { LABEL: "value" },
+            fragmentShader: s_FS,
             uniforms: {
-                tDiffuse: new Uniform(null),
-                uTime: { value: 0 },
+            uTime: { value: 0 },
+            uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
             },
         });
 
-        this.backgroundPass = new ShaderPass(this.backgroundMaterial, "tDiffuse");
-        this.composer.addPass(this.topFadePass);
-        */
-    }
-
-    TestPlane()
-    {
-        const geometry = new THREE.PlaneGeometry(100, 100);
-        const material = new THREE.ShaderMaterial({
-        uniforms: {
-            uTime: { value: 0 },
-            uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
-        },
-        vertexShader: `
-        varying vec2 vUv;
-        void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-        `,
-        fragmentShader: `
-            uniform float uTime;
-            uniform vec2 uResolution;
-            varying vec2 vUv;
-            
-            void main() {
-                vec2 uv = gl_FragCoord.xy / uResolution;
-                gl_FragColor = vec4(sin(uv.x + uTime), cos(uv.y - uTime), sin(uTime), 1.0);
-            }
-        `,
-        });
-        
         this.backgroundMesh = new THREE.Mesh(geometry, material);
         this.backgroundMesh.position.set(0, 0, -10);
-        this.backgroundMesh.rotateX(THREE.MathUtils.degToRad(0));
         this.pageMeshes.push(this.backgroundMesh);
     }
 

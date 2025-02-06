@@ -1,15 +1,9 @@
-uniform sampler2D myTexture;
-varying vec2 vUV;
-
 uniform float uTime;
-
-uniform float uDisplacementScale;
-uniform float uDisplacementStrength;
-
+uniform vec2 uResolution;
+varying vec2 vUv;
+            
 void main()
 {
-    vec2 displacedUV = vUV + ((gln_perlin(vUV * displacementScale + vec2(uTime)) * displacementStrength));
-    vec4 color = texture(myTexture, displacedUV);
-
-    csm_DiffuseColor = color;
+    vec2 uv = gl_FragCoord.xy / uResolution;
+    csm_DiffuseColor = vec4(sin(uv.x + uTime), cos(uv.y - uTime), sin(uTime), 1.0);
 }
