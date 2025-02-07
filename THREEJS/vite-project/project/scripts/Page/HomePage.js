@@ -12,7 +12,8 @@ import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 import {
   patchShadersCSM,
-  Perlin
+  Perlin,
+  Simplex
 } from "gl-noise"
 
 import HomeBackgroundVS from '../../shaders/HomeBackgroundVertex.glsl';
@@ -68,8 +69,8 @@ export default class HomePage extends APage
         this.composer.addPass(this.bloomPass);
         
         // Film
-        this.filmPass = new FilmPass(1, false);
-        this.composer.addPass(this.filmPass);
+        //this.filmPass = new FilmPass(1, false);
+        //this.composer.addPass(this.filmPass);
     }
 
     async initBackground()
@@ -81,7 +82,7 @@ export default class HomePage extends APage
             header: "",
             main: HomeBackgroundFS,
         };
-        const { defines, header, main } = await patchShadersCSM(o_FS, [Perlin]);
+        const { defines, header, main } = await patchShadersCSM(o_FS, [Perlin, Simplex]);
         const s_FS = `${defines}${header}${main}`;
 
         const geometry = new THREE.PlaneGeometry(100, 100);
@@ -128,7 +129,7 @@ export default class HomePage extends APage
 
     updateBackground()
     {
-        //this.backgroundMesh.material.uniforms.uTime.value += this.clock.getDelta() * this.backgroundSpeed;
+        this.backgroundMesh.material.uniforms.uTime.value += this.clock.getDelta() * this.backgroundSpeed;
     }
 
 
