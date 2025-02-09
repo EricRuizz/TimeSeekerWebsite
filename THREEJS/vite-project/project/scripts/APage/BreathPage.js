@@ -11,6 +11,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
 import { BokehPass } from 'three/examples/jsm/Addons.js';
 import { AfterimagePass } from 'three/addons/postprocessing/AfterimagePass.js';
+//TODO: FFXA
 
 // Shader imports
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
@@ -39,10 +40,8 @@ export default class BreathPage extends APage
       super(scene, camera, clock, composer);
     }
 
-    async Init(autoEnter)
+    async DoInit()
     {
-      super.InitPageIndex(1);
-
       this.InitPostProcessing();
 
       this.InitEnterAniamtion();
@@ -63,8 +62,8 @@ export default class BreathPage extends APage
       this.InitHoldTransition();
 
       super.SceneAdditions();
-      if(autoEnter) super.Enter();
-      return super.pageIndex;
+      console.log("AN");
+      super.Enter();
     }
 
     DoEnter()
@@ -411,7 +410,6 @@ export default class BreathPage extends APage
 
     InitMouseMovement()
     {
-      this.mousePosition = new THREE.Vector2(0.0, 0.0);
       this.currentMouseFollowPos = new THREE.Vector2(0.0, 0.0);
             
       this.mouseXCoef = 0.30;
@@ -653,12 +651,7 @@ export default class BreathPage extends APage
 
 
 
-    OnMouseMove(mousePosition)
-    {
-      this.mousePosition = mousePosition;
-    }
-
-    OnMouseDown(event)
+    DoOnMouseDown(event)
     {
       if(this.isPopupTextShown && !this.isHoldTransitioning && !this.inTransitionAnimation)
       {
@@ -666,7 +659,7 @@ export default class BreathPage extends APage
       }
     }
 
-    OnMouseUp(event)
+    DoOnMouseUp(event)
     {
       if(this.isHoldTransitioning && !this.inTransitionAnimation)
       {
@@ -676,7 +669,7 @@ export default class BreathPage extends APage
 
 
   
-    initEnterAniamtion()
+    InitEnterAniamtion()
     {
       this.enterAnimationPlaying = true;
 
@@ -711,7 +704,7 @@ export default class BreathPage extends APage
       });
     }
 
-    initExitAnimation()
+    InitExitAnimation()
     {
       //Postprocessing tween
       this.contrastExitParamObject = { value: 0.0 };

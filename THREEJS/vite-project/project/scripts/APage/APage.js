@@ -1,31 +1,62 @@
+import * as THREE from 'three';
+
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+
+
 export default class APage
 {
     pageMeshes = [];
-    finishedLoading = false;
 
-    constructor(scene, camera, clock, composer)
-    {
-        //TODO - CREATE ALL OF THESE THINGS HERE
-        this.scene = scene;
-        this.camera = camera;
-        this.clock = clock;
-        this.composer = composer;
+    constructor()
+    {        
+        this.scene = new THREE.Scene();
+        
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 1000);
+
+        this.renderer = new THREE.WebGLRenderer({
+        canvas: document.querySelector('#bg'),
+        });
+
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.camera.position.set(0, 0, 0);
+
+        // is this needed???? maybe
+        this.renderer.render(this.scene, this.camera);
+        // is this needed????
+
+        this.renderScene = new RenderPass(this.scene, this.camera);
+        this.composer = new EffectComposer(this.renderer);
+        this.composer.addPass(this.renderScene);
+
+        this.clock = new THREE.Clock(true);
 
         this.Init();
     }
 
+
     Init()
     {
+        this.mousePosition = new THREE.Vector2(0.0, 0.0);
+
+        this.OnMouseMove = this.OnMouseMove.bind(this);
+        this.OnMouseDown = this.OnMouseDown.bind(this);
+        this.OnMouseUp = this.OnMouseUp.bind(this);
+        //TODO - this.OnMouseMove = this.OnScroll.bind(this);
+
         document.addEventListener("mousemove", this.OnMouseMove, false);
         document.addEventListener('mousedown', this.OnMouseDown, false);
         document.addEventListener('mouseup', this.OnMouseUp, false);
-        document.body.onscroll = this.OnScroll;
+        //TODO - document.body.onscroll = this.OnScroll;
 
-        window.addEventListener('resize', OnWindowResize);
+        window.addEventListener('resize', this.OnWindowResize);
 
+        this.finishedLoading = false;
         this.DoInit();
     }
     DoInit() {}
+
 
     SceneAdditions()
     {
@@ -37,6 +68,7 @@ export default class APage
         this.finishedLoading = true;
     }
 
+
     Enter()
     {
         this.pageMeshes.forEach(mesh => {
@@ -44,6 +76,7 @@ export default class APage
         });
         
         this.DoEnter();
+        this.Update();
     }
     DoEnter() {}
 
@@ -57,12 +90,16 @@ export default class APage
     }
     DoExit() {}
 
+
     Update()
     {
         if(this.finishedLoading)
         {
-            return this.DoUpdate();
+            this.DoUpdate();
         }
+
+        this.composer.render();
+        requestAnimationFrame(() => this.Update());
     }
     DoUpdate() {}
 
