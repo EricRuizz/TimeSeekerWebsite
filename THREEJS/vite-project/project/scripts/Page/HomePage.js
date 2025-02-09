@@ -46,6 +46,7 @@ export default class HomePage extends APage
     
     doEnter()
     {
+        document.title = "Home";
         //TODO - window.location.href = "/home";
         //TODO - this.backgroundEnterTween.start();
     }
@@ -91,10 +92,13 @@ export default class HomePage extends APage
             vertexShader: HomeBackgroundVS,
             fragmentShader: s_FS,
             uniforms: {
-            uTime: { value: 0 },
-            uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+            uTime: { value: 15.0 },
+            uIdleNoiseScrollSpeed: { value: 0.2 },
+            uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+            maskTexture: { value: new THREE.TextureLoader().load('./project/textures/TimeSeeker_Logo_White_Transparent.png') },
             },
         });
+        console.log(window.innerWidth + "          " + window.innerHeight);
 
         this.backgroundMesh = new THREE.Mesh(geometry, material);
         this.backgroundMesh.position.set(0, 0, -10);

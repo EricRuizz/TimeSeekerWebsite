@@ -69,6 +69,7 @@ export default class BreathPage extends APage
 
     doEnter()
     {
+      document.title = "Breath";
       //TODO - window.location.href = "/breath";
       this.EAApertureUp.start();
       this.contrastEnterTween.start();
