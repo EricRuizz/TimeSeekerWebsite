@@ -39,50 +39,48 @@ export default class BreathPage extends APage
       super(scene, camera, clock, composer);
     }
 
-    async init(autoEnter)
+    async Init(autoEnter)
     {
-      super.initPageIndex(1);
+      super.InitPageIndex(1);
 
-      this.initPostProcessing();
+      this.InitPostProcessing();
 
-      this.initEnterAniamtion();
-      this.initExitAnimation();
+      this.InitEnterAniamtion();
+      this.InitExitAnimation();
 
       await Promise.all([
-        this.initMoon(),
-        this.initSkybox(),
-        this.initWaves(),
-        //this.initBotFade(),
-        this.initPopupText(),
+        this.InitMoon(),
+        this.InitSkybox(),
+        this.InitWaves(),
+        //this.InitBotFade(),
+        this.InitPopupText(),
       ]);
 
-      this.intiRayasting();
-      this.initLights();
-      this.initCamera();
-      this.initMouseMovement();
-      this.initHoldTransition();
+      this.IntiRayasting();
+      this.InitLights();
+      this.InitCamera();
+      this.InitMouseMovement();
+      this.InitHoldTransition();
 
-      super.sceneAdditions();
-      if(autoEnter) super.enter();
+      super.SceneAdditions();
+      if(autoEnter) super.Enter();
       return super.pageIndex;
     }
 
-    doEnter()
+    DoEnter()
     {
-      document.title = "Breath";
-      //TODO - window.location.href = "/breath";
       this.EAApertureUp.start();
       this.contrastEnterTween.start();
     }
 
-    doExit()
+    DoExit()
     {
       this.composer.passes = [];
     }
 
 
 
-    initPostProcessing()
+    InitPostProcessing()
     {
       this.guiPostprocessing = {};
       
@@ -197,7 +195,7 @@ export default class BreathPage extends APage
       });
     }
 
-    async initMoon()
+    async InitMoon()
     {
       const moonGeometry = new THREE.SphereGeometry(10, 30, 30);
       const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('./project/textures/MoonTexture.jpg') });
@@ -209,7 +207,7 @@ export default class BreathPage extends APage
       this.pageMeshes.push(this.moon);
     }
 
-    async initSkybox()
+    async InitSkybox()
     {
       const skyboxGeometry = new THREE.SphereGeometry(500, 32, 32);
       const skyboxMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('./project/textures/NightSkyTexture_Dark.png'), side: THREE.BackSide });
@@ -220,7 +218,7 @@ export default class BreathPage extends APage
       this.pageMeshes.push(this.skybox);
     }
 
-    initHoldTransition()
+    InitHoldTransition()
     {
       this.holdTimeToTransition = 3;
       this.isHoldTransitioning = false;
@@ -242,7 +240,7 @@ export default class BreathPage extends APage
       this.stopHoldTransitionClock = new THREE.Clock(false);
     }
 
-    async initWaves()
+    async InitWaves()
     {
       const o_GerstnerVS = {
         defines: "",
@@ -262,7 +260,6 @@ export default class BreathPage extends APage
         baseMaterial: THREE.MeshStandardMaterial,
         vertexShader: s_GerstnerVS,
         fragmentShader: GerstnerFS,
-        // Uniforms
         uniforms: {
           uTime: { value: 0 },
           uHeight: { value: 0 },
@@ -284,7 +281,7 @@ export default class BreathPage extends APage
     }
 
     /*
-    async initBotFade()
+    async InitBotFade()
     {
       const o_BotFadeFS = {
         defines: "",
@@ -322,7 +319,7 @@ export default class BreathPage extends APage
     }
     */
 
-    async initPopupText()
+    async InitPopupText()
     {
       const oFS = {
         defines: "",
@@ -361,18 +358,18 @@ export default class BreathPage extends APage
 
       this.popupTextSpeed = 2000.0;
 
-      this.updateShowPopupTextTween();
-      this.updateHidePopupTextTween();
+      this.UpdateShowPopupTextTween();
+      this.UpdateHidePopupTextTween();
     }
 
-    intiRayasting()
+    IntiRayasting()
     {
       this.raycaster = new THREE.Raycaster();
       this.scrabbleRaycastTargets = [];
       this.scrabbleRaycastTargets.push(this.scrabbleLogo);
     }
 
-    initLights()
+    InitLights()
     {
       this.ambientLight = new THREE.AmbientLight(0xffffff);
       this.ambientLight.intensity = 1;
@@ -386,7 +383,7 @@ export default class BreathPage extends APage
       this.scene.add(this.pointLightA);
     }
 
-    initCamera()
+    InitCamera()
     {
       this.cameraBaseFov = this.camera.fov;
       this.cameraFovRange = -2.5;
@@ -412,7 +409,7 @@ export default class BreathPage extends APage
       this.transitionFOVCoef = 0.0;
     }
 
-    initMouseMovement()
+    InitMouseMovement()
     {
       this.mousePosition = new THREE.Vector2(0.0, 0.0);
       this.currentMouseFollowPos = new THREE.Vector2(0.0, 0.0);
@@ -423,20 +420,20 @@ export default class BreathPage extends APage
 
 
 
-    doUpdate()
+    DoUpdate()
     {
-      this.updateTweens();
+      this.UpdateTweens();
 
-      this.updateTransition();
-      this.updateWaves();
-      //this.updateBotFade();
-      this.updateSkybox();
-      this.updateCamera();
-      this.updatePopupText();
+      this.UpdateTransition();
+      this.UpdateWaves();
+      //this.UpdateBotFade();
+      this.UpdateSkybox();
+      this.UpdateCamera();
+      this.UpdatePopupText();
       return this.nextPageIndex;
     }
 
-    updateTweens()
+    UpdateTweens()
     {
       if(this.enterAnimationPlaying)
       {
@@ -465,11 +462,11 @@ export default class BreathPage extends APage
       }
     }
 
-    updateTransition()
+    UpdateTransition()
     {
       if(this.holdTransitionClock.getElapsedTime() >= this.holdTimeToTransition && !this.inTransitionAnimation)
       {
-        this.startTransitionAnimation();
+        this.StartTransitionAnimation();
       }
       else if(this.inTransitionAnimation)
       {
@@ -482,7 +479,7 @@ export default class BreathPage extends APage
       }
     }
 
-    startTransitionAnimation()
+    StartTransitionAnimation()
     {
       this.inTransitionAnimation = true;
       this.transitionAnimationClock.start();
@@ -491,17 +488,17 @@ export default class BreathPage extends APage
       this.contrastExitTween.start();
     }
 
-    updateWaves()
+    UpdateWaves()
     {
       this.waves.material.uniforms.uTime.value += this.clock.getDelta() * 0.15;
     }
 
-    updateBotFade()
+    UpdateBotFade()
     {
       this.botFade.material.uniforms.uTime.value += this.clock.getDelta();
     }
 
-    updateSkybox()
+    UpdateSkybox()
     {
       const skyboxTransitionRotation = 0.0;//THREE.MathUtils.clamp((this.holdTransitionClock.getElapsedTime() * 0.1) ** 3, 0, 0.05);
       const skyboxDefaultRotationOffset = this.clock.getDelta() * 0.01;
@@ -510,7 +507,7 @@ export default class BreathPage extends APage
       this.skybox.rotation.y += skyboxRotationOffset;
     }
 
-    updateCamera()
+    UpdateCamera()
     {
       // Camera FOV
       this.transitionFOVCoef = this.isHoldTransitioning ? this.holdTransitionClock.getElapsedTime() : this.holdTransitionClock.getElapsedTime() - this.stopHoldTransitionClock.getElapsedTime();
@@ -522,13 +519,13 @@ export default class BreathPage extends APage
 
       if(!this.inTransitionAnimation)
       {
-        this.updateCameraRotation();
+        this.UpdateCameraRotation();
       }
       
       this.camera.updateProjectionMatrix();
     }
 
-    updateCameraRotation()
+    UpdateCameraRotation()
     {
       // Camera rotation
       this.cameraRotOffsetIdle.x = Math.sin(this.clock.getElapsedTime() * this.cameraIdleXRotationSpeed) * this.cameraIdleXRotationRange + this.cameraIdleXRotationOffset;
@@ -561,9 +558,9 @@ export default class BreathPage extends APage
       this.camera.rotation.y = this.cameraBaseRotY + cameraRotYOffset;
     }
 
-    updatePopupText()
+    UpdatePopupText()
     {
-      this.popupTextChangeStateCheck();
+      this.PopupTextChangeStateCheck();
 
       if(this.isPopupTextShown) {
         this.popupText_showTween.update();
@@ -572,42 +569,42 @@ export default class BreathPage extends APage
       }
     }
 
-    popupTextChangeStateCheck()
+    PopupTextChangeStateCheck()
     {
       if(this.inTransitionAnimation) return;
       if(this.mousePosition.y > this.popupTextMouseY && !this.isPopupTextShown)
       {
-        this.showPopupText();
+        this.ShowPopupText();
       }
       else if(this.mousePosition.y <= this.popupTextMouseY && this.isPopupTextShown)
       {
-        this.hidePopupText();
+        this.HidePopupText();
       }
     }
 
-    showPopupText()
+    ShowPopupText()
     {
       this.isPopupTextShown = true;
       
-      this.updateShowPopupTextTween();
+      this.UpdateShowPopupTextTween();
       this.popupText_showTween.start();
 
       this.topFadeEnterTween.start();
       this.topFadeExitTween.stop();
     }
 
-    hidePopupText()
+    HidePopupText()
     {
       this.isPopupTextShown = false;
 
-      this.updateHidePopupTextTween();
+      this.UpdateHidePopupTextTween();
       this.popupText_hideTween.start();
 
       this.topFadeEnterTween.stop();
       this.topFadeExitTween.start();
     }
 
-    updateShowPopupTextTween()
+    UpdateShowPopupTextTween()
     {
       const completionTime = this.popupText.position.distanceTo(this.popupTextShowPosition) * this.popupTextSpeed;
       this.popupText_showTween = new TWEEN.Tween(this.popupText.position)
@@ -615,7 +612,7 @@ export default class BreathPage extends APage
       .easing(TWEEN.Easing.Cubic.Out);
     }
 
-    updateHidePopupTextTween()
+    UpdateHidePopupTextTween()
     {
       const completionTime = this.popupText.position.distanceTo(this.popupTextHidePosition) * this.popupTextSpeed;
       this.popupText_hideTween = new TWEEN.Tween(this.popupText.position)
@@ -625,7 +622,7 @@ export default class BreathPage extends APage
 
 
 
-    startHoldTransition()
+    StartHoldTransition()
     {
       this.initTransitionClock();
       this.isHoldTransitioning = true;
@@ -643,7 +640,7 @@ export default class BreathPage extends APage
       this.afterImageExitTween.start();
     }
 
-    stopHoldTransition()
+    StopHoldTransition()
     {
       this.isHoldTransitioning = false;
       this.afterImagePass.uniforms.damp = { value: 0.0 };
@@ -656,32 +653,24 @@ export default class BreathPage extends APage
 
 
 
-    onMouseMove(mousePosition)
+    OnMouseMove(mousePosition)
     {
       this.mousePosition = mousePosition;
-
-      //TODO - Uncomment when fixed
-      //raycaster.setFromCamera(mousePosition, camera);
-      //const intersects = raycaster.intersectObjects(scribbleRaycastTargets, true);
-        
-      //if (intersects.length > 0) {
-      //  console.log(intersects);
-      //}
     }
 
-    onMouseDown(event)
+    OnMouseDown(event)
     {
       if(this.isPopupTextShown && !this.isHoldTransitioning && !this.inTransitionAnimation)
       {
-        this.startHoldTransition();
+        this.StartHoldTransition();
       }
     }
 
-    onMouseUp(event)
+    OnMouseUp(event)
     {
       if(this.isHoldTransitioning && !this.inTransitionAnimation)
       {
-        this.stopHoldTransition();
+        this.StopHoldTransition();
       }
     }
 
@@ -734,7 +723,7 @@ export default class BreathPage extends APage
         this.contrastTransitionMaterial.uniforms.uSubtraction = { value: this.contrastExitParamObject.value };
       })
       .onComplete(() => {
-        this.nextPageIndex = 2; //TODO - Change index
+        this.nextPageIndex = 2;
       });
     }
 }

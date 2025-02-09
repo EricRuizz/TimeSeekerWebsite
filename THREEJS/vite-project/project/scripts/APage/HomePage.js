@@ -23,12 +23,12 @@ export default class HomePage extends APage
 {
     constructor(scene, camera, clock, composer)
     {
-      super(scene, camera, clock, composer);
+        super(scene, camera, clock, composer);
     }
 
-    async init(autoEnter)
+    async Init(autoEnter)
     {
-        super.initPageIndex(2);
+        super.InitPageIndex(2);
         
         this.initPostProcessing();
         
@@ -39,19 +39,19 @@ export default class HomePage extends APage
         this.initEnterAniamtion();
         this.initExitAnimation();
         
-        super.sceneAdditions();
-        if(autoEnter) super.enter();
+        super.SceneAdditions();
+        if(autoEnter) super.Enter();
         return super.pageIndex;
     }
     
-    doEnter()
+    DoEnter()
     {
         document.title = "Home";
         //TODO - window.location.href = "/home";
         //TODO - this.backgroundEnterTween.start();
     }
 
-    doExit()
+    DoExit()
     {
 
     }
@@ -117,7 +117,7 @@ export default class HomePage extends APage
 
 
 
-    doUpdate()
+    DoUpdate()
     {
         this.updateTweens();
 
@@ -142,5 +142,13 @@ export default class HomePage extends APage
     {
         this.backgroundEnterTween.stop();
         this.backgroundExitTween.start();
+    }
+
+    
+
+    OnMouseMove(mousePosition)
+    {
+        console.log("A");
+        this.mousePosition = mousePosition;
     }
 }

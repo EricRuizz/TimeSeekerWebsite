@@ -1,4 +1,4 @@
-import './style.css';
+import '/style.css';
 import * as THREE from 'three';
 
 //PostProcessing
@@ -7,7 +7,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 //TODO: FFXA
 
 //Classes
-import * as Page from './project/scripts/Page';
+import * as Page from '/project/scripts/APage';
 
 
 
@@ -112,7 +112,7 @@ document.body.onscroll = MoveCamera;*/
 // Mouse movement
 
 var mousePosition = new THREE.Vector2(0.0, 0.0);
-
+/*
 function OnMouseMove(event)
 {
   mousePosition.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -121,7 +121,7 @@ function OnMouseMove(event)
   currentPage.onMouseMove(mousePosition);
 }
 document.addEventListener("mousemove", OnMouseMove, false);
-
+*/
 function OnMouseDown(event)
 {
   currentPage.onMouseDown(event);
