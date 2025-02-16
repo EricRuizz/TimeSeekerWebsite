@@ -67,13 +67,15 @@ export default class BreathPage extends APage
 
     DoEnter()
     {
+      history.replaceState({}, "", "/Breath");
+
       this.EAApertureUp.start();
       this.contrastEnterTween.start();
     }
 
     DoExit()
     {
-      history.pushState({}, "", "/Home");
+      window.location.href = 'project/pages/home.html';
     }
 
 
@@ -222,7 +224,7 @@ export default class BreathPage extends APage
       this.isHoldTransitioning = false;
       this.inTransitionAnimation = false;
 
-      this.initTransitionClock();
+      this.InitTransitionClock();
 
       // Animation
       this.transitionAnimationClock = new THREE.Clock(false);
@@ -232,7 +234,7 @@ export default class BreathPage extends APage
       this.TARegularCameraRotationFadeClock = new THREE.Clock(false);
     }
 
-    initTransitionClock()
+    InitTransitionClock()
     {
       this.holdTransitionClock = new THREE.Clock(false);
       this.stopHoldTransitionClock = new THREE.Clock(false);
@@ -465,12 +467,18 @@ export default class BreathPage extends APage
       {
         this.StartTransitionAnimation();
       }
-      else if(this.inTransitionAnimation)
+      
+      if(this.inTransitionAnimation)
       {
+        console.log("ASD");
         this.contrastExitTween.update();
       }
 
-      if(this.holdTransitionClock.getElapsedTime() >= 3.0)
+      if(this.stopHoldTransitionClock.running && this.holdTransitionClock.getElapsedTime() - this.stopHoldTransitionClock.getElapsedTime() <= 0)
+      {
+        this.InitTransitionClock();
+      }
+      else if(this.holdTransitionClock.getElapsedTime() >= 3.0)
       {
         super.Exit();
       }
@@ -626,8 +634,9 @@ export default class BreathPage extends APage
 
     StartHoldTransition()
     {
-      this.initTransitionClock();
+      this.InitTransitionClock();
       this.isHoldTransitioning = true;
+      this.inTransitionAnimation = true;
 
       this.holdTransitionClock.start();
       this.stopHoldTransitionClock.stop();
@@ -646,6 +655,7 @@ export default class BreathPage extends APage
     {
       this.isHoldTransitioning = false;
       this.afterImagePass.uniforms.damp = { value: 0.0 };
+      this.inTransitionAnimation = false;
 
       this.stopHoldTransitionClock.start();
       this.holdTransitionClock.stop();
