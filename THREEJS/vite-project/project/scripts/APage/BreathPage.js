@@ -466,9 +466,7 @@ export default class BreathPage extends APage
       if(this.holdTransitionClock.getElapsedTime() >= this.holdTimeToTransition && !this.inTransitionAnimation)
       {
         this.StartTransitionAnimation();
-      }
-      
-      if(this.inTransitionAnimation)
+      } else if(this.inTransitionAnimation)
       {
         console.log("ASD");
         this.contrastExitTween.update();
@@ -480,7 +478,7 @@ export default class BreathPage extends APage
       }
       else if(this.holdTransitionClock.getElapsedTime() >= 3.0)
       {
-        super.Exit();
+        //TODO - DELETE super.Exit();
       }
 
       if(this.isHoldTransitioning)
@@ -636,7 +634,6 @@ export default class BreathPage extends APage
     {
       this.InitTransitionClock();
       this.isHoldTransitioning = true;
-      this.inTransitionAnimation = true;
 
       this.holdTransitionClock.start();
       this.stopHoldTransitionClock.stop();
@@ -655,7 +652,6 @@ export default class BreathPage extends APage
     {
       this.isHoldTransitioning = false;
       this.afterImagePass.uniforms.damp = { value: 0.0 };
-      this.inTransitionAnimation = false;
 
       this.stopHoldTransitionClock.start();
       this.holdTransitionClock.stop();
@@ -729,7 +725,7 @@ export default class BreathPage extends APage
         this.contrastTransitionMaterial.uniforms.uSubtraction = { value: this.contrastExitParamObject.value };
       })
       .onComplete(() => {
-        this.nextPageIndex = 2;
+        super.Exit();
       });
     }
 }
