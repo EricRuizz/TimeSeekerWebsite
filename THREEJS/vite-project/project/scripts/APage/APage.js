@@ -22,10 +22,6 @@ export default class APage
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.camera.position.set(0, 0, 0);
 
-        // is this needed???? maybe
-        this.renderer.render(this.scene, this.camera);
-        // is this needed????
-
         this.renderScene = new RenderPass(this.scene, this.camera);
         this.composer = new EffectComposer(this.renderer);
         this.composer.addPass(this.renderScene);
@@ -40,18 +36,24 @@ export default class APage
     {
         this.mousePosition = new THREE.Vector2(0.0, 0.0);
 
+
         this.OnMouseMove = this.OnMouseMove.bind(this);
         this.OnMouseDown = this.OnMouseDown.bind(this);
         this.OnMouseUp = this.OnMouseUp.bind(this);
-        //TODO - this.OnMouseMove = this.OnScroll.bind(this);
+        
+        this.OnScroll = this.OnScroll.bind(this);
+        this.OnWheel = this.OnWheel.bind(this);
+        this.OnWindowResize = this.OnWindowResize.bind(this);
 
         document.addEventListener("mousemove", this.OnMouseMove, false);
         document.addEventListener('mousedown', this.OnMouseDown, false);
         document.addEventListener('mouseup', this.OnMouseUp, false);
-        //TODO - document.body.onscroll = this.OnScroll;
 
-        window.addEventListener('resize', this.OnWindowResize);
+        window.addEventListener('scroll', this.OnScroll, false);
+        window.addEventListener('wheel', this.OnWheel, false);
+        window.addEventListener('resize', this.OnWindowResize, false);
 
+        
         this.finishedLoading = false;
         this.DoInit();
     }
@@ -85,6 +87,14 @@ export default class APage
         this.pageMeshes.forEach(mesh => {
             mesh.visible = false;
         });
+        
+        document.removeEventListener("mousemove", this.OnMouseMove, false);
+        document.removeEventListener('mousedown', this.OnMouseDown, false);
+        document.removeEventListener('mouseup', this.OnMouseUp, false);
+
+        window.removeEventListener('scroll', this.OnScroll, false);
+        window.removeEventListener('wheel', this.OnWheel, false);
+        window.removeEventListener('resize', this.OnWindowResize, false);
 
         this.DoExit();
     }
@@ -126,24 +136,26 @@ export default class APage
     }
     DoOnMouseUp(event) {}
 
-    OnScroll()
+    OnScroll(event)
     {
-        this.DoOnScroll();
+        this.DoOnScroll(event);
     }
-    DoOnScroll() {}
+    DoOnScroll(event) {}
+
+    OnWheel(event)
+    {
+        this.DoOnWheel(event);
+    }
+    DoOnWheel(event) {}
     
 
     // Window
-    //TODO - This might not even work at all? First time testing it
     OnWindowResize()
     {
-        //TODO - Remove this comment once this function works, windowHalfX & Y was being calculated for some reason?? code from a tutorial that never got deleted?
-
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
 
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        //TODO - was:    this.postprocessing.composer
         this.composer.setSize(window.innerWidth, window.innerHeight);
         
         this.DoOnWIndowResize();

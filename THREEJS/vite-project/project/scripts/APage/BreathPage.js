@@ -62,7 +62,6 @@ export default class BreathPage extends APage
       this.InitHoldTransition();
 
       super.SceneAdditions();
-      console.log("AN");
       super.Enter();
     }
 
@@ -74,7 +73,7 @@ export default class BreathPage extends APage
 
     DoExit()
     {
-      this.composer.passes = [];
+      history.pushState({}, "", "/Home");
     }
 
 
@@ -471,6 +470,11 @@ export default class BreathPage extends APage
         this.contrastExitTween.update();
       }
 
+      if(this.holdTransitionClock.getElapsedTime() >= 3.0)
+      {
+        super.Exit();
+      }
+
       if(this.isHoldTransitioning)
       {
         this.afterImageExitTween.update();
@@ -509,7 +513,7 @@ export default class BreathPage extends APage
     {
       // Camera FOV
       this.transitionFOVCoef = this.isHoldTransitioning ? this.holdTransitionClock.getElapsedTime() : this.holdTransitionClock.getElapsedTime() - this.stopHoldTransitionClock.getElapsedTime();
-      this.transitionFOVCoef = THREE.MathUtils.clamp((this.transitionFOVCoef * 1.0) ** 3.0, 0.0, 40.0);
+      this.transitionFOVCoef = THREE.MathUtils.clamp((this.transitionFOVCoef * 2.0) ** 2.0, 0.0, 40.0);
       this.camera.fov = Math.sin(this.clock.getElapsedTime() * this.cameraFovSpeed) * this.cameraFovRange + this.cameraBaseFov + this.transitionFOVCoef;
 
       // Camera Y movement
@@ -631,7 +635,7 @@ export default class BreathPage extends APage
       this.afterImageExitObject = { value: 0.0 };
       this.afterImageExitTween = new TWEEN.Tween(this.afterImageExitObject)
       .to({ value: 0.95 }, 1.0 * 1000)
-      .easing(TWEEN.Easing.Cubic.out)
+      .easing(TWEEN.Easing.Cubic.Out)
       .onUpdate(() => {
         this.afterImagePass.uniforms.damp = { value: this.afterImageExitObject.value };
       });
@@ -646,7 +650,6 @@ export default class BreathPage extends APage
       this.stopHoldTransitionClock.start();
       this.holdTransitionClock.stop();
       this.afterImageExitTween.stop();
-      //TODO - TOCHECK - this.initTransitionCLock(); used to be called here
     }
 
 
