@@ -46,7 +46,7 @@ export default class HomePage extends APage
     {
         history.replaceState({}, "", "/Home");
 
-        //TODO - this.backgroundEnterTween.start();
+        this.backgroundEnterTween.start();
     }
 
     DoExit()
@@ -91,10 +91,13 @@ export default class HomePage extends APage
             fragmentShader: s_FS,
             uniforms: {
             uTime: { value: 15.0 },
+            uEnterTransitionCoef: { value: 0.0 },
             uAnimStrength: { value: 1.0 },
-            uAnimSpeed: { value: 1.0 },
+            uAnimSpeed: { value: 0.25 },
+            uFloor: { value: 0.25 },
             uIdleNoiseScrollSpeed: { value: 0.2 },
             uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+            uGreyscaleClamp: { value: new THREE.Vector2(0.0, 1.0) },
             maskTexture: { value: new THREE.TextureLoader().load('/project/textures/TimeSeeker_Logo_White_Transparent.png') },
             },
         });
@@ -106,7 +109,13 @@ export default class HomePage extends APage
 
     initEnterAniamtion()
     {
-        
+        this.backgroundEnterParamObject = { value: 0.0 };
+        this.backgroundEnterTween = new TWEEN.Tween(this.backgroundEnterParamObject)
+        .to({ value: 1.0 }, 3.0 * 1000)
+        .easing(TWEEN.Easing.Sinusoidal.Out)
+        .onUpdate(() => {
+            this.backgroundMesh.material.uniforms.uEnterTransitionCoef.value = this.backgroundEnterParamObject.value;
+        });
     }
 
     initExitAnimation()
@@ -121,18 +130,21 @@ export default class HomePage extends APage
         this.updateTweens();
 
         this.updateBackground();
-
-        return this.nextPageIndex;
     }
 
     updateTweens()
     {
-        
+        if(this.backgroundEnterTween.isPlaying())
+        {
+            this.backgroundEnterTween.update();
+        }
     }
 
     updateBackground()
     {
         this.backgroundMesh.material.uniforms.uTime.value += this.clock.getDelta() * this.backgroundSpeed;
+        //this.backgroundMesh.material.uniforms.uAnimSpeed.value = Math.sin(this.backgroundMesh.material.uniforms.uTime.value);
+        //this.backgroundMesh.material.uniforms.uEnterTransitionCoef.value = Math.sin(this.backgroundMesh.material.uniforms.uTime.value);
     }
 
 

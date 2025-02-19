@@ -1,6 +1,8 @@
 uniform float uTime;
+uniform float uEnterTransitionCoef;
 uniform float uAnimStrength;
 uniform float uAnimSpeed;
+uniform float uFloor;
 uniform float uIdleNoiseScrollSpeed;
 uniform vec2 uResolution;
 varying vec2 vUv;
@@ -46,8 +48,7 @@ void main()
     vec4 maskTexColor = texture(maskTexture, uv);
     vec3 gradientGrayscale = maskA.rgb * (1.0 - maskTexColor.a) + maskT.rgb * maskTexColor.a;
 
-    float enterCoef = clamp(uTime - 15.5, 0.0, 1.0);
-    gradientGrayscale *= clamp(abs(sin(uTime * uAnimStrengh) * uAnimSpeed), 0.0, 1.0) * enterCoef;
+    gradientGrayscale *= (pow(sin(uTime * uAnimSpeed) * uAnimStrength, 2.0) * (1.0 - uFloor) + uFloor) * uEnterTransitionCoef;
 
     vec3 gradientColor = mix(color0, color1, smoothstep(0.0, gs0, gradientGrayscale));
     gradientColor = mix(gradientColor, color2, smoothstep(gs0, gs1, gradientGrayscale));
