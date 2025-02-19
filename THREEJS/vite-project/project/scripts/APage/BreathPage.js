@@ -466,9 +466,9 @@ export default class BreathPage extends APage
       if(this.holdTransitionClock.getElapsedTime() >= this.holdTimeToTransition && !this.inTransitionAnimation)
       {
         this.StartTransitionAnimation();
-      } else if(this.inTransitionAnimation)
+      }
+      else if(this.inTransitionAnimation)
       {
-        console.log("ASD");
         this.contrastExitTween.update();
       }
 

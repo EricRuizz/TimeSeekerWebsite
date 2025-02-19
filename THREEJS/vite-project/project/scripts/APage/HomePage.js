@@ -34,10 +34,10 @@ export default class HomePage extends APage
         await Promise.all([
             this.initBackground(),
         ]);
-
+        
         this.initEnterAniamtion();
         this.initExitAnimation();
-        
+
         super.SceneAdditions();
         super.Enter();
     }
@@ -91,6 +91,8 @@ export default class HomePage extends APage
             fragmentShader: s_FS,
             uniforms: {
             uTime: { value: 15.0 },
+            uAnimStrength: { value: 1.0 },
+            uAnimSpeed: { value: 1.0 },
             uIdleNoiseScrollSpeed: { value: 0.2 },
             uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
             maskTexture: { value: new THREE.TextureLoader().load('/project/textures/TimeSeeker_Logo_White_Transparent.png') },
@@ -104,7 +106,7 @@ export default class HomePage extends APage
 
     initEnterAniamtion()
     {
-        //TODO
+        
     }
 
     initExitAnimation()
@@ -125,7 +127,7 @@ export default class HomePage extends APage
 
     updateTweens()
     {
-        //TODO - this.backgroundEnterTween.update();
+        
     }
 
     updateBackground()
