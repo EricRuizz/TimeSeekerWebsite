@@ -1,18 +1,69 @@
+
+/*::selection {
+  color: rgb(0, 0, 0);
+  background: rgb(57, 224, 196);
+}*/
+
 canvas{
   position: fixed;
   top: 0;
   left: 0;
+  cursor: none;
 }
 
 body {
   margin: 0;
   overflow: hidden;
-  background-color: #000000;
-}
-canvas {
-  cursor: none;
+  background-color: #03060e;
+  user-select: none;
+  color: white;
+  font-family: Montserrat, Geist, sans-serif;
+  font-weight: bold;
 }
 
 main {
   position: absolute;
+}
+
+#grad1 {
+  height: 200px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0,0,0,0));
+}
+
+.timeseekerTitle p {
+  font-size: 50px;
+}
+
+.header {
+  background-color: #00000000;
+  text-align: center;
+  padding: 20px;
+}
+
+.headerList li {
+  list-style-type: none;
+  margin: 0px 0px;
+  background-color: #00000000;
+}
+
+.headerContent a {
+  float: right;
+  padding: 0px 40px;
+  text-decoration: none;
+  color: white;
+  font-size: 15px;
+}
+
+/*.pageSelector {
+
+}*/
+
+.pageSelectorList li {
+  list-style-type: none;
+  text-align: center;
+}
+
+.pageSelectorContent a {
+  text-decoration: none;
+  height: 0px;
 }

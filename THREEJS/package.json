@@ -3,8 +3,14 @@
     "@tweenjs/tween.js": "^25.0.0",
     "dat.gui": "^0.7.9",
     "gl-noise": "^1.6.1",
+    "gsap": "^3.12.7",
     "three": "^0.167.1",
     "three-custom-shader-material": "^6.0.13",
     "vite-plugin-top-level-await": "^1.4.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/three": "^0.174.0",
+    "typescript": "^5.8.2"
   }
 }

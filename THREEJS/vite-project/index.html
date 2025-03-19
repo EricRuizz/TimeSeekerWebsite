@@ -1,26 +1,37 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <style>
-      body {
-        background-color: #000000;
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bonheur+Royale&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/TimeSeeker_Logo_White_Transparent.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Breath</title>
+    <title>TimeSeeker - Home</title>
   </head>
   <body>
-    <div id="app"></div>
-    <canvas id="bg"></canvas>
-    <main>
-      <header>
-        <h1>Uep com anem</h1>
-        <p>😈</p>
-      </header>
-    </main>
+    <div class="header">
+      <ul class="headerList">
+        <li class="headerContent"><a href="">CONTACT</a></li>
+        <li class="headerContent"><a href="">ABOUT</a></li>
+      </ul>
+    </div>
+    <div class="pageSelector">
+      <ul class="pageSelectorList">
+        <li class="pageSelectorContent" style=" font-size: 60px; font-family: Aldrich; font-weight: 400;"><a href="">Games</a></li>
+        <li class="pageSelectorContent" style=" font-size: 60px; font-family: Jaini; font-weight: 600;"><a href="">Art</a></li>
+        <li class="pageSelectorContent" style=" font-size: 60px; font-family: Lobster; font-weight: 200;"><a href="">Music</a></li>
+        <li class="pageSelectorContent" style=" font-size: 60px; font-family: Arial; font-weight: 600;"><a href="">Others</a></li>
+      </ul>
+    </div>
+    <div class="presentation">
+      <p>Hello! I'm Èric, aka</p>
+      <p class="timeseekerTitle">TIMESEEKER</p>
+      <p>I am an indie game developer focused in design and programming based in Barcelona, who is also passionate about many other art forms such as music and painting.</p>
+    </div>
     <script type="module" src="lib/glNoise.m.js"></script>
-    <script type="module" src="project/scripts/Pages/MainBreath.js"></script>
   </body>
 </html>
