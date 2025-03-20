@@ -1,17 +1,18 @@
 
+
+/* GENERAL */
+
 * {
   box-sizing: border-box;
 }
 
 :root {
   --headerSideMargin: 4vw;
-  --highlightColor: rgb(255, 185, 105);
-}
+  --highlightColor: rgb(255, 160, 52);
 
-/*::selection {
-  color: rgb(0, 0, 0);
-  background: rgb(57, 224, 196);
-}*/
+  --preivewCardStripeHeight: 2vh;
+  --preivewCardStripeOffset: 22%;
+}
 
 canvas{
   position: fixed;
@@ -30,15 +31,19 @@ body {
   font-weight: normal;
 
   display: flex;
-  flex-direction: column; /* Stacks header on top and main content below */
+  flex-direction: column;
   align-items: center; 
-  min-height: 100vh; /* Ensures full viewport height */
+  min-height: 100vh;
 }
 
 #grad1 {
   height: 200px;
   background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0,0,0,0));
 }
+
+
+
+/* HEADER */
 
 .header {
   overflow: hidden;
@@ -64,10 +69,36 @@ body {
   color: var(--highlightColor);
 }
 
+
+
+/* Landing container */
+
+.containerLanding {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 45vw;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sideLanding {
+  width: 15vw;
+  text-align: center;
+}
+
+
+
+/* TIMESEEKER info */
+
 .tsContainer {
-  position: relative; /* Acts as a reference point for absolute positioning */
-  display: inline-block; /* Ensures width is only as wide as the text */
-  text-align: center; /* Centers the text block */
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  z-index: -2;
 }
 
 .tsTitle {
@@ -79,17 +110,17 @@ body {
 
 .tsPresentation {
   position: absolute;
-  bottom: 100%; /* Moves the text exactly on top of .tsTitle */
-  left: 0; /* Ensures it starts at the same point as .tsTitle */
-  width: 100%; /* Makes sure it has the same width as .tsTitle */
-  text-align: left; /* Aligns text to the left */
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  text-align: left;
   color: var(--highlightColor);
   margin: 0;
 }
 
-/*.pageSelector {
 
-}*/
+
+/* Page selector */
 
 ul.pageSelectorList {
   list-style: none;
@@ -113,28 +144,37 @@ ul.pageSelectorList {
   color: var(--highlightColor);
 }
 
-.containerMain {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 45vw;
 
+
+/* Preview Card */
+
+div.previewCard {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Perfect centering */
+  transform: translate(-50%, -50%);
+
+  width: 100vw;
+  height: 45vh;
+  background-color: black;
+  z-index: -1;
 }
 
-.sideMain {
-  width: 15vw;
-  text-align: center;
+div.previewCardStripe {
+  position: absolute;
+  left: 50%;
+  width: 100vw;
+  height: var(--preivewCardStripeHeight);
+  background-color: black;
+  z-index: -1;
 }
 
-
-/* Responsive layout - makes the three columns stack on top of each other instead of next to each other
-@media screen and (max-width:600px) {
-  .column {
-    width: 100%;
-  }
+div.previewCardStripe.top {
+  top: calc(-1 * var(--preivewCardStripeOffset));
+  transform: translate(-50%, -50%);
 }
-*/
+
+div.previewCardStripe.bot {
+  top: calc(100% + var(--preivewCardStripeOffset));
+  transform: translate(-50%, -50%);
+}
