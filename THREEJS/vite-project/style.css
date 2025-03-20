@@ -1,4 +1,13 @@
 
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --highlightColor: rgb(255, 185, 105);
+  --headerHeight: 4vh;
+}
+
 /*::selection {
   color: rgb(0, 0, 0);
   background: rgb(57, 224, 196);
@@ -14,15 +23,11 @@ canvas{
 body {
   margin: 0;
   overflow: hidden;
-  background-color: #03060e;
+  background-color: #212121;
   user-select: none;
   color: white;
   font-family: Montserrat, Geist, sans-serif;
-  font-weight: bold;
-}
-
-main {
-  position: absolute;
+  font-weight: normal;
 }
 
 #grad1 {
@@ -30,33 +35,60 @@ main {
   background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0,0,0,0));
 }
 
-.timeseekerTitle p {
-  font-size: 50px;
-}
-
 .header {
-  background-color: #00000000;
-  text-align: center;
-  padding: 20px;
+  background-color: #21c753;
+  /*padding: 2vh;*/
+  height: var(--headerHeight);
 }
 
-.headerList li {
+.header ul {
   list-style-type: none;
-  margin: 0px 0px;
   background-color: #00000000;
 }
 
-.headerContent a {
-  float: right;
-  padding: 0px 40px;
+.header li {
+}
+
+.header a {
+  color: rgb(255, 255, 255);
+  display: block;
+  text-align: center;
   text-decoration: none;
-  color: white;
   font-size: 15px;
+  float: right;
+  padding: 20px 40px;
+}
+
+.header a:hover {
+  color: var(--highlightColor);
+}
+
+p.tsPresentation {
+  height: 0px;
+  line-height: 0%;
+  position: relative;
+  top: 20px;
+  color: var(--highlightColor);
+  text-align: center;
+}
+
+p.tsTitle {
+  height: 0px;
+  line-height: 0%;
+  font-size: 50px;
+  font-weight: 800;
+  text-align: center;
 }
 
 /*.pageSelector {
 
 }*/
+
+ul.pageSelectorList {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
+}
 
 .pageSelectorList li {
   list-style-type: none;
@@ -65,5 +97,33 @@ main {
 
 .pageSelectorContent a {
   text-decoration: none;
+  color: rgb(241, 241, 241);
   height: 0px;
 }
+
+.pageSelectorContent a:hover { /* TODO - Make GSAP animations */
+  text-decoration: none;
+  color: var(--highlightColor);
+}
+
+.containerMain {
+  display: flex;
+  justify-content: center; /* Ensures everything is centered */
+  align-items: center;
+  gap: 900px; /* Controls the space between left and right */
+  height: calc(100vh - calc(var(--headerHeight) * 2));
+}
+
+.sideMain {
+  width: 400px; /* Adjust width as needed */
+  text-align: center;
+}
+
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other
+@media screen and (max-width:600px) {
+  .column {
+    width: 100%;
+  }
+}
+*/

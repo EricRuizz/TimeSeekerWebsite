@@ -4,8 +4,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bonheur+Royale&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/TimeSeeker_Logo_White_Transparent.svg" />
@@ -14,24 +15,30 @@
   </head>
   <body>
     <div class="header">
-      <ul class="headerList">
-        <li class="headerContent"><a href="">CONTACT</a></li>
-        <li class="headerContent"><a href="">ABOUT</a></li>
+      <ul>
+        <li><a href="">CONTACT</a></li>
+        <li><a href="">ABOUT</a></li>
       </ul>
     </div>
-    <div class="pageSelector">
-      <ul class="pageSelectorList">
-        <li class="pageSelectorContent" style=" font-size: 60px; font-family: Aldrich; font-weight: 400;"><a href="">Games</a></li>
-        <li class="pageSelectorContent" style=" font-size: 60px; font-family: Jaini; font-weight: 600;"><a href="">Art</a></li>
-        <li class="pageSelectorContent" style=" font-size: 60px; font-family: Lobster; font-weight: 200;"><a href="">Music</a></li>
-        <li class="pageSelectorContent" style=" font-size: 60px; font-family: Arial; font-weight: 600;"><a href="">Others</a></li>
-      </ul>
-    </div>
-    <div class="presentation">
-      <p>Hello! I'm Èric, aka</p>
-      <p class="timeseekerTitle">TIMESEEKER</p>
-      <p>I am an indie game developer focused in design and programming based in Barcelona, who is also passionate about many other art forms such as music and painting.</p>
-    </div>
+    <div class="containerMain">
+      <div class="sideMain left">
+        <div class="pageSelector">
+          <ul class="pageSelectorList">
+            <li class="pageSelectorContent" style=" font-size: 60px; font-family: Aldrich;   font-weight: 400;"><a href="">Games</a></li>
+            <li class="pageSelectorContent" style=" font-size: 60px; font-family: Jaini;     font-weight: 600;"><a href="">Art</a></li>
+            <li class="pageSelectorContent" style=" font-size: 60px; font-family: Lobster;   font-weight: 200;"><a href="">Music</a></li>
+            <li class="pageSelectorContent" style=" font-size: 60px; font-family: Marcellus; font-weight: 600;"><a href="">Others</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="sideMain right">
+        <div class="presentation">
+          <p class="tsPresentation">Hello! I'm Èric, aka</p>
+          <p class="tsTitle">TIMESEEKER</p>
+          <p style="padding: 0% 10% 0% 10%; text-align: center;"><br>I am an indie game developer focused in design and programming based in Barcelona, who is also passionate about many other art forms such as music and painting.</p>
+        </div>
+      </div>
+    </div>    
     <script type="module" src="lib/glNoise.m.js"></script>
   </body>
 </html>
