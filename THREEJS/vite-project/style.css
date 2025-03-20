@@ -4,7 +4,7 @@
 }
 
 :root {
-  --headerSideMargin: 2vw;
+  --headerSideMargin: 4vw;
   --highlightColor: rgb(255, 185, 105);
 }
 
@@ -50,7 +50,7 @@ body {
   display: block;
   text-align: center;
   margin-right: var(--headerSideMargin);
-  padding: 40px 40px;
+  margin-top: 4vh;
   text-decoration: none;
   color: white;
 }
@@ -64,21 +64,27 @@ body {
   color: var(--highlightColor);
 }
 
-p.tsPresentation {
-  height: 0px;
-  line-height: 0%;
-  position: relative;
-  top: 20px;
-  color: var(--highlightColor);
-  text-align: center;
+.tsContainer {
+  position: relative; /* Acts as a reference point for absolute positioning */
+  display: inline-block; /* Ensures width is only as wide as the text */
+  text-align: center; /* Centers the text block */
 }
 
-p.tsTitle {
-  height: 0px;
-  line-height: 0%;
-  font-size: 50px;
+.tsTitle {
+  font-size: 42px;
   font-weight: 800;
   text-align: center;
+  margin: 0;
+}
+
+.tsPresentation {
+  position: absolute;
+  bottom: 100%; /* Moves the text exactly on top of .tsTitle */
+  left: 0; /* Ensures it starts at the same point as .tsTitle */
+  width: 100%; /* Makes sure it has the same width as .tsTitle */
+  text-align: left; /* Aligns text to the left */
+  color: var(--highlightColor);
+  margin: 0;
 }
 
 /*.pageSelector {
@@ -120,7 +126,7 @@ ul.pageSelectorList {
 }
 
 .sideMain {
-  width: 20vw;
+  width: 15vw;
   text-align: center;
 }
 
