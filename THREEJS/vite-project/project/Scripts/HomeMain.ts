@@ -83,7 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
 // HOVER PAGE SELECTOR ITEM
 function HoveredPageSelectorItem(type: PageSelectorItemType)
 {
-    console.log("HoveredPageSelectorItem");
     isHoveringPageSelectorItem = true;
 
     if(isPreviewCardShown == false)
@@ -97,12 +96,16 @@ function ShowPreviewCard()
 {
     isPreviewCardShown = true;
 
-    //TODO - animate Mask
+    ElementToggleVisibilityAnimation(previewCard, "show");
+    setTimeout(() =>
+    {
+        ElementToggleVisibilityAnimation(previewCardStripeTop, "show");
+        ElementToggleVisibilityAnimation(previewCardStripeBot, "show");
+    }, 100);
 }
 
 function HoveredPageSelectorItemType(type: PageSelectorItemType)
 {
-    console.log("CHANGE");
     currentPreviewCardImage?.classList.toggle("show", false);
     currentPreviewCardImage = previewImageDictionary[type];
     currentPreviewCardImage?.classList.toggle("show", true);
@@ -111,7 +114,6 @@ function HoveredPageSelectorItemType(type: PageSelectorItemType)
 // UNHOVER PAGE SELECTOR ITEM
 function UnhoveredPageSelectorItem()
 {
-    console.log("UnhoveredPageSelectorItem");
     isHoveringPageSelectorItem = false;
 
     setTimeout(() =>
@@ -120,14 +122,23 @@ function UnhoveredPageSelectorItem()
         {
             HidePreviewCard();
         }
-    }, 100);
+    }, 50);
 }
 
 function HidePreviewCard()
 {
-    console.log("Hide PreviewCard");
-    currentPreviewCardImage?.classList.toggle("show", false);
-    currentPreviewCardImage = null;
+    isPreviewCardShown = false;
 
-    //TODO - actually hide the div
+    ElementToggleVisibilityAnimation(previewCard, "hide");
+    setTimeout(() =>
+    {
+        ElementToggleVisibilityAnimation(previewCardStripeTop, "hide");
+        ElementToggleVisibilityAnimation(previewCardStripeBot, "hide");
+    }, 100);
 }
+
+function ElementToggleVisibilityAnimation(element: HTMLElement | null, action: "show" | "hide") {
+    element?.classList.remove("show", "hide");
+    void element?.offsetHeight;
+    element?.classList.add(action);
+  }
