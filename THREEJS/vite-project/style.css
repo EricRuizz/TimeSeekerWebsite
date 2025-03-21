@@ -36,11 +36,6 @@ body {
   min-height: 100vh;
 }
 
-#grad1 {
-  height: 200px;
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0,0,0,0));
-}
-
 
 
 /* HEADER */
@@ -148,6 +143,13 @@ ul.pageSelectorList {
 
 /* Preview Card */
 
+div.pagePreview {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 div.previewCard {
   position: absolute;
   top: 50%;
@@ -158,6 +160,8 @@ div.previewCard {
   height: 45vh;
   background-color: black;
   z-index: -1;
+
+  overflow: hidden;
 }
 
 div.previewCardStripe {
@@ -177,4 +181,28 @@ div.previewCardStripe.top {
 div.previewCardStripe.bot {
   top: calc(100% + var(--preivewCardStripeOffset));
   transform: translate(-50%, -50%);
+}
+
+.previewCardGrad {
+  height: 100%;
+  width: 65%;
+  float: right;
+  background-image: linear-gradient(to left, rgba(0, 0, 0, 1), rgba(0,0,0,0));
+}
+
+img.previewCardImage {
+  display: none;
+  position: fixed; /* Ensures it stays in place, ignoring parent div */
+  top: 50%;
+  left: 50%;
+  width: 100vw; /* Covers the entire viewport width */
+  height: 100vh; /* Covers the entire viewport height */
+  object-fit: cover; /* Ensures the image fills the screen without stretching */
+  transform: translate(-50%, -50%); /* Centers the image */
+  z-index: -1;
+  pointer-events: none;
+}
+
+.previewCardImage.show {
+  display: flex;
 }

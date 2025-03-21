@@ -16,23 +16,32 @@ import { TextPlugin } from "gsap/TextPlugin";
 
 
 enum PageSelectorItemType {
-    Games = 0,
-    Art = 1,
-    Music = 2,
-    Others = 3,
+    Games,
+    Art,
+    Music,
+    Others
 }
 
 var isPreviewCardShown = false as boolean;
 var isHoveringPageSelectorItem = false as boolean;
 
-var previewCard: HTMLElement | null;
-var previewCardStripeTop: HTMLElement | null;
-var previewCardStripeBot: HTMLElement | null;
-
 var pageSelectorContentGames: HTMLElement | null;
 var pageSelectorContentArt: HTMLElement | null;
 var pageSelectorContentMusic: HTMLElement | null;
 var pageSelectorContentOthers: HTMLElement | null;
+
+var previewCard: HTMLElement | null;
+var previewCardStripeTop: HTMLElement | null;
+var previewCardStripeBot: HTMLElement | null;
+
+var previewCardImageGames: HTMLElement | null;
+var previewCardImageArt: HTMLElement | null;
+var previewCardImageMusic: HTMLElement | null;
+var previewCardImageOthers: HTMLElement | null;
+
+var currentPreviewCardImage: HTMLElement | null;
+
+var previewImageDictionary: { [key in PageSelectorItemType]: HTMLElement | null };
 
 document.addEventListener("DOMContentLoaded", () => {
     //Event class
@@ -55,6 +64,20 @@ document.addEventListener("DOMContentLoaded", () => {
     previewCard = document.querySelector(".previewCard");
     previewCardStripeTop = document.querySelector(".previewCardStripe.top");
     previewCardStripeBot = document.querySelector(".previewCardStripe.bot");
+
+    previewCardImageGames = document.querySelector(".previewCardImage.games");
+    previewCardImageArt = document.querySelector(".previewCardImage.art");
+    previewCardImageMusic = document.querySelector(".previewCardImage.music");
+    previewCardImageOthers = document.querySelector(".previewCardImage.others");
+
+    currentPreviewCardImage = previewCardImageGames;
+
+    previewImageDictionary = {
+        [PageSelectorItemType.Games]: previewCardImageGames,
+        [PageSelectorItemType.Art]: previewCardImageArt,
+        [PageSelectorItemType.Music]: previewCardImageMusic,
+        [PageSelectorItemType.Others]: previewCardImageOthers
+    };
 });
 
 // HOVER PAGE SELECTOR ITEM
@@ -74,27 +97,15 @@ function ShowPreviewCard()
 {
     isPreviewCardShown = true;
 
-    //TODO - previewCard?.classList.add("TEST");
+    //TODO - animate Mask
 }
 
 function HoveredPageSelectorItemType(type: PageSelectorItemType)
 {
-    if(type == PageSelectorItemType.Games)
-    {
-
-    }
-    else if(type == PageSelectorItemType.Art)
-    {
-
-    }
-    else if(type == PageSelectorItemType.Music)
-    {
-
-    }
-    else if(type == PageSelectorItemType.Others)
-    {
-
-    }
+    console.log("CHANGE");
+    currentPreviewCardImage?.classList.toggle("show", false);
+    currentPreviewCardImage = previewImageDictionary[type];
+    currentPreviewCardImage?.classList.toggle("show", true);
 }
 
 // UNHOVER PAGE SELECTOR ITEM
@@ -114,8 +125,9 @@ function UnhoveredPageSelectorItem()
 
 function HidePreviewCard()
 {
-    
-}
+    console.log("Hide PreviewCard");
+    currentPreviewCardImage?.classList.toggle("show", false);
+    currentPreviewCardImage = null;
 
-//TODO - if "mouseleave" for 0.1 seconds, then make the preview card disappear
-//TODO - only call previewCard.appear if previewCard is hiden 
+    //TODO - actually hide the div
+}
