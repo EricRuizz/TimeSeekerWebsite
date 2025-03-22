@@ -12,6 +12,8 @@ import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { EaselPlugin } from "gsap/EaselPlugin";
 import { PixiPlugin } from "gsap/PixiPlugin";
 import { TextPlugin } from "gsap/TextPlugin";
+import { eventNames } from 'process';
+import { duplexPair } from 'stream';
 
 
 
@@ -42,6 +44,7 @@ var previewCardImageOthers: HTMLElement | null;
 var currentPreviewCardImage: HTMLElement | null;
 
 var previewImageDictionary: { [key in PageSelectorItemType]: HTMLElement | null };
+const stripeScrollTextDuration = 20;
 
 document.addEventListener("DOMContentLoaded", () => {
     //Event class
@@ -60,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pageSelectorContentMusic?.addEventListener("mouseleave", () => UnhoveredPageSelectorItem());
     pageSelectorContentOthers?.addEventListener("mouseleave", () => UnhoveredPageSelectorItem());
 
-    //Affected class
+    //Affected classes
     previewCard = document.querySelector(".previewCard");
     previewCardStripeTop = document.querySelector(".previewCardStripe.top");
     previewCardStripeBot = document.querySelector(".previewCardStripe.bot");
@@ -78,9 +81,44 @@ document.addEventListener("DOMContentLoaded", () => {
         [PageSelectorItemType.Music]: previewCardImageMusic,
         [PageSelectorItemType.Others]: previewCardImageOthers
     };
+
+    //Preview card stripe scroll
+    createScrollingAnimation(".previewCardStripeText.top", "top");
+    createScrollingAnimation(".previewCardStripeText.bot", "bot");
+
 });
 
-// HOVER PAGE SELECTOR ITEM
+function createScrollingAnimation(selector: string, type: "top" | "bot") {
+    const elements = document.querySelectorAll(selector) as NodeListOf<HTMLElement>;
+
+    gsap.set(elements, {
+      x: (i) => window.innerWidth * [0, 0.25, 0.5, 0.75][i]
+    });
+
+    elements.forEach((el) => {
+      function animate()
+      {
+        const currentXPosition = gsap.getProperty(el, "x") as number || 0;
+        const endXPosition = type === "bot" ? window.innerWidth : -el.offsetWidth;
+        const distance = Math.abs(endXPosition - currentXPosition);
+        const referenceDistance = type === "bot" ? window.innerWidth : window.innerWidth + el.offsetWidth; 
+        const duration = stripeScrollTextDuration * (distance / referenceDistance);
+
+        gsap.to(el, {
+          x: endXPosition,
+          duration: duration,
+          ease: "linear",
+          onComplete: () => {
+            gsap.set(el, { x: type === "bot" ? -el.offsetWidth : window.innerWidth }); //Reset position
+            animate(); //Reset animation
+          }
+        });
+      }
+
+      animate();
+    });
+}
+
 function HoveredPageSelectorItem(type: PageSelectorItemType)
 {
     isHoveringPageSelectorItem = true;
@@ -111,7 +149,6 @@ function HoveredPageSelectorItemType(type: PageSelectorItemType)
     currentPreviewCardImage?.classList.toggle("show", true);
 }
 
-// UNHOVER PAGE SELECTOR ITEM
 function UnhoveredPageSelectorItem()
 {
     isHoveringPageSelectorItem = false;
@@ -137,8 +174,9 @@ function HidePreviewCard()
     }, 100);
 }
 
-function ElementToggleVisibilityAnimation(element: HTMLElement | null, action: "show" | "hide") {
+function ElementToggleVisibilityAnimation(element: HTMLElement | null, action: "show" | "hide")
+{
     element?.classList.remove("show", "hide");
     void element?.offsetHeight;
     element?.classList.add(action);
-  }
+}

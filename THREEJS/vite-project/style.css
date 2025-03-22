@@ -192,6 +192,7 @@ div.previewCardStripe {
   background-color: black;
   z-index: -1;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .previewCardStripe.show {
@@ -225,12 +226,19 @@ div.previewCardStripe.bot {
   transform: translate(-50%, -50%);
 }
 
-.previewCardStripe a {
-  display: block;
+.previewCardStripeText {
+  position: absolute;
   text-align: center;
+  top: 0;
   font-style: italic;
   font-family: Montserrat, Geist, sans-serif;
+  white-space: nowrap;
 }
+
+.animated {
+  transition: transform 5s linear;
+}
+
 
 .previewCardGrad {
   height: 100%;
