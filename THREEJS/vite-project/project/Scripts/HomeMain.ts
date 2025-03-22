@@ -44,7 +44,23 @@ var previewCardImageOthers: HTMLElement | null;
 var currentPreviewCardImage: HTMLElement | null;
 
 var previewImageDictionary: { [key in PageSelectorItemType]: HTMLElement | null };
+
+var stripeTextsTop: NodeListOf<HTMLElement>;
+var stripeTextsBot: NodeListOf<HTMLElement>;
 const stripeScrollTextDuration = 20;
+
+var previewStripeTextDictionary: { [key in PageSelectorItemType]: string[] };
+const stripeTextsGame = new Array("Nomad Defender","Hyper Shapes", "Nomad Defender", "Hyper Shapes", "Nomad Defender") as string[];
+const stripeTextsArt = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
+const stripeTextsMusic = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
+const stripeTextsOthers = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
+
+previewStripeTextDictionary = {
+    [PageSelectorItemType.Games]: stripeTextsGame,
+    [PageSelectorItemType.Art]: stripeTextsArt,
+    [PageSelectorItemType.Music]: stripeTextsMusic,
+    [PageSelectorItemType.Others]: stripeTextsOthers
+};
 
 document.addEventListener("DOMContentLoaded", () => {
     //Event class
@@ -82,14 +98,15 @@ document.addEventListener("DOMContentLoaded", () => {
         [PageSelectorItemType.Others]: previewCardImageOthers
     };
 
-    //Preview card stripe scroll
-    createScrollingAnimation(".previewCardStripeText.top", "top");
-    createScrollingAnimation(".previewCardStripeText.bot", "bot");
+    stripeTextsTop = document.querySelectorAll(".previewCardStripeText.top") as NodeListOf<HTMLElement>;
+    stripeTextsBot = document.querySelectorAll(".previewCardStripeText.bot") as NodeListOf<HTMLElement>;
+
+    StartStripeTextScrollingAnimation(stripeTextsTop, "top");
+    StartStripeTextScrollingAnimation(stripeTextsBot, "bot");
 
 });
 
-function createScrollingAnimation(selector: string, type: "top" | "bot") {
-    const elements = document.querySelectorAll(selector) as NodeListOf<HTMLElement>;
+function StartStripeTextScrollingAnimation(elements: NodeListOf<HTMLElement>, type: "top" | "bot") {
 
     gsap.set(elements, {
       x: (i) => window.innerWidth * [0, 0.25, 0.5, 0.75][i]
@@ -119,6 +136,15 @@ function createScrollingAnimation(selector: string, type: "top" | "bot") {
     });
 }
 
+function ChangeStripeTexts(type: PageSelectorItemType)
+{
+    for (let i = 0; i < stripeTextsTop.length; i++)
+    {
+        stripeTextsTop[i].textContent = previewStripeTextDictionary[type][i];
+        stripeTextsBot[i].textContent = previewStripeTextDictionary[type][i];
+    }
+}
+
 function HoveredPageSelectorItem(type: PageSelectorItemType)
 {
     isHoveringPageSelectorItem = true;
@@ -127,7 +153,9 @@ function HoveredPageSelectorItem(type: PageSelectorItemType)
     {
         ShowPreviewCard();
     }
+
     HoveredPageSelectorItemType(type);
+    ChangeStripeTexts(type);
 }
 
 function ShowPreviewCard()
