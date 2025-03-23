@@ -16,6 +16,7 @@ import { eventNames } from 'process';
 import { duplexPair } from 'stream';
 
 
+gsap.registerPlugin(ScrollTrigger);
 
 enum PageSelectorItemType {
     Games,

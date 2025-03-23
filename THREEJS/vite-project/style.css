@@ -13,26 +13,30 @@
   --preivewCardStripeOffset: 22%;
 }
 
-canvas{
-  position: fixed;
-  top: 0;
-  left: 0;
-  cursor: none;
-}
-
 body {
   margin: 0;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  min-height: 100vh;
+
   background-color: #212121;
   user-select: none;
   color: white;
   font-family: Montserrat, Geist, sans-serif;
   font-weight: normal;
+  overflow-x: hidden;
+}
 
+.section {
+  width: 100%;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center; 
-  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
 }
 
 
@@ -40,8 +44,10 @@ body {
 /* HEADER */
 
 .header {
-  overflow: hidden;
+  position: fixed;
+  top: 0;
   width: 100%;
+  z-index: 10;
 }
 
 .header a {
@@ -52,6 +58,7 @@ body {
   margin-top: 4vh;
   text-decoration: none;
   color: white;
+  overflow: hidden;
 }
 
 .header a.headerOpposite {
@@ -75,8 +82,8 @@ body {
 
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  right: 50%;
+  transform: translate(50%, -50%);
 }
 
 .sideLanding {
@@ -229,6 +236,7 @@ div.previewCardStripe.bot {
 .previewCardStripeText {
   position: absolute;
   top: 0;
+  left: 0;
   font-style: italic;
   font-family: Montserrat, Geist, sans-serif;
   white-space: nowrap;
@@ -261,4 +269,27 @@ img.previewCardImage {
 
 .previewCardImage.show {
   display: flex;
+}
+
+
+/* ABOUT */
+
+.section.landing {
+  background-color: rgba(112, 16, 16, 0.384);
+}
+
+.section.about.intro {
+  background-color: rgb(31, 78, 78);
+}
+
+.section.about.career {
+  background-color: rgb(65, 100, 77);
+}
+
+.section.about.skills {
+  background-color: rgb(158, 157, 93);
+}
+
+.section.contact {
+  background-color: rgba(41, 41, 41, 0.384);
 }
