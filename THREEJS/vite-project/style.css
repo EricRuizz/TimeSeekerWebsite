@@ -50,7 +50,7 @@ body {
   z-index: 10;
 }
 
-.header a {
+.header span {
   float: right;
   display: block;
   text-align: center;
@@ -59,14 +59,16 @@ body {
   text-decoration: none;
   color: white;
   overflow: hidden;
+  background-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
 }
 
-.header a.headerOpposite {
+.header span.headerOpposite {
   float: left;
   margin-left: var(--headerSideMargin);;
 }
 
-.header a:hover {
+.header span:hover {
   color: var(--highlightColor);
 }
 

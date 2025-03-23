@@ -16,7 +16,8 @@ import { eventNames } from 'process';
 import { duplexPair } from 'stream';
 
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
 
 enum PageSelectorItemType {
     Games,
@@ -25,7 +26,9 @@ enum PageSelectorItemType {
     Others
 }
 
-var sections : NodeListOf<HTMLElement>;
+var sections: NodeListOf<HTMLElement>;
+var observer: globalThis.Observer | undefined;
+var scrollTween: gsap.core.Tween | null;
 
 var isPreviewCardShown = false as boolean;
 var isHoveringPageSelectorItem = false as boolean;
@@ -65,20 +68,39 @@ previewStripeTextDictionary = {
     [PageSelectorItemType.Others]: stripeTextsOthers
 };
 
+
 document.addEventListener("DOMContentLoaded", () => {
-    //Sections
+    //Scroll setup
+    if (ScrollTrigger.isTouch === 1)
+    {
+        observer = ScrollTrigger.normalizeScroll(true);
+    }
+    //On touch devices, ignore touchstart events if there's an in-progress tween so that touch-scrolling doesn't interrupt and make it wonky
+    document.addEventListener("touchstart", e => {
+        if (scrollTween) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        }
+    }, { capture: true, passive: false })
+
+    //Section scroll
     sections = document.querySelectorAll(".section");
     console.log(sections.length);
-    gsap.to(sections, {
-        scrollTrigger: {
-            trigger: ".container",
-            pin: true,
-            scrub: true,
-            snap: 1 / (sections.length - 1),
-        },
-        ease: "none",
-        duration: 0.5,
+    
+    sections.forEach((section, i) =>
+    {
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top bottom",
+          end: "+=199%",
+          onToggle: self => self.isActive && !scrollTween && ScrollToSection(i)
+        });
     });
+
+    //Header
+    document.getElementById("timeseekerdev")?.addEventListener("click", () => { ScrollToSection(0) });
+    document.getElementById("about")?.addEventListener("click", () => { ScrollToSection(1) });
+    document.getElementById("contact")?.addEventListener("click", () => { ScrollToSection(4) });
 
     //Page Selector Event class
     pageSelectorContentGames = document.querySelector(".pageSelectorContent.games");
@@ -122,6 +144,24 @@ document.addEventListener("DOMContentLoaded", () => {
     StartStripeTextScrollingAnimation(stripeTextsBot, "leftToRight");
 
 });
+
+function ScrollToSection(i: number)
+{
+    scrollTween = gsap.to(window, {
+        scrollTo: {
+            y: i * innerHeight,
+            autoKill: false
+        },
+        onStart: () => {
+            if (!observer) return;
+            observer.disable(); // Stops any user touch-scrolling
+            observer.enable();
+        },
+        duration: 1,
+        onComplete: () => scrollTween = null,
+        overwrite: true
+    });
+}
 
 function StartStripeTextScrollingAnimation(elements: NodeListOf<HTMLElement>, type: "rightToLeft" | "leftToRight") {
 
