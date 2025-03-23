@@ -25,6 +25,8 @@ enum PageSelectorItemType {
     Others
 }
 
+var sections : NodeListOf<HTMLElement>;
+
 var isPreviewCardShown = false as boolean;
 var isHoveringPageSelectorItem = false as boolean;
 
@@ -64,7 +66,21 @@ previewStripeTextDictionary = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    //Event class
+    //Sections
+    sections = document.querySelectorAll(".section");
+    console.log(sections.length);
+    gsap.to(sections, {
+        scrollTrigger: {
+            trigger: ".container",
+            pin: true,
+            scrub: true,
+            snap: 1 / (sections.length - 1),
+        },
+        ease: "none",
+        duration: 0.5,
+    });
+
+    //Page Selector Event class
     pageSelectorContentGames = document.querySelector(".pageSelectorContent.games");
     pageSelectorContentArt = document.querySelector(".pageSelectorContent.art");
     pageSelectorContentMusic = document.querySelector(".pageSelectorContent.music");
@@ -80,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pageSelectorContentMusic?.addEventListener("mouseleave", () => UnhoveredPageSelectorItem());
     pageSelectorContentOthers?.addEventListener("mouseleave", () => UnhoveredPageSelectorItem());
 
-    //Affected classes
+    //Page Selector Affected classes
     previewCard = document.querySelector(".previewCard");
     previewCardStripeTop = document.querySelector(".previewCardStripe.top");
     previewCardStripeBot = document.querySelector(".previewCardStripe.bot");
