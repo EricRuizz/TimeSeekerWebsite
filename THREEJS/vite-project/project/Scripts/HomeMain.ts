@@ -50,10 +50,10 @@ var stripeTextsBot: NodeListOf<HTMLElement>;
 const stripeScrollTextDuration = 20;
 
 var previewStripeTextDictionary: { [key in PageSelectorItemType]: string[] };
-const stripeTextsGame = new Array("Nomad Defender","Hyper Shapes", "Nomad Defender", "Hyper Shapes", "Nomad Defender") as string[];
-const stripeTextsArt = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
-const stripeTextsMusic = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
-const stripeTextsOthers = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
+const stripeTextsGame = new Array("Nomad Defender","Hyper Shapes", "Nomad Defender", "Hyper Shapes") as string[];
+const stripeTextsArt = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
+const stripeTextsMusic = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
+const stripeTextsOthers = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
 
 previewStripeTextDictionary = {
     [PageSelectorItemType.Games]: stripeTextsGame,
@@ -101,24 +101,26 @@ document.addEventListener("DOMContentLoaded", () => {
     stripeTextsTop = document.querySelectorAll(".previewCardStripeText.top") as NodeListOf<HTMLElement>;
     stripeTextsBot = document.querySelectorAll(".previewCardStripeText.bot") as NodeListOf<HTMLElement>;
 
-    StartStripeTextScrollingAnimation(stripeTextsTop, "top");
-    StartStripeTextScrollingAnimation(stripeTextsBot, "bot");
+    StartStripeTextScrollingAnimation(stripeTextsTop, "leftToRight");
+    StartStripeTextScrollingAnimation(stripeTextsBot, "leftToRight");
 
 });
 
-function StartStripeTextScrollingAnimation(elements: NodeListOf<HTMLElement>, type: "top" | "bot") {
+function StartStripeTextScrollingAnimation(elements: NodeListOf<HTMLElement>, type: "rightToLeft" | "leftToRight") {
 
     gsap.set(elements, {
-      x: (i) => window.innerWidth * [0, 0.25, 0.5, 0.75][i]
+        //                            [0, 0.25, 0.5 , 0.75] + --> [0 * 0.03, 1 * 0.03, 2 * 0.03, 3 * 0.03] (aaplied offset to minimize end-start imperfection)
+        x: (i) => window.innerWidth * [0, 0.28, 0.56, 0.85][i]
     });
 
+    const offsetWidth = 150;
     elements.forEach((el) => {
       function animate()
       {
         const currentXPosition = gsap.getProperty(el, "x") as number || 0;
-        const endXPosition = type === "bot" ? window.innerWidth : -el.offsetWidth;
+        const endXPosition = type === "leftToRight" ? window.innerWidth : -offsetWidth * 2;
         const distance = Math.abs(endXPosition - currentXPosition);
-        const referenceDistance = type === "bot" ? window.innerWidth : window.innerWidth + el.offsetWidth; 
+        const referenceDistance = type === "leftToRight" ? window.innerWidth : window.innerWidth + offsetWidth * 2; 
         const duration = stripeScrollTextDuration * (distance / referenceDistance);
 
         gsap.to(el, {
@@ -126,7 +128,7 @@ function StartStripeTextScrollingAnimation(elements: NodeListOf<HTMLElement>, ty
           duration: duration,
           ease: "linear",
           onComplete: () => {
-            gsap.set(el, { x: type === "bot" ? -el.offsetWidth : window.innerWidth }); //Reset position
+            gsap.set(el, { x: type === "leftToRight" ? -offsetWidth : window.innerWidth }); //Reset position
             animate(); //Reset animation
           }
         });
