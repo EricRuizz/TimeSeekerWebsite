@@ -1,22 +1,13 @@
 import '/style.css';
-import * as THREE from 'three';
+import '/project/CSS/HomeStyle.css';
 
 import { gsap } from "gsap";
-    
-import { Flip } from "gsap/Flip";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Observer } from "gsap/Observer";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { Draggable } from "gsap/Draggable";
-import { MotionPathPlugin } from "gsap/MotionPathPlugin";
-import { EaselPlugin } from "gsap/EaselPlugin";
-import { PixiPlugin } from "gsap/PixiPlugin";
-import { TextPlugin } from "gsap/TextPlugin";
-import { eventNames } from 'process';
-import { duplexPair } from 'stream';
-
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+history.replaceState({}, "", "");
 
 
 enum PageSelectorItemType {
@@ -69,7 +60,8 @@ previewStripeTextDictionary = {
 };
 
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () =>
+{
     //Scroll setup
     if (ScrollTrigger.isTouch === 1)
     {
@@ -85,7 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Section scroll
     sections = document.querySelectorAll(".section");
-    console.log(sections.length);
     
     sections.forEach((section, i) =>
     {
@@ -100,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //Header
     document.getElementById("timeseekerdev")?.addEventListener("click", () => { ScrollToSection(0) });
     document.getElementById("about")?.addEventListener("click", () => { ScrollToSection(1) });
-    document.getElementById("contact")?.addEventListener("click", () => { ScrollToSection(4) });
+    document.getElementById("contact")?.addEventListener("click", () => { ScrollToSection(sections.length - 1) });
 
     //Page Selector Event class
     pageSelectorContentGames = document.querySelector(".pageSelectorContent.games");
@@ -144,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     StartStripeTextScrollingAnimation(stripeTextsBot, "leftToRight");
 
 });
+
 
 function ScrollToSection(i: number)
 {

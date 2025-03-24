@@ -1,19 +1,40 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>TimeSeeker - Home</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/TimeSeeker_Logo_White_Transparent.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TimeSeeker - Home</title>
+
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/project/CSS/HomeStyle.css">
+    <link rel="stylesheet" href="/project/CSS/Transition.css">
+    
+    <link rel="icon" type="image/svg+xml" href="/TimeSeeker_Logo_White_Transparent.svg"/>
   </head>
   <body>
+    <div class="transition">
+      <div class="transition-row row-1">
+        <div class="transitionBlock"></div>
+        <div class="transitionBlock"></div>
+        <div class="transitionBlock"></div>
+        <div class="transitionBlock"></div>
+        <div class="transitionBlock"></div>
+      </div>
+      <div class="transition-row row-2">
+        <div class="transitionBlock"></div>
+        <div class="transitionBlock"></div>
+        <div class="transitionBlock"></div>
+        <div class="transitionBlock"></div>
+        <div class="transitionBlock"></div>
+      </div>
+    </div>
     <div class="header">
       <span id="contact">CONTACT</span>
       <span id="about">ABOUT</span>
@@ -25,7 +46,7 @@
           <div class="tsContainer">
             <p class="tsPresentation">Hello! I'm Èric, aka</p>
             <p class="tsTitle">TIMESEEKER</p>
-            <p style="text-align: left;"><br>I am an indie game developer focused in design and programming based in Barcelona, who is also passionate about many other art forms such as music and painting.</p>
+            <p style="text-align: left;"><br>I am an indie game developer focused in game design and programming based in Barcelona, who is also passionate about many other art forms such as music and painting.</p>
           </div>
         </div>
         <div class="pagePreview">
@@ -52,10 +73,10 @@
         <div class="sideLanding selector">
           <div class="pageSelector">
             <ul class="pageSelectorList">
-              <li class="pageSelectorContent games"  style=" font-size: 60px; font-family: Aldrich;   font-weight: 400;"><a href="">Games</a></li>
-              <li class="pageSelectorContent art"    style=" font-size: 60px; font-family: Jaini;     font-weight: 600;"><a href="">Art</a></li>
-              <li class="pageSelectorContent music"  style=" font-size: 60px; font-family: Lobster;   font-weight: 200;"><a href="">Music</a></li>
-              <li class="pageSelectorContent others" style=" font-size: 60px; font-family: Marcellus; font-weight: 600;"><a href="">Others</a></li>
+              <li class="pageSelectorContent games"  style=" font-size: 60px; font-family: Aldrich;   font-weight: 400;"><a href="project/HTML/Games.html">Games</a></li>
+              <li class="pageSelectorContent art"    style=" font-size: 60px; font-family: Jaini;     font-weight: 600;"><a href="project/HTML/Art.html">Art</a></li>
+              <li class="pageSelectorContent music"  style=" font-size: 60px; font-family: Lobster;   font-weight: 200;"><a href="project/HTML/Music.html">Music</a></li>
+              <li class="pageSelectorContent others" style=" font-size: 60px; font-family: Marcellus; font-weight: 600;"><a href="project/HTML/Others.html">Others</a></li>
             </ul>
           </div>
         </div>
@@ -63,7 +84,7 @@
     </section>
     <section class="section about intro">
       <div class="container">
-        <p>Intro</p>
+        <p>Intro?</p>
       </div>
     </section>
     <section class="section about career">
@@ -83,5 +104,6 @@
     </section>
     <script type="module" src="lib/glNoise.m.js"></script>
     <script type="module" src="project/Scripts/HomeMain.ts"></script>
+    <script type="module" src="project/Scripts/Transition.ts"></script>
   </body>
 </html>
