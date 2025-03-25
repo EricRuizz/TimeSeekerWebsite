@@ -1,4 +1,4 @@
- 
+
 body {
     margin: 0;
     display: flex;
@@ -14,13 +14,87 @@ body {
     font-weight: normal;
     overflow-x: hidden;
 }
-  
+
 .section {
-    width: 25%;
-    height: 100vh;
+    width: 100%;
+    height: 28vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     overflow: hidden;
+    gap: 3%;
+}
+
+.previewCard {
+    position: relative;
+    width: 77%;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-direction: row;
+}
+
+.previewCard img.previewImage {
+    width: 100%;
+}
+
+.roleContainer {
+    position: absolute;
+    display: flex;
+    width: 10%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.788), rgba(0, 0, 0, 0.548));
+    right: 10%;
+    z-index: 2;
+}
+
+.roleText {
+    position: absolute;
+    text-align: center;
+    font-style: italic;
+}
+
+.logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.space {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.separator {
+    width: 100%;
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.smallPreviewCard {
+    position: relative;
+    width: 37%;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-direction: row;
 }

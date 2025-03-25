@@ -3,6 +3,11 @@ import { gsap } from "gsap";
 const blockClass = ".transitionBlock" as string;
 const ease = "power4.inOut";
 
+const startDuration =       0.35 as number;
+const startEachDuration =   0.05 as number;
+const revealDuration =      0.35 as number;
+const revealEachDuration =  0.05 as number;
+
 document.addEventListener("DOMContentLoaded", () =>
 {
     document.querySelectorAll("a").forEach((link) => 
@@ -15,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () =>
 
             if(href && !href.startsWith("#") && href !== window.location.pathname)
             {
-                AnimateTransition().then(() => 
+                StartTransition().then(() => 
                 {
                     window.location.href = href;
                 })
@@ -23,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () =>
         })
     });
 
-    function AnimateTransition()
+    function StartTransition()
     {
         return new Promise((Resolve) => 
         {
@@ -31,10 +36,10 @@ document.addEventListener("DOMContentLoaded", () =>
             gsap.to(blockClass, 
                 {
                     scaleY: 1,
-                    duration: 1,
+                    duration: startDuration,
                     stagger: 
                     {
-                        each: 0.1,
+                        each: startEachDuration,
                         from: "start",
                         grid: [2, 5],
                         axis: "x"
@@ -55,10 +60,10 @@ document.addEventListener("DOMContentLoaded", () =>
             gsap.to(blockClass, 
                 {
                     scaleY: 0,
-                    duration: 1,
+                    duration: revealDuration,
                     stagger:
                     {
-                        each: 0.1,
+                        each: revealEachDuration,
                         from: "start",
                         grid: "auto",
                         axis: "x",

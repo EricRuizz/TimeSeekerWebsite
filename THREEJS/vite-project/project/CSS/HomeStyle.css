@@ -1,10 +1,5 @@
 
-/* GENERAL */
-  
-:root {
-    --headerSideMargin: 4vw;
-    --highlightColor: rgb(255, 160, 52);
-    
+:root {    
     --preivewCardStripeOffset: 22%;
 }
   

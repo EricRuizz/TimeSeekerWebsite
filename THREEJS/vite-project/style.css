@@ -3,6 +3,10 @@
   box-sizing: border-box;
 }
 
+:root {
+  --headerSideMargin: 4vw;
+  --highlightColor: rgb(255, 160, 52);
+}
 
 /* HEADER */
 
@@ -13,7 +17,7 @@
   z-index: 10;
 }
 
-.header span {
+.header span, .header a {
   float: right;
   display: block;
   text-align: center;
@@ -26,11 +30,31 @@
   cursor: pointer;
 }
 
-.header span.headerOpposite {
+.header span.headerOpposite, .header a.headerOpposite {
   float: left;
   margin-left: var(--headerSideMargin);;
 }
 
-.header span:hover {
+.header span:hover, .header a:hover {
+  color: var(--highlightColor);
+}
+
+/* HERO */
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 33vh;
+  width: 100%;
+  color: white;
+  overflow: hidden;
+}
+
+.hero h1 {
+  font-size: 6rem;
+}
+
+#highlightText {
   color: var(--highlightColor);
 }

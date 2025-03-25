@@ -7,6 +7,6 @@ import '/project/CSS/GamesStyle.css';
 
 //gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-history.replaceState({}, "", "");
+history.replaceState({}, "", "/Games");
 
 
