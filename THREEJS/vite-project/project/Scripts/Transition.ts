@@ -32,7 +32,8 @@ document.addEventListener("DOMContentLoaded", () =>
     {
         return new Promise((Resolve) => 
         {
-            gsap.set(blockClass, { visibility: "visible", scaleY: 0 })
+            gsap.set(blockClass, { visibility: "visible", scaleY: 0 });
+            
             gsap.to(blockClass, 
                 {
                     scaleY: 1,

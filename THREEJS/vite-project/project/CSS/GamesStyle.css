@@ -1,4 +1,8 @@
 
+:root {
+    --bannerColor: rgba(255, 136, 0, 0.25);
+}
+
 body {
     margin: 0;
     display: flex;
@@ -26,10 +30,24 @@ body {
     gap: 3%;
 }
 
+.previewBanner {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 0vh;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), var(--bannerColor) 10%, var(--bannerColor) 90%, rgba(0, 0, 0, 0));
+    z-index: -2;
+}
+
+.previewSelector {
+    position: absolute;
+    display: flex;
+    z-index: -1;
+}
+
 .previewCard {
     position: relative;
     width: 77%;
-    height: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,10 +57,14 @@ body {
 
 .previewCard:hover {
     /* PUT GAMEPLAY GIFS / TRAILER */
-    height: 100%;
 }
 
 .previewCard img.previewImage {
+    width: 100%;
+}
+
+.previewGIF {
+    position: absolute;
     width: 100%;
 }
 
