@@ -13,8 +13,13 @@ history.replaceState({}, "", "/Games");
 
 
 const previewCardHeight = "80%" as string;
+const selectorHeight = "40.5vh" as string;
+const selectorWidth = "1%" as string;
 
-const bannerAnimDuration = 0.15 as number;
+//SYNTAX - d(uration)_name
+const d_bannerAnim = 0.15 as number;
+const d_sHeight = 0.15 as number;
+const d_sWidth = 0.05 as number;
 
 document.addEventListener("DOMContentLoaded", () =>
 {
@@ -25,47 +30,33 @@ document.addEventListener("DOMContentLoaded", () =>
         card.addEventListener("mouseenter", () =>
         {
             const section = card.closest(".section");
-            const leftSelector = card.previousElementSibling;
-            const rightSelector = card.nextElementSibling;
+            const selectors: (Element | null)[] = [card.previousElementSibling, card.nextElementSibling];
             const previewGIF = card.querySelector(".previewGIF");
             const previewBanner = section?.querySelector(".previewBanner");
-    
-            if (leftSelector) {
-                gsap.to(leftSelector, { opacity: 1, y: 0, duration: bannerAnimDuration });
-            }
-            if (rightSelector) {
-                gsap.to(rightSelector, { opacity: 1, y: 0, duration: bannerAnimDuration });
-            }
-    
-            if (previewBanner) {
-                gsap.to(previewBanner, { height: "20vh", duration: bannerAnimDuration });
-            }
 
-            gsap.to(previewGIF, { opacity: 1, duration: bannerAnimDuration });
-            gsap.to(card, { height: "100%", duration: bannerAnimDuration });
+            gsap.set(selectors, { opacity: 1 });
+            var tl = gsap.timeline();
+            tl.to(selectors, { height: selectorHeight, duration: d_sHeight }, 0);
+            tl.to(selectors, { width: selectorWidth, duration: d_sWidth }, ">");
+            if (previewBanner) tl.to(previewBanner, { height: "20vh", duration: d_bannerAnim }, 0);
+            tl.to(previewGIF, { opacity: 1, duration: d_bannerAnim }, 0);
+            tl.to(card, { height: "100%", duration: d_bannerAnim }, 0);
         });
     
         card.addEventListener("mouseleave", () =>
         {
             const section = card.closest(".section");
-            const leftSelector = card.previousElementSibling;
-            const rightSelector = card.nextElementSibling;
+            const selectors: (Element | null)[] = [card.previousElementSibling, card.nextElementSibling];
             const previewGIF = card.querySelector(".previewGIF");
             const previewBanner = section?.querySelector(".previewBanner");
             
-            if (leftSelector) {
-                gsap.to(leftSelector, { opacity: 0, y: 0, duration: bannerAnimDuration });
-            }
-            if (rightSelector) {
-                gsap.to(rightSelector, { opacity: 0, y: 0, duration: bannerAnimDuration });
-            }
-    
-            if (previewBanner) {
-                gsap.to(previewBanner, { height: "0vh", duration: bannerAnimDuration });
-            }
-            
-            gsap.to(previewGIF, { opacity: 0, duration: bannerAnimDuration });
-            gsap.to(card, { height: previewCardHeight, duration: bannerAnimDuration });
+            var tl = gsap.timeline();
+            tl.to(selectors, { width: "0%", duration: d_sWidth }, 0);
+            tl.to(selectors, { height: "0%", duration: d_sHeight }, ">");
+            tl.set(selectors, { opacity: 0 }, ">");
+            if (previewBanner) tl.to(previewBanner, { height: "0vh", duration: d_bannerAnim }, 0);
+            tl.to(previewGIF, { opacity: 0, duration: d_bannerAnim }, 0);
+            tl.to(card, { height: previewCardHeight, duration: d_bannerAnim }, 0);
         });
     });    
 });

@@ -21,7 +21,7 @@ body {
 
 .section {
     width: 100%;
-    height: 28vh;
+    height: 38vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -40,13 +40,11 @@ body {
 
 .selector {
     position: absolute;
-    opacity: 0;
     display: flex;
     z-index: -1;
-    width: 1%;
-    height: 30.5vh;
     border: 3px solid var(--highlightColor);
     background: transparent;
+    opacity: 0;
 
     &.l {
         border-right: none;
