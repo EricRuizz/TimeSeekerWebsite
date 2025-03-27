@@ -25,34 +25,46 @@ document.addEventListener("DOMContentLoaded", () =>
         card.addEventListener("mouseenter", () =>
         {
             const section = card.closest(".section");
-            const nextSelector = card.nextElementSibling;
+            const leftSelector = card.previousElementSibling;
+            const rightSelector = card.nextElementSibling;
+            const previewGIF = card.querySelector(".previewGIF");
             const previewBanner = section?.querySelector(".previewBanner");
     
-            if (nextSelector && nextSelector.classList.contains("previewSelector")) {
-                gsap.to(nextSelector, { opacity: 1, y: -10, duration: bannerAnimDuration });
+            if (leftSelector) {
+                gsap.to(leftSelector, { opacity: 1, y: 0, duration: bannerAnimDuration });
+            }
+            if (rightSelector) {
+                gsap.to(rightSelector, { opacity: 1, y: 0, duration: bannerAnimDuration });
             }
     
             if (previewBanner) {
                 gsap.to(previewBanner, { height: "20vh", duration: bannerAnimDuration });
             }
 
+            gsap.to(previewGIF, { opacity: 1, duration: bannerAnimDuration });
             gsap.to(card, { height: "100%", duration: bannerAnimDuration });
         });
     
         card.addEventListener("mouseleave", () =>
         {
             const section = card.closest(".section");
-            const nextSelector = card.nextElementSibling;
+            const leftSelector = card.previousElementSibling;
+            const rightSelector = card.nextElementSibling;
+            const previewGIF = card.querySelector(".previewGIF");
             const previewBanner = section?.querySelector(".previewBanner");
-    
-            if (nextSelector && nextSelector.classList.contains("previewSelector")) {
-                gsap.to(nextSelector, { opacity: 0, y: 0, duration: bannerAnimDuration });
+            
+            if (leftSelector) {
+                gsap.to(leftSelector, { opacity: 0, y: 0, duration: bannerAnimDuration });
+            }
+            if (rightSelector) {
+                gsap.to(rightSelector, { opacity: 0, y: 0, duration: bannerAnimDuration });
             }
     
             if (previewBanner) {
                 gsap.to(previewBanner, { height: "0vh", duration: bannerAnimDuration });
             }
-
+            
+            gsap.to(previewGIF, { opacity: 0, duration: bannerAnimDuration });
             gsap.to(card, { height: previewCardHeight, duration: bannerAnimDuration });
         });
     });    

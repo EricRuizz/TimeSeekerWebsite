@@ -26,7 +26,6 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    overflow: hidden;
     gap: 3%;
 }
 
@@ -39,10 +38,25 @@ body {
     z-index: -2;
 }
 
-.previewSelector {
+.selector {
     position: absolute;
+    opacity: 0;
     display: flex;
     z-index: -1;
+    width: 1%;
+    height: 30.5vh;
+    border: 3px solid var(--highlightColor);
+    background: transparent;
+
+    &.l {
+        border-right: none;
+        left: 11%;
+    }
+
+    &.r {
+        border-left: none;
+        right: 11%;
+    }
 }
 
 .previewCard {
@@ -66,6 +80,7 @@ body {
 .previewGIF {
     position: absolute;
     width: 100%;
+    opacity: 0;
 }
 
 .roleContainer {
