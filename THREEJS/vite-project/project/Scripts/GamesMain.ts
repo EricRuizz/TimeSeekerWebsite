@@ -13,8 +13,8 @@ history.replaceState({}, "", "/Games");
 
 
 const previewCardHeight = "80%" as string;
-const selectorHeight = "40.5vh" as string;
-const selectorWidth = "1%" as string;
+const selectorHeight = "38.5vh" as string;
+const selectorWidth = "1vw" as string;
 
 //SYNTAX - d(uration)_name
 const d_bannerAnim = 0.15 as number;
@@ -23,14 +23,14 @@ const d_sWidth = 0.05 as number;
 
 document.addEventListener("DOMContentLoaded", () =>
 {
-    document.querySelectorAll(".previewCard").forEach(card =>
+    document.querySelectorAll(".content").forEach(card =>
     {
         gsap.set(card, { height: previewCardHeight });
 
         card.addEventListener("mouseenter", () =>
         {
             const section = card.closest(".section");
-            const selectors: (Element | null)[] = [card.previousElementSibling, card.nextElementSibling];
+            const selectors: (Element | null | undefined)[] = [card.previousElementSibling?.previousElementSibling, card.previousElementSibling];
             const previewGIF = card.querySelector(".previewGIF");
             const previewBanner = section?.querySelector(".previewBanner");
 
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () =>
         card.addEventListener("mouseleave", () =>
         {
             const section = card.closest(".section");
-            const selectors: (Element | null)[] = [card.previousElementSibling, card.nextElementSibling];
+            const selectors: (Element | null | undefined)[] = [card.previousElementSibling?.previousElementSibling, card.previousElementSibling];
             const previewGIF = card.querySelector(".previewGIF");
             const previewBanner = section?.querySelector(".previewBanner");
             

@@ -1,6 +1,8 @@
 
 :root {
     --bannerColor: rgba(255, 136, 0, 0.25);
+
+    --selectorSideOffset: -1%;
 }
 
 body {
@@ -19,6 +21,74 @@ body {
     overflow-x: hidden;
 }
 
+
+/* NEW      NEW     NEW     NEW     NEW     NEW */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    justify-content: center; /* Centers the grid */
+    align-items: center;
+    
+    row-gap: 0%;
+    column-gap: 5%;
+    margin: 0px 200px 0px 200px;
+}
+
+.cell {
+    position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    width: 35vw;
+    height: 36vh;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    overflow: hidden;
+  	background-color: white;
+  	width: 100%;
+  	height: 80%;
+}
+
+.content:hover {
+    height: 100%;
+}
+
+.cover {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.336);
+}
+
+.selector {
+    position: absolute;
+    display: flex;
+    z-index: 1;
+    border: 3px solid var(--highlightColor);
+    background: transparent;
+    opacity: 0;
+    transform-origin: left center; /* Expansion starts from the left */
+    pointer-events: none;
+
+    &.l {
+        border-right: none;
+        left: var(--selectorSideOffset);
+    }
+
+    &.r {
+        border-left: none;
+        right: var(--selectorSideOffset);
+    }
+}
+
+
+/* NEW      NEW     NEW     NEW     NEW     NEW */
+
+/*
 .section {
     width: 100%;
     height: 38vh;
@@ -29,20 +99,6 @@ body {
     gap: 0%;
 }
 
-.preview {
-    margin: -30%;
-    position: relative;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-direction: row;
-    pointer-events: none;
-
-    background-color: rgba(255, 0, 0, 0);
-}
 
 .previewBanner {
     position: absolute;
@@ -82,6 +138,10 @@ body {
     }
 }
 
+.latestRelease {
+
+}
+
 .previewCard {
     position: relative;
     width: 77%;
@@ -90,10 +150,6 @@ body {
     justify-content: center;
     overflow: hidden;
     flex-direction: row;
-}
-
-.previewCard:hover {
-    /* PUT GAMEPLAY GIFS / TRAILER */
 }
 
 .previewCard img.previewImage {
@@ -157,3 +213,5 @@ body {
 .previewCard.small {
     width: 37%;
 }
+    
+*/
