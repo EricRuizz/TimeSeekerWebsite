@@ -12,51 +12,47 @@ history.replaceState({}, "", "/Games");
 
 
 
-const previewCardHeight = "80%" as string;
-const selectorHeight = "38.5vh" as string;
-const selectorWidth = "1vw" as string;
-
-//SYNTAX - d(uration)_name
-const d_bannerAnim = 0.15 as number;
-const d_sHeight = 0.15 as number;
-const d_sWidth = 0.05 as number;
-
 document.addEventListener("DOMContentLoaded", () =>
 {
-    document.querySelectorAll(".content").forEach(card =>
+    document.querySelectorAll(".cell").forEach(cell =>
     {
-        gsap.set(card, { height: previewCardHeight });
+        const contentHeight = "80%" as string;
+        const selectorHeight = "38.5vh" as string;
+        const selectorWidth = "1vw" as string;
+        
+        //SYNTAX - d(uration)_name
+        const d_bannerAnim = 0.15 as number;
+        const d_sHeight = 0.15 as number;
+        const d_sWidth = 0.05 as number;
 
-        card.addEventListener("mouseenter", () =>
+        const content = cell.querySelector(".content") || cell;
+        const hover = cell.querySelector(".selector");
+        const hSelectors: (Element | null | undefined)[] = [...hover?.querySelectorAll(".selector-bar") || []];
+        const previewGIF = content.querySelector(".preview");
+        const hBanner = hover?.querySelector(".selector-banner");
+
+        const contentHeightA = window.getComputedStyle(content).getPropertyValue("height") as string;
+
+        cell.addEventListener("mouseenter", () =>
         {
-            const section = card.closest(".section");
-            const selectors: (Element | null | undefined)[] = [card.previousElementSibling?.previousElementSibling, card.previousElementSibling];
-            const previewGIF = card.querySelector(".previewGIF");
-            const previewBanner = section?.querySelector(".previewBanner");
-
-            gsap.set(selectors, { opacity: 1 });
+            gsap.set(hSelectors, { opacity: 1 });
             var tl = gsap.timeline();
-            tl.to(selectors, { height: selectorHeight, duration: d_sHeight }, 0);
-            tl.to(selectors, { width: selectorWidth, duration: d_sWidth }, ">");
-            if (previewBanner) tl.to(previewBanner, { height: "20vh", duration: d_bannerAnim }, 0);
+            tl.to(hSelectors, { height: selectorHeight, duration: d_sHeight }, 0);
+            tl.to(hSelectors, { width: selectorWidth, duration: d_sWidth }, ">");
+            if (hBanner) tl.to(hBanner, { height: "20vh", duration: d_bannerAnim }, 0);
             tl.to(previewGIF, { opacity: 1, duration: d_bannerAnim }, 0);
-            tl.to(card, { height: "100%", duration: d_bannerAnim }, 0);
+            tl.to(content, { height: "100%", duration: d_bannerAnim }, 0);
         });
     
-        card.addEventListener("mouseleave", () =>
-        {
-            const section = card.closest(".section");
-            const selectors: (Element | null | undefined)[] = [card.previousElementSibling?.previousElementSibling, card.previousElementSibling];
-            const previewGIF = card.querySelector(".previewGIF");
-            const previewBanner = section?.querySelector(".previewBanner");
-            
+        cell.addEventListener("mouseleave", () =>
+        {            
             var tl = gsap.timeline();
-            tl.to(selectors, { width: "0%", duration: d_sWidth }, 0);
-            tl.to(selectors, { height: "0%", duration: d_sHeight }, ">");
-            tl.set(selectors, { opacity: 0 }, ">");
-            if (previewBanner) tl.to(previewBanner, { height: "0vh", duration: d_bannerAnim }, 0);
+            tl.to(hSelectors, { width: "0%", duration: d_sWidth }, 0);
+            tl.to(hSelectors, { height: "0%", duration: d_sHeight }, ">");
+            tl.set(hSelectors, { opacity: 0 }, ">");
+            if (hBanner) tl.to(hBanner, { height: "0vh", duration: d_bannerAnim }, 0);
             tl.to(previewGIF, { opacity: 0, duration: d_bannerAnim }, 0);
-            tl.to(card, { height: previewCardHeight, duration: d_bannerAnim }, 0);
+            tl.to(content, { height: contentHeightA, duration: d_bannerAnim }, 0);
         });
     });    
 });
