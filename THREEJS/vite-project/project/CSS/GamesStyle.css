@@ -22,17 +22,21 @@ body {
 }
 
 
-/* NEW      NEW     NEW     NEW     NEW     NEW */
 
 .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr); 
-    justify-content: center; /* Centers the grid */
+    justify-content: center;
     align-items: center;
     
     row-gap: 0%;
     column-gap: 5%;
     margin: 0px 200px 0px 200px;
+
+    &.small {
+        column-gap: 3%;
+        grid-template-columns: repeat(3, 1fr); 
+    }
 }
 
 .cell {
@@ -41,8 +45,12 @@ body {
 	justify-content: center;
 	align-items: center;
     width: 35vw;
-    aspect-ratio: 2 / 1; /* Adjust this to your desired ratio */
-    background-color: rgba(255, 255, 255, 0);
+    aspect-ratio: 2 / 1;
+    background-color: rgba(255, 0, 0, 0);
+
+    &.small {
+        width: 23vw;
+    }
 }
 
 .content {
@@ -58,7 +66,7 @@ body {
 
 .cover {
     width: 100%;
-    background-color: rgba(255, 0, 0, 0.336);
+    background-color: rgba(0, 255, 34, 0);
 }
 
 .selector {
@@ -68,6 +76,7 @@ body {
 	align-items: center;
     width: 100%;
     height: 100%;
+    background-color: rgba(17, 0, 255, 0);
 }
 
 .selector-bar {
@@ -77,8 +86,11 @@ body {
     border: 0.15vw solid var(--highlightColor);
     background: transparent;
     opacity: 0;
-    transform-origin: left center; /* Expansion starts from the left */
+    transform-origin: left center;
     pointer-events: none;
+
+    width: 1vw;
+    height: 38.5vh;
 
     &.l {
         border-right: none;
@@ -94,8 +106,7 @@ body {
 .selector-banner {
     position: absolute;
     display: flex;
-    width: 100%;
-    height: 0vh;
+    width: 120%;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), var(--bannerColor) 10%, var(--bannerColor) 90%, rgba(0, 0, 0, 0));
     z-index: -2;
 }
@@ -116,109 +127,10 @@ body {
     background-image: linear-gradient(to left, rgb(0, 0, 0), rgba(0, 0, 0, 0));
     right: 0%;
     z-index: 2;
-}
 
-.roleText {
-    position: absolute;
-    text-align: right;
-    font-style: italic;
-    right: 10%;
-}
-
-.logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
-}
-
-
-/* NEW      NEW     NEW     NEW     NEW     NEW */
-
-/*
-.section {
-    width: 100%;
-    height: 38vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 0%;
-}
-
-
-.previewBanner {
-    position: absolute;
-    display: flex;
-    width: 100%;
-    height: 0vh;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), var(--bannerColor) 10%, var(--bannerColor) 90%, rgba(0, 0, 0, 0));
-    z-index: -2;
-}
-
-.selector {
-    position: absolute;
-    display: flex;
-    z-index: -1;
-    border: 3px solid var(--highlightColor);
-    background: transparent;
-    opacity: 0;
-
-    &.big.left.l {
-        border-right: none;
-        left: 11%;
+    &.small {
+        width: 50%;
     }
-
-    &.big.left.r {
-        border-left: none;
-        right: 51%;
-    }
-
-    &.big.right.l {
-        border-right: none;
-        left: 51%;
-    }
-
-    &.big.right.r {
-        border-left: none;
-        right: 11%;
-    }
-}
-
-.latestRelease {
-
-}
-
-.previewCard {
-    position: relative;
-    width: 77%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-direction: row;
-}
-
-.previewCard img.previewImage {
-    width: 100%;
-}
-
-.previewGIF {
-    position: absolute;
-    width: 100%;
-    opacity: 0;
-}
-
-.roleContainer {
-    position: absolute;
-    display: flex;
-    width: 30%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    background-image: linear-gradient(to left, rgb(0, 0, 0), rgba(0, 0, 0, 0));
-    right: 0%;
-    z-index: 2;
 }
 
 .roleText {
@@ -256,9 +168,3 @@ body {
     overflow: hidden;
     flex-direction: column;
 }
-
-.previewCard.small {
-    width: 37%;
-}
-    
-*/
