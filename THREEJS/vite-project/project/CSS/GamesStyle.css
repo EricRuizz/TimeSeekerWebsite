@@ -26,7 +26,22 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: 3%;
+    gap: 0%;
+}
+
+.preview {
+    margin: -30%;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-direction: row;
+    pointer-events: none;
+
+    background-color: rgba(255, 0, 0, 0);
 }
 
 .previewBanner {
@@ -46,12 +61,22 @@ body {
     background: transparent;
     opacity: 0;
 
-    &.l {
+    &.big.left.l {
         border-right: none;
         left: 11%;
     }
 
-    &.r {
+    &.big.left.r {
+        border-left: none;
+        right: 51%;
+    }
+
+    &.big.right.l {
+        border-right: none;
+        left: 51%;
+    }
+
+    &.big.right.r {
         border-left: none;
         right: 11%;
     }
