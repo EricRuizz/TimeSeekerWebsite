@@ -89,9 +89,6 @@ body {
     transform-origin: left center;
     pointer-events: none;
 
-    width: 1vw;
-    height: 38.5vh;
-
     &.l {
         border-right: none;
         left: var(--selectorSideOffset);
