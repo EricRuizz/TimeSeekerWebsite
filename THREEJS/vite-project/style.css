@@ -14,7 +14,8 @@
 }
 
 .contentH2Title {
-
+  font-size: 1.75rem;
+  color: rgb(255, 136, 0);
 }
 
 p.simpleParagraph {

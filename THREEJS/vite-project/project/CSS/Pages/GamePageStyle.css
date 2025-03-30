@@ -84,7 +84,7 @@ body {
 /* Individual vertical sections */
 .vertical-section {
     /*flex: 1;*/ /* Makes each section take equal width */
-    padding: 4vh;
+    padding: 2vh 2vw;
     background: rgba(var(--generalBackgroundColor), 0.8);
     text-align: left;
 }
@@ -97,4 +97,26 @@ body {
 .video {
     width: 40%;
     aspect-ratio: 16 / 9;
+}
+
+.titledListContainer {
+    margin-top: 5vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5vh;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.titledListRow {
+    display: flex;
+    gap: 2.5vh;
+    align-items: baseline;
+}
+
+.titledListTitle {
+    flex: 0 0 10vw;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    background-color: rgba(255, 136, 0, 0.253);
 }
