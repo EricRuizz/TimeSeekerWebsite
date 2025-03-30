@@ -7,7 +7,7 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-history.replaceState({}, "", "");
+history.replaceState({}, "", "/Home");
 
 
 enum PageSelectorItemType {
@@ -47,7 +47,7 @@ var stripeTextsBot: NodeListOf<HTMLElement>;
 const stripeScrollTextDuration = 20;
 
 var previewStripeTextDictionary: { [key in PageSelectorItemType]: string[] };
-const stripeTextsGame = new Array("Nomad Defender","Hyper Shapes", "Nomad Defender", "Hyper Shapes") as string[];
+const stripeTextsGame = new Array("Nomad Defender","Hyper Shapes", "Anchored Soul", "The Last Trip") as string[];
 const stripeTextsArt = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
 const stripeTextsMusic = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
 const stripeTextsOthers = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];

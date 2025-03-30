@@ -6,6 +6,7 @@
 :root {
   --headerSideMargin: 4vw;
   --highlightColor: rgb(255, 136, 0);
+  --textColor: rgb(255, 255, 255);
 }
 
 /* HEADER */
@@ -24,7 +25,7 @@
   margin-right: var(--headerSideMargin);
   margin-top: 4vh;
   text-decoration: none;
-  color: white;
+  color: var(--textColor);
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0);
   cursor: pointer;
@@ -47,7 +48,7 @@
   align-items: center;
   height: 33vh;
   width: 100%;
-  color: white;
+  color: var(--textColor);
   overflow: hidden;
 }
 
