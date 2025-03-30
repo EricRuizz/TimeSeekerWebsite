@@ -11,7 +11,7 @@ body {
   
     min-height: 100vh;
   
-    background-color: #212121;
+    background-color: rgb(var(--generalBackgroundColor));
     user-select: none;
     color: white;
     font-family: Montserrat, Geist, sans-serif;
@@ -234,7 +234,7 @@ img.previewCardImage {
 /* ABOUT */
   
 .section.landing {
-    background-color: rgb(44, 44, 44);
+    background-color: rgb(var(--generalBackgroundColor));
 }
   
 .section.about.intro {

@@ -4,9 +4,31 @@
 }
 
 :root {
-  --headerSideMargin: 4vw;
+  --headerHorizontalMargin: 2vw;
+  --headerVerticalMargin: 2vh;
   --highlightColor: rgb(255, 136, 0);
   --textColor: rgb(255, 255, 255);
+  --blur: 50px;
+  --generalBackgroundColor: 35, 35, 35;
+  --regularTextSize: 1rem;
+}
+
+.contentH2Title {
+
+}
+
+p.simpleParagraph {
+  font-size: var(--regularTextSize);
+  line-height: 1.5;
+  letter-spacing: 0.025rem;
+}
+
+.boldParagraphText {
+  font-weight: bold;
+  word-break: normal;
+  white-space: normal;
+  display: inline;
+  line-height: inherit;
 }
 
 /* HEADER */
@@ -16,24 +38,26 @@
   top: 0;
   width: 100%;
   z-index: 10;
+  backdrop-filter: blur(var(--blur));
+  background-color: rgb(var(--generalBackgroundColor));
 }
 
 .header span, .header a {
   float: right;
   display: block;
   text-align: center;
-  margin-right: var(--headerSideMargin);
-  margin-top: 4vh;
+  margin-right: var(--headerHorizontalMargin);
+  margin-top: var(--headerVerticalMargin);
+  margin-bottom: var(--headerVerticalMargin);
   text-decoration: none;
   color: var(--textColor);
   overflow: hidden;
-  background-color: rgba(0, 0, 0, 0);
   cursor: pointer;
 }
 
 .header span.headerOpposite, .header a.headerOpposite {
   float: left;
-  margin-left: var(--headerSideMargin);;
+  margin-left: var(--headerHorizontalMargin);;
 }
 
 .header span:hover, .header a:hover {

@@ -1,8 +1,8 @@
 
 :root {
     --backgroundHeightOffset: -40%;
-    --backgroundColor: rgba(0, 0, 0, 0.849);
-    --backgroundColorGoal: rgba(0, 0, 0, 0);
+    --fadeBackgroundColor: rgba(0, 0, 0, 0.849);
+    --fadeBackgroundColorGoal: rgba(0, 0, 0, 0);
 }
 
 body {
@@ -15,7 +15,7 @@ body {
   
     background-color: #212121;
     user-select: none;
-    color:  var(--textColor);
+    color: var(--textColor);
     font-family: Montserrat, Geist, sans-serif;
     font-weight: normal;
     overflow-x: hidden;
@@ -41,19 +41,18 @@ body {
 
 .container {
     position: relative;
-    background-color: rgba(255, 0, 0, 0.267);
     width: 100%;
-    padding: 10vh 5vw;
+    /*padding: 10vh 5vw; STYLE_1 */
     overflow: hidden;
 }
 
 .content {
-    margin-top: 5%;
+    margin-top: 10%;
     margin-bottom: 0%;
     width: 100%;
     
-    backdrop-filter: blur(50px);
-    background-image: linear-gradient(to top, var(--backgroundColor), var(--backgroundColorGoal));
+    backdrop-filter: blur(var(--blur));
+    background-image: linear-gradient(to top, var(--fadeBackgroundColor), var(--fadeBackgroundColorGoal));
 }
 
 .section {
@@ -61,8 +60,8 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 1vh 5vw;
-    background: rgba(54, 54, 54, 0.473);
+    padding: 1vh 15vw; /* 1vh 10vw STYLE_1 */
+    background: rgba(48, 48, 48, 0.473);
 
     &.gameHero {
         background: none;
@@ -77,20 +76,25 @@ body {
 .vertical-container {
     display: flex;
     justify-content: center; /* Center contents horizontally */
-    align-items: center; /* Align vertically */
+    /*align-items: center; Align vertically */
     flex-wrap: wrap; /* Wraps if needed */
     width: 100%;
 }
 
 /* Individual vertical sections */
 .vertical-section {
-    flex: 1; /* Makes each section take equal width */
-    padding: 2vh;
-    background: rgba(32, 32, 32, 0.842);
-    text-align: center;
+    /*flex: 1;*/ /* Makes each section take equal width */
+    padding: 4vh;
+    background: rgba(var(--generalBackgroundColor), 0.8);
+    text-align: left;
 }
 
 /* If there's only one vertical section, center it */
 .vertical-container:has(.vertical-section:only-child) {
     justify-content: center;
+}
+
+.video {
+    width: 40%;
+    aspect-ratio: 16 / 9;
 }
