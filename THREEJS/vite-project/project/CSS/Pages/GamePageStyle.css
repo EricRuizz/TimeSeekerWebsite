@@ -47,7 +47,7 @@ body {
 }
 
 .content {
-    margin-top: 10%;
+    margin-top: 0%;
     margin-bottom: 0%;
     width: 100%;
     
@@ -60,16 +60,22 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 1vh 15vw; /* 1vh 10vw STYLE_1 */
+    padding: 2vh 15vw; /* 1vh 10vw STYLE_1 */
     background: rgba(48, 48, 48, 0.473);
 
     &.gameHero {
+        height: 40vh;
         background: none;
     }
 
     &.spacer {
         height: 10vh;
     }
+}
+
+.gameHeroImage {
+    margin-top: auto;
+    margin-left: auto;
 }
 
 /* Handles horizontal layout inside each section */
@@ -104,7 +110,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2.5vh;
-    background-color: rgba(0, 0, 0, 0);
 }
 
 .titledListRow {

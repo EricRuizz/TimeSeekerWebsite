@@ -74,7 +74,7 @@ body {
     left: 0;
     width: 100%;
     text-align: left;
-    color: var(--highlightColor);
+    color: rgb(var(--highlightColor));
     margin: 0;
 }
   
@@ -101,7 +101,7 @@ ul.pageSelectorList {
   
 .pageSelectorContent a:hover { /* TODO - Make GSAP animations */
     text-decoration: none;
-    color: var(--highlightColor);
+    color: rgb(var(--highlightColor));
 }
   
   

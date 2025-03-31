@@ -6,16 +6,23 @@
 :root {
   --headerHorizontalMargin: 2vw;
   --headerVerticalMargin: 2vh;
-  --highlightColor: rgb(255, 136, 0);
+  --highlightColor: 255, 136, 0;
   --textColor: rgb(255, 255, 255);
   --blur: 50px;
   --generalBackgroundColor: 35, 35, 35;
   --regularTextSize: 1rem;
+  
+  scrollbar-color: rgba(0, 0, 0, 0.712) rgb(var(--generalBackgroundColor));
+  scrollbar-width: thin;
 }
 
 .contentH2Title {
   font-size: 1.75rem;
   color: rgb(255, 136, 0);
+}
+
+.contextText {
+  opacity: 0.5;
 }
 
 p.simpleParagraph {
@@ -39,7 +46,7 @@ p.simpleParagraph {
   top: 0;
   width: 100%;
   z-index: 10;
-  backdrop-filter: blur(var(--blur));
+  /*backdrop-filter: blur(var(--blur));*/
   background-color: rgb(var(--generalBackgroundColor));
 }
 
@@ -62,7 +69,7 @@ p.simpleParagraph {
 }
 
 .header span:hover, .header a:hover {
-  color: var(--highlightColor);
+  color: rgb(var(--highlightColor));
 }
 
 /* HERO */
@@ -82,5 +89,5 @@ p.simpleParagraph {
 }
 
 #highlightText {
-  color: var(--highlightColor);
+  color: rgb(var(--highlightColor));
 }

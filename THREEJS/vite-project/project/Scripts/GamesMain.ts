@@ -2,9 +2,13 @@ import '/style.css';
 import '/project/CSS/GamesStyle.css';
 
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+
+
+gsap.registerPlugin(ScrollTrigger);
 
 history.replaceState({}, "", "/Games");
-
 
 
 class GridCell
@@ -100,7 +104,16 @@ const selectorBarWidthCoef = 0.05 as number;
 
 document.addEventListener("DOMContentLoaded", () =>
 {
-    gridCells = [...document.querySelectorAll(".cell")].map(cellElement => new GridCell(cellElement));
+    history.replaceState({}, "", document.querySelector('meta[name="page-identifier"]')?.getAttribute("content") || "");
 
+    gridCells = [...document.querySelectorAll(".cell")].map(cellElement => new GridCell(cellElement));
     gridCells.forEach(gridCell => { gridCell.Init() });
+
+    gsap.to(".parallaxBackground", {
+        y: "40vh",
+        ease: "none",
+        scrollTrigger: {
+            scrub: 0,
+        }
+    });
 });
