@@ -12,13 +12,18 @@
   --generalBackgroundColor: 35, 35, 35;
   --regularTextSize: 1rem;
   
-  scrollbar-color: rgba(0, 0, 0, 0.712) rgb(var(--generalBackgroundColor));
+  scrollbar-color: rgba(128, 128, 128, 0.781) rgb(var(--generalBackgroundColor));
   scrollbar-width: thin;
 }
 
 .contentH2Title {
   font-size: 1.75rem;
-  color: rgb(255, 136, 0);
+  color: rgb(var(--highlightColor));
+}
+
+.contentH3Title {
+  font-size: 1.5rem;
+  color: rgb(var(--highlightColor));
 }
 
 .contextText {
@@ -26,6 +31,8 @@
 }
 
 p.simpleParagraph {
+  text-align: justify;
+  text-justify: inter-word;
   font-size: var(--regularTextSize);
   line-height: 1.5;
   letter-spacing: 0.025rem;
@@ -47,7 +54,11 @@ p.simpleParagraph {
   width: 100%;
   z-index: 10;
   /*backdrop-filter: blur(var(--blur));*/
-  background-color: rgb(var(--generalBackgroundColor));
+  background-color: rgb(var(--generalBackgroundColor), 0);
+  transition: background-color 0.1s linear;
+}
+.header.scrolled {
+  background-color: rgba(var(--generalBackgroundColor), 1);
 }
 
 .header span, .header a {
@@ -65,7 +76,7 @@ p.simpleParagraph {
 
 .header span.headerOpposite, .header a.headerOpposite {
   float: left;
-  margin-left: var(--headerHorizontalMargin);;
+  margin-left: var(--headerHorizontalMargin);
 }
 
 .header span:hover, .header a:hover {

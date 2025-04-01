@@ -12,9 +12,10 @@ document.addEventListener("DOMContentLoaded", () =>
 
     gsap.to(".background", {
         y: "25vh",
+        ease: "none",
         scrollTrigger: {
             start: "top top",
             scrub: 0,
-        }
+        },
     });
 });

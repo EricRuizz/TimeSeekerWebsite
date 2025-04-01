@@ -14,7 +14,6 @@ body {
     min-height: 100vh;
   
     background-color: #212121;
-    user-select: none;
     color: var(--textColor);
     font-family: Montserrat, Geist, sans-serif;
     font-weight: normal;
@@ -32,6 +31,7 @@ body {
 
 .backgroundImage {
     position: absolute;
+    width: 100%;
     transform: translate(0%, var(--backgroundHeightOffset));
 
     &.reflection {
@@ -75,7 +75,6 @@ body {
 
 .gameHeroImage {
     margin-top: auto;
-    margin-left: auto;
 }
 
 /* Handles horizontal layout inside each section */
@@ -85,12 +84,17 @@ body {
     /*align-items: center; Align vertically */
     flex-wrap: wrap; /* Wraps if needed */
     width: 100%;
+    box-shadow: 0vw 0vw 20px 0px rgba(0, 0, 0, 0.5);
+
+    &.shadowless {
+        box-shadow: none;
+    }
 }
 
 /* Individual vertical sections */
 .vertical-section {
     /*flex: 1;*/ /* Makes each section take equal width */
-    padding: 2vh 2vw;
+    padding: 1vh 2vw;
     background: rgba(var(--generalBackgroundColor), 0.8);
     text-align: left;
 }
