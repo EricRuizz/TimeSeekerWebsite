@@ -107,3 +107,56 @@ p.simpleParagraph {
 #highlightText {
   color: rgb(var(--highlightColor));
 }
+
+
+/* IMAGE CAROUSEL */
+.imageCarousel {
+  position: relative;
+}
+
+.icPrev, .icNext {
+  position: absolute;
+  cursor: pointer;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  user-select: none;
+
+  transition: 0.2s ease;
+}
+
+.icNext {
+  right: 0;
+}
+
+.icPrev:hover, .icNext:hover {
+  background-color: rgba(32, 32, 32, 0.8);
+}
+
+.carouselImage {
+  display: none
+}
+
+.carouselImageIndicatorContainer {
+  text-align: center;
+}
+
+.carouselImageIndicator {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 15px 3px;
+  background-color: #ffffff2d;
+  border-radius: 50%;
+  display: inline-block;
+
+  transition: background-color 0.2s ease;
+}
+
+.ciActive, .carouselImageIndicator:hover {
+  background-color: #ffffff9f;
+}
