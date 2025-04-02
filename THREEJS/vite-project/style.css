@@ -26,6 +26,11 @@
   color: rgb(var(--highlightColor));
 }
 
+.contentH4Title {
+  font-size: 1.25rem;
+  color: rgb(var(--highlightColor));
+}
+
 .contextText {
   opacity: 0.5;
 }

@@ -77,6 +77,16 @@ body {
     margin-top: auto;
 }
 
+.sectionWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    box-shadow: 0vw 0vw 20px 0px rgba(0, 0, 0, 0.5);
+
+    &.shadowless {
+        box-shadow: none;
+    }
+}
+
 /* Handles horizontal layout inside each section */
 .vertical-container {
     display: flex;
@@ -84,11 +94,6 @@ body {
     /*align-items: center; Align vertically */
     flex-wrap: wrap; /* Wraps if needed */
     width: 100%;
-    box-shadow: 0vw 0vw 20px 0px rgba(0, 0, 0, 0.5);
-
-    &.shadowless {
-        box-shadow: none;
-    }
 }
 
 /* Individual vertical sections */
