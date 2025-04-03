@@ -24,9 +24,11 @@ class ImageCarousel
 
         this.nextButton = imageCarousel.querySelector(".icNext") as HTMLElement;
         this.previousButton = imageCarousel.querySelector(".icPrev") as HTMLElement;
+
+        this.Init();
     }
 
-    public Init()
+    private Init()
     {
         this.carouselImageIndicator.forEach((indicator, index) => { indicator.addEventListener("click", () => this.SetIndex(index + 1)); });
 
@@ -84,5 +86,4 @@ document.addEventListener("DOMContentLoaded", function ()
 
     //Image Carousel
     imageCarousels = [...document.querySelectorAll(".imageCarousel")].map(imageCarousel => new ImageCarousel(imageCarousel as HTMLElement));
-    imageCarousels.forEach(imageCarousel => { imageCarousel.Init() });
 });

@@ -81,10 +81,6 @@ body {
     display: flex;
     flex-wrap: wrap;
     box-shadow: 0vw 0vw 20px 0px rgba(0, 0, 0, 0.5);
-
-    &.shadowless {
-        box-shadow: none;
-    }
 }
 
 /* Handles horizontal layout inside each section */
@@ -94,13 +90,18 @@ body {
     /*align-items: center; Align vertically */
     flex-wrap: wrap; /* Wraps if needed */
     width: 100%;
+
+    background: rgba(var(--generalBackgroundColor), 0.7);
+
+    &.backgroundless {
+        background: rgba(var(--generalBackgroundColor), 0.0);
+    }
 }
 
 /* Individual vertical sections */
 .vertical-section {
     /*flex: 1;*/ /* Makes each section take equal width */
     padding: 1vh 2vw;
-    background: rgba(var(--generalBackgroundColor), 0.8);
     text-align: left;
 }
 
@@ -129,8 +130,8 @@ body {
 
 .titledListTitle {
     flex: 0 0 10vw;
-    font-weight: bold;
     text-align: center;
     white-space: nowrap;
     background-color: rgba(255, 136, 0, 0.253);
+    border-radius: 100px;
 }  

@@ -75,15 +75,15 @@
                             <h2 class="contentH2Title">MY CONTRIBUTION <span class="contextText">as a...</span></h2>
                             <div class="titledListContainer">
                                 <div class="titledListRow">
-                                    <span class="titledListTitle"><b>Game Designer</b></span>
+                                    <span class="titledListTitle">Game Designer</span>
                                     <p class="simpleParagraph">Proposed a general direction for the game, as well as Later, through a data collecting system that recorded various events such as player and enemy actions, damage and more, I analyzed the actual usage of the previously designed moveset.</p>
                                 </div>
                                 <div class="titledListRow">
-                                    <span class="titledListTitle"><b>Technical artist</b></span>
+                                    <span class="titledListTitle">Technical artist</span>
                                     <p class="simpleParagraph">I was responsible for anything that involved shaders and/or particles, from stuff like the water shader to the player's VFX, a triplanar surface material, or the blood stains in the ground.</p>
                                 </div>
                                 <div class="titledListRow">
-                                    <span class="titledListTitle"><b>Programmer</b></span>
+                                    <span class="titledListTitle">Programmer</span>
                                     <p class="simpleParagraph">Programmed a system that allowed me to produce VFX at a very high speed, easily controling interpolations either in sequence or parallel, managing durations, eases, delays, despawns and different behaviours as well as recycling. This was ment to make me self-sufficient in the project and not overload our main programmer.</p>
                                 </div>
                             </div>
@@ -95,30 +95,62 @@
                 <div class="sectionWrapper">
                     <div class="vertical-container">
                         <div class="vertical-section" style="flex: 1">
-                            <h2 class="contentH2Title">GAME DESIGN</h2>
+                            <h2 class="contentH2Title">DESIGN GOALS</h2>
                             <p class="simpleParagraph">
-                                My idea for this project was to design a completly new moveset for the user to enjoy, a different take on the good old Action-Adventure genre combination, which is suprisingly stuck when it comes to combat. This proved to be challenging for many reasons, one of them being that the complexity of the moveset had to be quite low given the predicted short duration of the game. It was not enough for the player to get used to it, we needed them to get comfortable enough to really have fun and experiment, instead of battling new controls until the experience was over.
+                                My idea for this project was to design a completly new moveset for the user to enjoy, a different take on the good old Action-Adventure genre combination, which was suprisingly stuck when it comes to combat. This proved to be challenging for many reasons, one of them being that the complexity of the moveset had to be quite low given the predicted short duration of the game. It was not enough for the player to get used to it, we needed them to get comfortable enough to really have fun and experiment, instead of battling new controls until the experience was over.
                             </p>
-                            <h3 class="contentH3Title"><br>Moveset</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="sectionWrapper">
+                    <div class="vertical-container">
+                        <div class="vertical-section" style="flex: 1">
+                            <h3 class="contentH3Title">MOVESET</h3>
                             <h4 class="contentH4Title">Core</h4>
                             <p class="simpleParagraph">
-                                The core of the moveset is divided into two states, <i>Anchor</i> and <i>Anchorless</i>.<br>
-                                Main - 2 states, 2 actions per state, each action revolves (TODO - anchor pick up - faster w/o anchor)<br>
-                                <b></b>
-                                Resource dependant - Healing and special moves<br>
-                                We really liked the most aggressive playstyles of this moveset, so to encourage players to be aggressive even in dire situations we directly linked the resource required to Heal to combat, gaining Soul with every enemy hit.
+                                The core of the moveset is divided into two states, <i>With Anchor</i> and <i>Without Anchor</i>. There are two possible actions per state, making a total of 4 actions. When the player does not have the anchor, their speed is increased, but their movement is restricted to an area around the anchor. Touching the anchor when it is in the floor automatically picks it up.<br>
+                                <br>
+                                <b> · Slam:</b> The player dashes forward, throwing the anchor upwards. This move provides invulnerability until the dash ends and damages enemies where it started when the anchor falls.<br>
+                                <b> · Throw:</b> The player aims and throws the anchor in a straight line, dealing damage to every enemy in its path and knocking them back.<br>
+                                <b> · Dash:</b> The player turns invulnerable and dashes towards the anchor.<br>
+                                <b> · Pull:</b> The player pulls the anchor towards them in a straight line, damaging enemies the same way a throw does but knocking them closer.<br>
+                                <br>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="vertical-container" style="align-items: center;">
+                        <div class="vertical-section" style="flex: 1">
+                            <p class="simpleParagraph">
+                                Thanks to the image at the right we can see, a bit more clearly, some of the carefully designed "<b>rules</b>" of this moveset. They allow players to adapt at a faster rate even if they are not conscious of said "<b>rules</b>".<br>
+                                <br>
+                                <b> · Rule 1:</b> Every action implies a change of state.<br>
+                                <b> · Rule 2:</b> L2 / LT actions imply player movement.<br>
+                                <b> · Rule 3:</b> R2 / RT actions imply anchor movement.<br>
+                                <br>
+                                Creating a coherent moveset and propperly integrating it into the controls is key in a game like this, where one of the main challenges was to make something completly new, somewhat complex, yet enjoyable and engaging in a really short amount of time.
+                            </p>
+                        </div>
+                        <img style="width: 40%;" src="/project/Textures/Games/AnchoredSoul/AnchoredSoul_CoreMoveset.png" alt="Anchored Soul Core Moveset Table">
+                    </div>
+                    <div class="vertical-container">
+                        <div class="vertical-section" style="flex: 1">
+                            <h4 class="contentH4Title">Resource dependant</h4>
+                            <p class="simpleParagraph">
+                                The other part of the moveset is formed by those actions that the player cannot always perform, actions that require resources becouse of their strenght. All this moves ended up using Soul, a resource gained with every enemy you hit. This way of obtaining Soul was designed to encourage players to be aggressive even in dire situations, and the more aggressive they are, the more they tend to engage with the moveset.<br><br>
+                                <b> · Healing:</b> Hold the healing input for a short duration of time while having your movement speed heavily decreased in order to heal for a given amount.<br>
+                                <b> · Chain Spikes:</b> Spikes quickly grow out of the chain, dealing damage to everything around it.<br>
+                                <b> · Spin:</b> Hold the Spin input for a short amount of time to start spining, heavily reducing your movement speed and spinning the anchor around you multiple times, dealing great damange to everything around you.<br>
+                                
                             </p>
                         </div>
                     </div>
                     <div class="vertical-container">
                         <div class="vertical-section" style="flex: 1">
-                            <h4 class="contentH4Title">Core</h4>
+                            <h4 class="contentH4Title">Result</h4>
                             <p class="simpleParagraph">
-                                The core of the moveset is divided into two states, <i>Anchor</i> and <i>Anchorless</i>.<br>
-                                Main - 2 states, 2 actions per state, each action revolves (TODO - anchor pick up - faster w/o anchor)<br>
-                                <b></b>
-                                Resource dependant - Healing and special moves<br>
-                                We really liked the most aggressive playstyles of this moveset, so to encourage players to be aggressive even in dire situations we directly linked the resource required to Heal to combat, gaining Soul with every enemy hit.
+                                The big hitboxes and huge amounts of AOE damage allows for an extremely satisfying experience, hitting multiple enemies per attack without being too worried about accuracy, letting the player focus on what matters, experiencing with the moveset. If we add lots of movement and invulnerability frames, we end up with a fun and engaging experience that makes the player feel powerful, encouraging them to be fast and aggressive, creating epic encounters and great action sequences. 
                             </p>
                         </div>
                     </div>
@@ -126,7 +158,7 @@
             </section>
             <section class="section spacer"></section>
             <section class="section">
-                <div class="vertical-container shadowless">
+                <div class="vertical-container backgroundless">
                     <iframe frameborder="0" src="https://itch.io/embed/2699238?border_width=0&amp;dark=true" width="550" height="165"><a href="https://dhelpra-games.itch.io/anchoredsoul">Anchored Soul by Dhelpra Games</a></iframe>
                 </div>
             </section>

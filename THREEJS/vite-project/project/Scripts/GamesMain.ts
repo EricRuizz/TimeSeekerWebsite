@@ -48,11 +48,10 @@ class GridCell
         // # === Resizing relevant variables === #
 
         this.InitResizingRelevantVariables();
-
-        window.addEventListener("resize", () => this.OnWindowResize());
+        this.Init();
     }
 
-    public InitResizingRelevantVariables(): void
+    private InitResizingRelevantVariables(): void
     {
         this.cellHeight = window.getComputedStyle(this.cell).getPropertyValue("height") as string;
         this.cellWidth = window.getComputedStyle(this.cell).getPropertyValue("width") as string;
@@ -67,9 +66,11 @@ class GridCell
         .to(this.selectorBanner, { height: this.cellHeight, duration: d_bannerAnim }, 0)
         .to(this.previewGIF, { opacity: 1, duration: d_bannerAnim }, 0)
         .to(this.content, { height: "100%", duration: d_bannerAnim }, 0);
+        
+        window.addEventListener("resize", () => this.OnWindowResize());
     }
 
-    public Init()
+    private Init()
     {
         this.cell.addEventListener("mouseenter", () => this.MouseEnter());
         this.cell.addEventListener("mouseleave", () => this.MouseLeave());
@@ -107,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () =>
     history.replaceState({}, "", document.querySelector('meta[name="page-identifier"]')?.getAttribute("content") || "");
 
     gridCells = [...document.querySelectorAll(".cell")].map(cellElement => new GridCell(cellElement));
-    gridCells.forEach(gridCell => { gridCell.Init() });
 
     gsap.to(".parallaxBackground", {
         y: "40vh",
