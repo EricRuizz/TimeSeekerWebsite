@@ -1,5 +1,10 @@
 import * as THREE from 'three';
 
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
+
 import WaterRippleSimVS from "../../Shaders/WaterRippleSimVS.glsl";
 import WaterRippleSimFS from "../../Shaders/WaterRippleSimFS.glsl";
 import WaterRippleRenderFS from "../../Shaders/WaterRippleRenderFS.glsl";
@@ -10,6 +15,7 @@ import WaterRippleRenderVS from "../../Shaders/WaterRippleRenderVS.glsl";
     Original Shader - "Simple Water Ripple effect" by Polygon on Shadertoy
     Shader adaptation and js implementation by Codegrid
 */
+
 
 
 const backgroundColor = "#2774fb";
@@ -82,6 +88,34 @@ document.addEventListener("DOMContentLoaded", () =>
     logoTexture.format = THREE.RGBAFormat;
 
 
+    //POSTPROCESSING
+    const renderScene = new RenderPass(scene, camera);
+    const composer = new EffectComposer(renderer);
+    composer.addPass(renderScene);
+
+    // Bloom
+    var bloomPassLow = new UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
+        0.2,  //Intensity
+        0.1,  //Radius
+        0.1   //Which pixels are affected
+    );
+    composer.addPass(bloomPassLow);
+          
+    var bloomPass = new UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight), //Resolution of the scene
+        0.9, //Intensity
+        0.5,  //Radius
+        5   //Which pixels are affected
+    );
+    //composer.addPass(bloomPass);
+          
+    // Film
+    var filmPass = new FilmPass(2, false);
+    composer.addPass(filmPass);
+    //POSTPROCESSING
+
+
     window.addEventListener("resize", () =>
     {
         const newWidth = window.innerWidth * window.devicePixelRatio;
@@ -95,12 +129,12 @@ document.addEventListener("DOMContentLoaded", () =>
         logoTexture.needsUpdate = true;
     });
 
-    renderer.domElement.addEventListener("mousemove", (e) => {
+    document.addEventListener("mousemove", (e) => {
         mousePosition.x = e.clientX * window.devicePixelRatio;
         mousePosition.y = (window.innerHeight - e.clientY) * window.devicePixelRatio;
     });
 
-    renderer.domElement.addEventListener("mouseleave", () => {
+    document.addEventListener("mouseleave", () => {
         mousePosition.set(0, 0);
     });
 
@@ -115,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () =>
         renderMAterial.uniforms.textureA.value = rtb.texture;
         renderMAterial.uniforms.textureB.value = logoTexture;
         renderer.setRenderTarget(null);
-        renderer.render(scene, camera);
+        composer.render();
 
         const temp = rta;
         rta = rtb;
