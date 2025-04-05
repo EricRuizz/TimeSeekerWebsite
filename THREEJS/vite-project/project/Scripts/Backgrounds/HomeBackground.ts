@@ -42,6 +42,8 @@ document.addEventListener("DOMContentLoaded", () =>
 
     const width = window.innerWidth * window.devicePixelRatio;
     const height = window.innerHeight * window.devicePixelRatio;
+    const resolutionProportion = width / height;
+    const scale = 0.5;
     const options = {
         format: THREE.RGBAFormat,
         type: THREE.FloatType,
@@ -57,7 +59,10 @@ document.addEventListener("DOMContentLoaded", () =>
         uniforms: {
             textureA: { value: null },
             mouse: { value: mousePosition },
+            prevMouse: { value: new THREE.Vector2() },
             resolution: { value: new THREE.Vector2(width, height) },
+            resolutionProportion: { value: resolutionProportion },
+            scale: { value: scale },
             time: { value: 0 },
             frame: { value: 0 }
         },
@@ -69,6 +74,9 @@ document.addEventListener("DOMContentLoaded", () =>
         uniforms: {
             textureA: { value: null },
             textureB: { value: null },
+            resolution: { value: new THREE.Vector2(width, height) },
+            resolutionProportion: { value: resolutionProportion },
+            scale: { value: scale },
         },
         vertexShader: WaterRippleRenderVS,
         fragmentShader: WaterRippleRenderFS,
@@ -120,18 +128,26 @@ document.addEventListener("DOMContentLoaded", () =>
     {
         const newWidth = window.innerWidth * window.devicePixelRatio;
         const newHeight = window.innerHeight * window.devicePixelRatio;
+        const resolutionProportion = newWidth / newHeight;
 
         renderer.setSize(window.innerWidth, window.innerHeight);
         rta.setSize(newWidth, newHeight);
         rtb.setSize(newWidth, newHeight);
         simMaterial.uniforms.resolution.value.set(newWidth, newHeight);
+        simMaterial.uniforms.resolutionProportion.value = resolutionProportion;
+        renderMAterial.uniforms.resolution.value.set(newWidth, newHeight);
+        renderMAterial.uniforms.resolutionProportion.value = resolutionProportion;
 
         logoTexture.needsUpdate = true;
     });
 
     document.addEventListener("mousemove", (e) => {
+        simMaterial.uniforms.prevMouse.value.copy(simMaterial.uniforms.mouse.value);
+
         mousePosition.x = e.clientX * window.devicePixelRatio;
         mousePosition.y = (window.innerHeight - e.clientY) * window.devicePixelRatio;
+
+        console.log(mousePosition, window.innerWidth, window.innerHeight);
     });
 
     document.addEventListener("mouseleave", () => {
