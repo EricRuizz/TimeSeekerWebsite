@@ -18,8 +18,6 @@ import WaterRippleRenderVS from "../../Shaders/WaterRippleRenderVS.glsl";
 
 
 
-const backgroundColor = "#2774fb";
-
 document.addEventListener("DOMContentLoaded", () =>
 {
     const scene = new THREE.Scene();
@@ -61,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () =>
             mouse: { value: mousePosition },
             prevMouse: { value: new THREE.Vector2() },
             resolution: { value: new THREE.Vector2(width, height) },
-            resolutionProportion: { value: resolutionProportion },
             scale: { value: scale },
             time: { value: 0 },
             frame: { value: 0 }
