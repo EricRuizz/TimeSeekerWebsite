@@ -11,8 +11,8 @@ import WaterRippleRenderFS from "../../Shaders/WaterRippleRenderFS.glsl";
 import WaterRippleRenderVS from "../../Shaders/WaterRippleRenderVS.glsl";
 
 /*
-    CREDITS:
-    Original Shader - "Simple Water Ripple effect" by Polygon on Shadertoy
+    Base implementation CREDITS:
+    "Simple Water Ripple effect" by Polygon on Shadertoy
     Shader adaptation and js implementation by Codegrid
 */
 
@@ -131,20 +131,26 @@ document.addEventListener("DOMContentLoaded", () =>
         rta.setSize(newWidth, newHeight);
         rtb.setSize(newWidth, newHeight);
         simMaterial.uniforms.resolution.value.set(newWidth, newHeight);
-        simMaterial.uniforms.resolutionProportion.value = resolutionProportion;
         renderMAterial.uniforms.resolution.value.set(newWidth, newHeight);
         renderMAterial.uniforms.resolutionProportion.value = resolutionProportion;
 
         logoTexture.needsUpdate = true;
     });
 
+    let mouseInitialized = false;
     document.addEventListener("mousemove", (e) => {
-        simMaterial.uniforms.prevMouse.value.copy(simMaterial.uniforms.mouse.value);
+        const x = e.clientX * window.devicePixelRatio;
+        const y = (window.innerHeight - e.clientY) * window.devicePixelRatio;
 
-        mousePosition.x = e.clientX * window.devicePixelRatio;
-        mousePosition.y = (window.innerHeight - e.clientY) * window.devicePixelRatio;
+        if (!mouseInitialized)
+        {
+            simMaterial.uniforms.prevMouse.value.set(x, y);
+            mouseInitialized = true;
+        } else {
+            simMaterial.uniforms.prevMouse.value.copy(simMaterial.uniforms.mouse.value);
+        }
 
-        console.log(mousePosition, window.innerWidth, window.innerHeight);
+        mousePosition.set(x, y);
     });
 
     document.addEventListener("mouseleave", () => {
@@ -155,18 +161,18 @@ document.addEventListener("DOMContentLoaded", () =>
         simMaterial.uniforms.frame.value = frame++;
         simMaterial.uniforms.time.value = performance.now() / 1000;
 
-        simMaterial.uniforms.textureA.value = rta.texture;
-        renderer.setRenderTarget(rtb);
-        renderer.render(simScene, camera);
+        for (let i = 0; i < 4; i++)
+        {
+            simMaterial.uniforms.textureA.value = rta.texture;
+            renderer.setRenderTarget(rtb);
+            renderer.render(simScene, camera);
+            [rta, rtb] = [rtb, rta];
+        }
 
         renderMAterial.uniforms.textureA.value = rtb.texture;
         renderMAterial.uniforms.textureB.value = logoTexture;
         renderer.setRenderTarget(null);
         composer.render();
-
-        const temp = rta;
-        rta = rtb;
-        rtb = temp;
 
         requestAnimationFrame(animate);
     }

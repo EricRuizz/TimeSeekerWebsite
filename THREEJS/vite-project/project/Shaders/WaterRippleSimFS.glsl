@@ -8,7 +8,7 @@ uniform int frame;
 
 varying vec2 vUv;
 
-const float delta = 1.4;
+const float strenght = 1.4;
 
 void main()
 {
@@ -38,11 +38,11 @@ void main()
     if (uv.y >= 1.0 - texelSize.y) p_up = p_down;
 
     // Propagation
-    pVel += delta + (-2.0 * pressure + p_right + p_left) / 4.0;
-    pVel += delta + (-2.0 * pressure + p_up + p_down) / 4.0;
+    pVel += strenght + (-2.0 * pressure + p_right + p_left) / 4.0;
+    pVel += strenght + (-2.0 * pressure + p_up + p_down) / 4.0;
 
-    pressure += delta * pVel;
-    pVel -= 0.005 * delta * pressure;
+    pressure += strenght * pVel;
+    pVel -= 0.0005 * strenght * pressure;
 
     pVel *= 0.995;
     pressure *= 0.9995;
@@ -52,7 +52,9 @@ void main()
     vec2 prevMouseUV = prevMouse / resolution;
 
     vec2 velocity = mouseUV - prevMouseUV;
+    float maxSpeed = 0.001;
     float speed = length(velocity);
+    speed = clamp(speed, 0.0, maxSpeed);
 
     if (mouse.x > 0.0 && speed > 0.0001) {
         float dist = distance(uv, mouseUV);
@@ -64,7 +66,6 @@ void main()
             pVel += dot(normalize(uv - mouseUV), push);
         }
     }
-
 
     // Wind
     float windStrength = 0.001;
