@@ -38,8 +38,7 @@ body {
     cursor: pointer;
 
     :hover {
-        box-shadow: 1000px 500px 500px red;
-        opacity: 0.5;
+        filter: contrast(75%) brightness(115%); /* TODO - BETTER BACK HOVER */ 
     }
 }
 
