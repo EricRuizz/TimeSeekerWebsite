@@ -1,7 +1,8 @@
 
 :root {
-    --generalPadding: 1rem;
-    --generalHalfPadding: 3rem;
+    --generalPadding: 5px;
+    --generalHalfPadding: 20px;
+    --generalQPadding: 40px;
 }
 
 body {
@@ -24,9 +25,33 @@ body {
 
 /* BBBBBBB */
 
-.preview {
-    padding: var(--generalHalfPadding) 0;
+.previewContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 5000px; /* Ensure 3D space */
     overflow: hidden;
+    transition: transform 0.1s ease;
+    transform-style: preserve-3d; /* Enable 3D transforms */
+    will-change: transform;
+    transform-origin: center center; /* Rotate from center */
+    cursor: pointer;
+
+    :hover {
+        box-shadow: 1000px 500px 500px red;
+        opacity: 0.5;
+    }
+}
+
+
+.previewCell {
+    margin-top: var(--generalQPadding);
+    position: relative;
+    
+    -webkit-perspective: 500px;
+    -moz-perspective: 500px;
+    -o-perspective: 500px;
+    perspective: 500px;
 }
 
 /* AAAAAAA */
@@ -44,8 +69,9 @@ body {
     padding: var(--generalPadding) var(--generalHalfPadding);
 }
   
-.preview img {
-    vertical-align: middle;
+.preview {
+    display: block;
+    max-width: none;
 }
 /* Responsive layout - makes a two column-layout instead of four columns */
 @media screen and (max-width: 800px) {
