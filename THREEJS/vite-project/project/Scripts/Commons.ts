@@ -32,6 +32,10 @@ class ImageCarousel
     {
         this.carouselImageIndicator.forEach((indicator, index) => { indicator.addEventListener("click", () => this.SetIndex(index + 1)); });
 
+        for (let i = 0; i < this.images.length; i++) {
+            this.images[i].style.display = "none";  
+        }
+
         this.nextButton.addEventListener("click", () => this.ChangeImage(1));
         this.previousButton.addEventListener("click", () => this.ChangeImage(-1));
 
@@ -60,7 +64,8 @@ class ImageCarousel
             this.carouselImageIndicator[i].className = this.carouselImageIndicator[i].className.replace(" ciActive", "");
         }
 
-        this.images[this.currentIndex - 1].style.display = "block";  
+        this.images[this.currentIndex - 1].style.display = "flex";  
+        this.images[this.currentIndex - 1].style.alignItems = "center";  
         this.carouselImageIndicator[this.currentIndex - 1].className += " ciActive";
     }
 }
@@ -68,12 +73,29 @@ class ImageCarousel
 class Modal
 {
     private modal: HTMLElement;
+    private inputElement: HTMLElement;
 
-    constructor(modal: HTMLElement)
+    constructor(modal: HTMLElement, inputElement: HTMLElement)
     {
         console.log("constructor");
         
         this.modal = modal;
+        this.modal.addEventListener("click", () => this.CloseModal());
+
+        this.inputElement = inputElement;
+        this.inputElement.addEventListener("click", () => this.OpenModal());
+    }
+
+    OpenModal()
+    {
+        this.modal.style.display = "block";
+        console.log("block");
+    }
+
+    CloseModal()
+    {
+        this.modal.style.display = "none";
+        console.log("AAAAAAAAA");
     }
 }
 
@@ -99,5 +121,5 @@ document.addEventListener("DOMContentLoaded", function ()
 
     //Image Carousel
     imageCarousels = [...document.querySelectorAll(".imageCarousel")].map(imageCarousel => new ImageCarousel(imageCarousel as HTMLElement));
-    modals = [...document.querySelectorAll(".modal")].map(modal => new Modal(modal as HTMLElement));
+    modals = [...document.querySelectorAll(".modal")].map(modal => new Modal(modal as HTMLElement, modal.parentElement as HTMLElement));
 });
