@@ -51,8 +51,8 @@ p.simpleParagraph {
   line-height: inherit;
 }
 
-/* HEADER */
 
+/* HEADER */
 .header {
   position: fixed;
   top: 0;
@@ -88,8 +88,8 @@ p.simpleParagraph {
   color: rgb(var(--highlightColor));
 }
 
-/* HERO */
 
+/* HERO */
 .hero {
   display: flex;
   justify-content: center;
@@ -159,4 +159,23 @@ p.simpleParagraph {
 
 .ciActive, .carouselImageIndicator:hover {
   background-color: #ffffff9f;
+}
+
+
+/* MODAL */
+.modal {
+  position: fixed;
+  z-index: 10;
+  padding: 0%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: rgba(238, 23, 23, 0.158);
+  backdrop-filter: blur(5px);
+  opacity: 0.8;
+
+
+  /* TODO - fixate arrows on sides of the screen instead of the image */
 }

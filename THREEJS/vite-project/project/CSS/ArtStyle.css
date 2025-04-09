@@ -6,7 +6,6 @@
 }
 
 body {
-    position: relative;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -45,12 +44,14 @@ body {
 
 .previewCell {
     margin-top: var(--generalQPadding);
-    position: relative;
-    
+}
+
+.previewParent {
     -webkit-perspective: 500px;
     -moz-perspective: 500px;
     -o-perspective: 500px;
     perspective: 500px;
+
 }
 
 /* AAAAAAA */

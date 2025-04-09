@@ -65,7 +65,20 @@ class ImageCarousel
     }
 }
 
+class Modal
+{
+    private modal: HTMLElement;
+
+    constructor(modal: HTMLElement)
+    {
+        console.log("constructor");
+        
+        this.modal = modal;
+    }
+}
+
 var imageCarousels: ImageCarousel[];
+var modals: Modal[];
 
 document.addEventListener("DOMContentLoaded", function ()
 {
@@ -86,4 +99,5 @@ document.addEventListener("DOMContentLoaded", function ()
 
     //Image Carousel
     imageCarousels = [...document.querySelectorAll(".imageCarousel")].map(imageCarousel => new ImageCarousel(imageCarousel as HTMLElement));
+    modals = [...document.querySelectorAll(".modal")].map(modal => new Modal(modal as HTMLElement));
 });
