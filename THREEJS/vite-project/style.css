@@ -139,8 +139,8 @@ p.simpleParagraph {
 
 .carouselImage {
   display: flex;
-  justify-content: center; /* horizontal center */
-  align-items: center;     /* vertical center */
+  justify-content: center;
+  align-items: center;
   height: 100%;
 }
 
@@ -164,6 +164,27 @@ p.simpleParagraph {
   background-color: #ffffff9f;
 }
 
+.carouselImageText {
+  position: absolute;
+  font-size: 1em;
+  white-space: nowrap;
+  bottom: -2em;
+}
+
+.bottom-left {
+  left: 0;
+}
+
+.bottom-right {
+  right: 0;
+}
+
+.imageRelativeWrapper {
+  position: relative;
+  max-height: 100%;
+  display: inline-block;
+}
+
 
 /* MODAL */
 .modal {
@@ -176,17 +197,15 @@ p.simpleParagraph {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: rgba(0, 0, 0, 0.274);
+  background-color: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(5px);
   scroll-behavior: none;
-
-
-  /* TODO - fixate arrows on sides of the screen instead of the image */
 }
 
 .modalCarouselImage {
-  max-height: 95%;
+  max-height: 90vh;
   height: auto;
-  width: auto; /* or 100% if you want to limit width too */
-  object-fit: contain; /* optional: helps with aspect ratio inside container */
+  width: auto;
+  object-fit: contain;
+  display: block;
 }

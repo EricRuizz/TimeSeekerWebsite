@@ -12,7 +12,7 @@ history.replaceState({}, "", "/Art");
 
 document.querySelectorAll('.previewCell').forEach(preview => {
     gsap.to(".parallaxBackground", {
-        y: "100vh",
+        y: "20vh",
         ease: "none",
         scrollTrigger: {
             scrub: 0,

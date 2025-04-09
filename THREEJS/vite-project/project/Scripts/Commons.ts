@@ -76,26 +76,29 @@ class Modal
     private inputElement: HTMLElement;
 
     constructor(modal: HTMLElement, inputElement: HTMLElement)
-    {
-        console.log("constructor");
-        
+    {        
         this.modal = modal;
-        this.modal.addEventListener("click", () => this.CloseModal());
+        this.modal.addEventListener("click", event => this.CloseModal(event));
 
         this.inputElement = inputElement;
-        this.inputElement.addEventListener("click", () => this.OpenModal());
+        this.inputElement.addEventListener("click", event => this.OpenModal(event));
+        
     }
 
-    OpenModal()
+    OpenModal(event: MouseEvent)
     {
-        this.modal.style.display = "block";
-        console.log("block");
+        if(this.inputElement == event.target as HTMLElement)
+        {
+            this.modal.style.display = "block";
+        }
     }
 
-    CloseModal()
-    {
-        this.modal.style.display = "none";
-        console.log("AAAAAAAAA");
+    CloseModal(event: MouseEvent)
+    {        
+        if((event.target as HTMLElement).classList.contains("modalCloser"))
+        {
+            this.modal.style.display = "none";
+        }
     }
 }
 
@@ -119,7 +122,9 @@ document.addEventListener("DOMContentLoaded", function ()
         });
     }
 
-    //Image Carousel
+    //Image Carousels
     imageCarousels = [...document.querySelectorAll(".imageCarousel")].map(imageCarousel => new ImageCarousel(imageCarousel as HTMLElement));
-    modals = [...document.querySelectorAll(".modal")].map(modal => new Modal(modal as HTMLElement, modal.parentElement as HTMLElement));
+
+    //Modals
+    modals = [...document.querySelectorAll(".modal")].map(modal => new Modal(modal as HTMLElement, modal.parentElement!.querySelector(".modalInteractable")! as HTMLElement));
 });
