@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () =>
     gridCells = [...document.querySelectorAll(".cell")].map(cellElement => new GridCell(cellElement));
 
     gsap.to(".parallaxBackground", {
-        y: "40vh",
+        y: (document.documentElement.scrollHeight * 0.02).toString() + "vh",
         ease: "none",
         scrollTrigger: {
             scrub: 0,

@@ -89,6 +89,9 @@ class Modal
         if(this.inputElement == event.target as HTMLElement)
         {
             this.modal.style.display = "block";
+            console.log(document.body.classList);
+            document.body.classList.add("no-scroll");
+            console.log(document.body.classList);
         }
     }
 
@@ -97,6 +100,7 @@ class Modal
         if((event.target as HTMLElement).classList.contains("modalCloser"))
         {
             this.modal.style.display = "none";
+            document.body.classList.remove("no-scroll");
         }
     }
 }

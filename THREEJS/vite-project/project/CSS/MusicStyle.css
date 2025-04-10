@@ -20,6 +20,10 @@ body {
     font-family: Montserrat, Geist, sans-serif;
     font-weight: normal;
     overflow-x: hidden;
+    
+    &.no-scroll {
+        overflow: hidden;
+    }
 }
 
 
@@ -88,7 +92,6 @@ body {
 }
 
 
-/* AAAAAAAAAAAA  */
 
 .contentContainer {
     display: flex;
@@ -115,9 +118,9 @@ body {
     padding: 20px 30px;
     width: 100%;
     background-color: rgb(var(--generalBackgroundColor));
+    border-radius: 0px 20px 20px 0px;
 }
 
-/* AAAAAAAAAAAA  */
 
 
 .space {

@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () =>
     history.replaceState({}, "", document.querySelector('meta[name="page-identifier"]')?.getAttribute("content") || "");
 
     gsap.to(".background", {
-        y: "25vh",
+        y: (document.documentElement.scrollHeight * 0.02).toString() + "vh",
         ease: "none",
         scrollTrigger: {
             start: "top top",

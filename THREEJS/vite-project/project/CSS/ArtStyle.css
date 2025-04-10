@@ -20,6 +20,10 @@ body {
     font-family: Montserrat, Geist, sans-serif;
     font-weight: normal;
     overflow-x: hidden;
+    
+    &.no-scroll {
+        overflow: hidden;
+    }
 }
 
 

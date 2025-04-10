@@ -12,7 +12,7 @@ history.replaceState({}, "", "/Music");
 
 document.querySelectorAll('.previewCell').forEach(preview => {
     gsap.to(".parallaxBackground", {
-        y: "20vh",
+        y: (document.documentElement.scrollHeight * 0.01).toString() + "vh",
         ease: "none",
         scrollTrigger: {
             scrub: 0,
