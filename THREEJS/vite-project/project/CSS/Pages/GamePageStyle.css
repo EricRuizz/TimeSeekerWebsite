@@ -86,9 +86,8 @@ body {
 /* Handles horizontal layout inside each section */
 .vertical-container {
     display: flex;
-    justify-content: center; /* Center contents horizontally */
-    /*align-items: center; Align vertically */
-    flex-wrap: wrap; /* Wraps if needed */
+    justify-content: center;
+    flex-wrap: wrap;
     width: 100%;
 
     background: rgba(var(--generalBackgroundColor), 0.7);
@@ -100,12 +99,10 @@ body {
 
 /* Individual vertical sections */
 .vertical-section {
-    /*flex: 1;*/ /* Makes each section take equal width */
     padding: 1vh 2vw;
     text-align: left;
 }
 
-/* If there's only one vertical section, center it */
 .vertical-container:has(.vertical-section:only-child) {
     justify-content: center;
 }

@@ -30,7 +30,6 @@ document.querySelectorAll('.previewCell').forEach(preview => {
 
         const x = mouseEvent.clientX - rect.left;
         const y = mouseEvent.clientY - rect.top;
-        //console.log(`x: ${x},             y: ${y}`);
 
         var percentX = (x / rect.width) - 0.5;  
         var percentY = (y / rect.height) - 0.5;
@@ -47,31 +46,4 @@ document.querySelectorAll('.previewCell').forEach(preview => {
     {
         HTMLPreview.style.transform = `rotateX(0deg) rotateY(0deg)`;
     });
-
-    /* Individual image roattion
-    preview.addEventListener('mousemove', e =>
-    {
-        const mouseEvent: MouseEvent = e as MouseEvent;
-        const rect = HTMLPreview.getBoundingClientRect();
-
-        const x = mouseEvent.clientX - rect.left;
-        const y = mouseEvent.clientY - rect.top;
-        console.log(`x: ${x},             y: ${y}`);
-
-        var percentX = (x / rect.width) - 0.5;  
-        var percentY = (y / rect.height) - 0.5;
-
-        const factor = 60;
-
-        const rotateX = percentY * factor * -1;
-        const rotateY = percentX * factor;
-
-        HTMLPreview.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-  
-    preview.addEventListener('mouseleave', () =>
-    {
-        HTMLPreview.style.transform = `rotateX(0deg) rotateY(0deg)`;
-    });
-    */
   });

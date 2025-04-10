@@ -1,0 +1,49 @@
+import '/style.css';
+import '/project/CSS/MusicStyle.css';
+
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+
+gsap.registerPlugin(ScrollTrigger);
+
+history.replaceState({}, "", "/Music");
+
+
+document.querySelectorAll('.previewCell').forEach(preview => {
+    gsap.to(".parallaxBackground", {
+        y: "20vh",
+        ease: "none",
+        scrollTrigger: {
+            scrub: 0,
+        }
+    });
+
+    const container: HTMLElement = preview.querySelector('.previewContainer')!;
+    const HTMLPreview: HTMLElement = container;
+  
+
+    document.addEventListener('mousemove', e =>
+    {
+        const mouseEvent: MouseEvent = e as MouseEvent;
+        const rect = HTMLPreview.getBoundingClientRect();
+
+        const x = mouseEvent.clientX - rect.left;
+        const y = mouseEvent.clientY - rect.top;
+
+        var percentX = (x / rect.width) - 0.5;  
+        var percentY = (y / rect.height) - 0.5;
+
+        const factor = 2;
+
+        const rotateX = percentY * factor * -1;
+        const rotateY = percentX * factor;
+
+        HTMLPreview.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    preview.addEventListener('mouseleave', () =>
+    {
+        HTMLPreview.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+  });

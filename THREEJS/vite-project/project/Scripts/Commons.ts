@@ -81,8 +81,7 @@ class Modal
         this.modal.addEventListener("click", event => this.CloseModal(event));
 
         this.inputElement = inputElement;
-        this.inputElement.addEventListener("click", event => this.OpenModal(event));
-        
+        this.inputElement.addEventListener("click", event => this.OpenModal(event));        
     }
 
     OpenModal(event: MouseEvent)

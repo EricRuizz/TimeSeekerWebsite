@@ -1,6 +1,8 @@
 
 :root {
-    
+    --generalPadding: 5px;
+    --generalHalfPadding: 20px;
+    --generalQPadding: 40px;
 }
 
 body {
@@ -22,6 +24,112 @@ body {
 
 
 
+.previewContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 5000px;
+    overflow: hidden;
+    transition: transform 0.1s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transform-origin: center center;
+    cursor: pointer;
+
+    :hover {
+        filter: contrast(75%) brightness(115%);
+    }
+}
+
+.previewCell {
+    margin-top: var(--generalQPadding);
+}
+
+.previewParent {
+    -webkit-perspective: 500px;
+    -moz-perspective: 500px;
+    -o-perspective: 500px;
+    perspective: 500px;
+}
+
+
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 var(--generalPadding);
+}
+
+.column {
+    flex: 33%;
+    max-width: 33%;
+    padding: var(--generalPadding) var(--generalHalfPadding);
+}
+  
+.preview {
+    display: block;
+    max-width: none;
+}
+
+@media screen and (max-width: 1200px) {
+    .column {
+        -ms-flex: 50%;
+        flex: 50%;
+        max-width: 50%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .column {
+        -ms-flex: 100%;
+        flex: 100%;
+        max-width: 100%;
+    }
+}
+
+
+/* AAAAAAAAAAAA  */
+
+.contentContainer {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 10vh 20vw;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.video {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+.textBox {
+    padding: 20px 30px;
+    width: 100%;
+    background-color: rgb(var(--generalBackgroundColor));
+}
+
+/* AAAAAAAAAAAA  */
+
+
+.space {
+    width: 100%;
+    height: 11vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    flex-direction: column;
+}
 
 
 

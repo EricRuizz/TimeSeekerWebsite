@@ -23,25 +23,23 @@ body {
 }
 
 
-/* BBBBBBB */
 
 .previewContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 5000px; /* Ensure 3D space */
+    perspective: 5000px;
     overflow: hidden;
     transition: transform 0.1s ease;
-    transform-style: preserve-3d; /* Enable 3D transforms */
+    transform-style: preserve-3d;
     will-change: transform;
-    transform-origin: center center; /* Rotate from center */
+    transform-origin: center center;
     cursor: pointer;
 
     :hover {
-        filter: contrast(75%) brightness(115%); /* TODO - BETTER BACK HOVER */ 
+        filter: contrast(75%) brightness(115%);
     }
 }
-
 
 .previewCell {
     margin-top: var(--generalQPadding);
@@ -52,10 +50,9 @@ body {
     -moz-perspective: 500px;
     -o-perspective: 500px;
     perspective: 500px;
-
 }
 
-/* AAAAAAA */
+
 
 .row {
     display: flex;
@@ -63,7 +60,6 @@ body {
     padding: 0 var(--generalPadding);
 }
 
-/* Create four equal columns that sits next to each other */
 .column {
     flex: 33%;
     max-width: 33%;
@@ -74,7 +70,7 @@ body {
     display: block;
     max-width: none;
 }
-/* Responsive layout - makes a two column-layout instead of four columns */
+
 @media screen and (max-width: 1200px) {
     .column {
         -ms-flex: 50%;
@@ -82,8 +78,7 @@ body {
         max-width: 50%;
     }
 }
-  
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+
 @media screen and (max-width: 700px) {
     .column {
         -ms-flex: 100%;
@@ -92,7 +87,19 @@ body {
     }
 }
 
-/* AAAAAAA */
+
+
+.space {
+    width: 100%;
+    height: 11vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    flex-direction: column;
+}
+
 
 
 .parallaxBackground-container {
