@@ -10,7 +10,8 @@ gsap.registerPlugin(ScrollTrigger);
 history.replaceState({}, "", "/Art");
 
 
-document.querySelectorAll('.previewCell').forEach(preview => {
+document.addEventListener("DOMContentLoaded", () =>
+{
     gsap.to(".parallaxBackground", {
         y: (document.documentElement.scrollHeight * 0.02).toString() + "vh",
         ease: "none",
@@ -18,32 +19,35 @@ document.querySelectorAll('.previewCell').forEach(preview => {
             scrub: 0,
         }
     });
-
-    const container: HTMLElement = preview.querySelector('.previewContainer')!;
-    const HTMLPreview: HTMLElement = container;
-  
-
-    document.addEventListener('mousemove', e =>
-    {
-        const mouseEvent: MouseEvent = e as MouseEvent;
-        const rect = HTMLPreview.getBoundingClientRect();
-
-        const x = mouseEvent.clientX - rect.left;
-        const y = mouseEvent.clientY - rect.top;
-
-        var percentX = (x / rect.width) - 0.5;  
-        var percentY = (y / rect.height) - 0.5;
-
-        const factor = 2;
-
-        const rotateX = percentY * factor * -1;
-        const rotateY = percentX * factor;
-
-        HTMLPreview.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    
+    document.querySelectorAll('.previewCell').forEach(preview => {
+    
+        const container: HTMLElement = preview.querySelector('.previewContainer')!;
+        const HTMLPreview: HTMLElement = container;
+      
+    
+        document.addEventListener('mousemove', e =>
+        {
+            const mouseEvent: MouseEvent = e as MouseEvent;
+            const rect = HTMLPreview.getBoundingClientRect();
+    
+            const x = mouseEvent.clientX - rect.left;
+            const y = mouseEvent.clientY - rect.top;
+    
+            var percentX = (x / rect.width) - 0.5;  
+            var percentY = (y / rect.height) - 0.5;
+    
+            const factor = 2;
+    
+            const rotateX = percentY * factor * -1;
+            const rotateY = percentX * factor;
+    
+            HTMLPreview.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+    
+        preview.addEventListener('mouseleave', () =>
+        {
+            HTMLPreview.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        });
     });
-
-    preview.addEventListener('mouseleave', () =>
-    {
-        HTMLPreview.style.transform = `rotateX(0deg) rotateY(0deg)`;
-    });
-  });
+});

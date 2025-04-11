@@ -73,26 +73,29 @@ class ImageCarousel
 class Modal
 {
     private modal: HTMLElement;
-    private inputElement: HTMLElement;
+    private inputElements: NodeListOf<HTMLElement>;
 
-    constructor(modal: HTMLElement, inputElement: HTMLElement)
+    constructor(modal: HTMLElement, inputElements: NodeListOf<HTMLElement>)
     {        
         this.modal = modal;
         this.modal.addEventListener("click", event => this.CloseModal(event));
 
-        this.inputElement = inputElement;
-        this.inputElement.addEventListener("click", event => this.OpenModal(event));        
+        this.inputElements = inputElements;
+        this.inputElements.forEach((inputElement) => { inputElement.addEventListener("click", event => this.OpenModal(event)); });
+               
     }
 
     OpenModal(event: MouseEvent)
     {
-        if(this.inputElement == event.target as HTMLElement)
+        this.inputElements.forEach(inputElement =>
         {
-            this.modal.style.display = "block";
-            console.log(document.body.classList);
-            document.body.classList.add("no-scroll");
-            console.log(document.body.classList);
-        }
+            if(inputElement == event.target as HTMLElement)
+            {
+                this.modal.style.display = "block";
+                document.body.classList.add("no-scroll");
+            }
+        });
+        
     }
 
     CloseModal(event: MouseEvent)
@@ -129,5 +132,5 @@ document.addEventListener("DOMContentLoaded", function ()
     imageCarousels = [...document.querySelectorAll(".imageCarousel")].map(imageCarousel => new ImageCarousel(imageCarousel as HTMLElement));
 
     //Modals
-    modals = [...document.querySelectorAll(".modal")].map(modal => new Modal(modal as HTMLElement, modal.parentElement!.querySelector(".modalInteractable")! as HTMLElement));
+    modals = [...document.querySelectorAll(".modal")].map(modal => new Modal(modal as HTMLElement, modal.parentElement!.querySelectorAll(".modalInteractable")! as NodeListOf<HTMLElement>));
 });

@@ -10,6 +10,7 @@
   --textColor: rgb(255, 255, 255);
   --blur: 50px;
   --generalBackgroundColor: 35, 35, 35;
+  --generalDarkBackgroundColor: 20, 20, 20;
   --regularTextSize: 1rem;
   
   scrollbar-color: rgba(128, 128, 128, 0.781) rgb(var(--generalBackgroundColor));
@@ -171,11 +172,11 @@ p.simpleParagraph {
   bottom: -2em;
 }
 
-.bottom-left {
+.left {
   left: 0;
 }
 
-.bottom-right {
+.right {
   right: 0;
 }
 
@@ -190,7 +191,7 @@ p.simpleParagraph {
 .modal {
   display: none;
   position: fixed;
-  z-index: 100;
+  z-index: 20;
   padding: 0%;
   inset: 0;
   width: 100%;

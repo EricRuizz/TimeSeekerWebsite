@@ -1,6 +1,9 @@
 
 :root {
-    
+    --generalPadding: 5px;
+    --generalHalfPadding: 20px;
+    --generalQPadding: 40px;
+    --generalborderRadius: 10px;
 }
 
 body {
@@ -18,10 +21,139 @@ body {
     font-family: Montserrat, Geist, sans-serif;
     font-weight: normal;
     overflow-x: hidden;
+
+    &.no-scroll {
+        overflow: hidden;
+    }
 }
 
 
 
+.column {
+    width: 70vw;
+    gap: 2.5vh;
+    display: flex;
+    flex-wrap: wrap;
+    padding: var(--generalPadding) var(--generalPadding);
+    border-radius: var(--generalborderRadius);
+}
+
+
+/* PREVIEW CELL */
+.previewCell {
+    position: relative;
+    overflow: hidden;
+    border-style: solid;
+    border-color: rgba(var(--generalDarkBackgroundColor), 1);
+    border-width: 5px;
+    padding: var(--generalPadding) var(--generalHalfPadding);
+    background-color: rgba(var(--generalBackgroundColor), 1);
+    border-radius: var(--generalborderRadius);
+    width: 100%;
+    margin-top: 0;
+    transition: color 0.3s ease;
+    cursor: pointer;
+
+    /* TODO make hover BOX */
+
+    :hover {
+        color: rgba(var(--highlightColor), 1);
+    }
+}
+/* PREVIEW CELL */
+
+
+.previewContainer {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    will-change: transform;
+    transform-origin: center center;
+}
+
+.previewParent {
+    width: 100%;
+}
+  
+.preview {
+    display: block;
+    width: 100%;
+}
+
+.previewTitle {
+    font-size: 1.75rem;
+}
+
+.previewContextText {
+    position: absolute;
+    font-size: 1em;
+    white-space: nowrap;
+    position: absolute;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+
+.content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 15vh 20vw;
+
+    cursor: auto;
+    user-select: text;
+    color: var(--textColor) !important;
+    :hover {
+        color: var(--textColor) !important;
+    }
+}
+
+.textBox {
+    padding: 20px 30px;
+    width: 100%;
+    background-color: rgb(var(--generalBackgroundColor), 0.9);
+    border-radius: var(--generalborderRadius);
+}
+
+a {
+    text-decoration: none;
+    color: rgba(var(--highlightColor), 1);
+}
+
+a:hover {
+    color: rgba(var(--generalBackgroundColor), 0.2);
+}
+
+
+
+@media screen and (max-width: 1400px) {
+    .column {
+        width: 85vw;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .previewContextText {
+        opacity: 0;
+    }
+}
+
+
+.space {
+    width: 100%;
+    height: 11vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    flex-direction: column;
+}
 
 
 
