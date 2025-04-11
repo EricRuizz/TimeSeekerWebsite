@@ -113,6 +113,8 @@ var modals: Modal[];
 
 document.addEventListener("DOMContentLoaded", function ()
 {
+    history.replaceState({}, "", document.querySelector('meta[name="page-identifier"]')?.getAttribute("content") || "");
+    
     // Header
     const header = document.querySelector(".header");
     if(header != null)

@@ -4,6 +4,8 @@
     --generalHalfPadding: 20px;
     --generalQPadding: 40px;
     --generalborderRadius: 10px;
+    
+    --selectorSideOffset: -1%;
 }
 
 body {
@@ -42,10 +44,9 @@ body {
 /* PREVIEW CELL */
 .previewCell {
     position: relative;
-    overflow: hidden;
     border-style: solid;
     border-color: rgba(var(--generalDarkBackgroundColor), 1);
-    border-width: 5px;
+    border-width: 7px;
     padding: var(--generalPadding) var(--generalHalfPadding);
     background-color: rgba(var(--generalBackgroundColor), 1);
     border-radius: var(--generalborderRadius);
@@ -55,6 +56,10 @@ body {
     cursor: pointer;
 
     /* TODO make hover BOX */
+    
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
     :hover {
         color: rgba(var(--highlightColor), 1);
@@ -126,7 +131,49 @@ a {
 }
 
 a:hover {
-    color: rgba(var(--generalBackgroundColor), 0.2);
+    color: rgba(var(--highlightColor), 1) !important;
+}
+
+
+.selector {
+    position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.selector-bar {
+    position: absolute;
+    display: flex;
+    z-index: 1;
+    border: 0.15vw solid rgb(var(--highlightColor));
+    background: transparent;
+    opacity: 0;
+    transform-origin: left center;
+    pointer-events: none;
+
+    &.l {
+        border-right: none;
+        left: var(--selectorSideOffset);
+        border-radius: var(--generalborderRadius) 0 0 var(--generalborderRadius);
+    }
+
+    &.r {
+        border-left: none;
+        right: var(--selectorSideOffset);
+        border-radius: 0 var(--generalborderRadius) var(--generalborderRadius) 0;
+    }
+}
+
+.selector-banner {
+    position: absolute;
+    display: flex;
+    width: 120%;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(var(--highlightColor), 0.25) 10%, rgba(var(--highlightColor), 0.25) 90%, rgba(0, 0, 0, 0));
+    z-index: -2;
 }
 
 

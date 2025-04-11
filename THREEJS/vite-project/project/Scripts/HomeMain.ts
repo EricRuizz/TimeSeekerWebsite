@@ -60,8 +60,6 @@ previewStripeTextDictionary = {
 
 document.addEventListener("DOMContentLoaded", () =>
 {
-    history.replaceState({}, "", document.querySelector('meta[name="page-identifier"]')?.getAttribute("content") || "");
-
     //Scroll setup
     if (ScrollTrigger.isTouch === 1)
     {

@@ -105,8 +105,6 @@ const selectorBarWidthCoef = 0.05 as number;
 
 document.addEventListener("DOMContentLoaded", () =>
 {
-    history.replaceState({}, "", document.querySelector('meta[name="page-identifier"]')?.getAttribute("content") || "");
-
     gridCells = [...document.querySelectorAll(".cell")].map(cellElement => new GridCell(cellElement));
 
     gsap.to(".parallaxBackground", {

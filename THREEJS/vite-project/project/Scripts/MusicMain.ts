@@ -7,8 +7,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-history.replaceState({}, "", "/Music");
-
 
 document.addEventListener("DOMContentLoaded", () =>
 {

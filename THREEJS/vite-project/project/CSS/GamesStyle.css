@@ -100,7 +100,7 @@ body {
     position: absolute;
     display: flex;
     width: 120%;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), var(--bannerColor) 10%, var(--bannerColor) 90%, rgba(0, 0, 0, 0));
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(var(--highlightColor), 0.25) 10%, rgba(var(--highlightColor), 0.25) 90%, rgba(0, 0, 0, 0));
     z-index: -2;
 }
 
