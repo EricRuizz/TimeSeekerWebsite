@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () =>
 
     //Header
     document.getElementById("timeseekerdev")?.addEventListener("click", () => { ScrollToSection(0) });
-    document.getElementById("about")?.addEventListener("click", () => { ScrollToSection(1) });
+    document.getElementById("career")?.addEventListener("click", () => { ScrollToSection(1) });
     document.getElementById("contact")?.addEventListener("click", () => { ScrollToSection(sections.length - 1) });
 
     //Page Selector Event class

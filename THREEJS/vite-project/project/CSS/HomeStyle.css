@@ -1,6 +1,7 @@
 
 :root {    
     --preivewCardStripeOffset: 22%;
+    --subtleBlur: 10px;
 }
   
 body {
@@ -11,7 +12,6 @@ body {
   
     min-height: 100vh;
   
-    /*background-color: rgb(var(--generalBackgroundColor));*/
     user-select: none;
     color: white;
     font-family: Montserrat, Geist, sans-serif;
@@ -226,13 +226,13 @@ div.previewCardStripe.bot {
   
 img.previewCardImage {
     display: none;
-    position: fixed; /* Ensures it stays in place, ignoring parent div */
+    position: fixed;
     top: 50%;
     left: 50%;
-    width: 100vw; /* Covers the entire viewport width */
-    height: 100vh; /* Covers the entire viewport height */
-    object-fit: cover; /* Ensures the image fills the screen without stretching */
-    transform: translate(-50%, -50%); /* Centers the image */
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
     z-index: -1;
     pointer-events: none;
 }
@@ -240,29 +240,80 @@ img.previewCardImage {
 .previewCardImage.show {
     display: flex;
 }
-  
-  
-/* ABOUT */
-  
+
+
+/* SECTIONS */
 .section.landing {
-    background-color: rgb(44, 44, 179);
     background: none;
 }
-  
-.section.about.intro {
-    background-color: rgb(31, 78, 78);
-}
-  
+
+/* CAREER */
 .section.about.career {
-    background-color: rgb(65, 100, 77);
+    backdrop-filter: blur(10px);
+    background-color: rgba(var(--generalBackgroundColor), 0.95);
 }
-  
-.section.about.skills {
-    background-color: rgb(158, 157, 93);
+
+.careerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+    height: 100%;
 }
-  
+
+.careerStep {
+    display: flex;
+    flex-direction: row;
+    width: 70vw;
+    gap: 10vw;
+}
+
+.careerLeft {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 5vw;
+}
+
+.careerRight {
+    flex: 1;
+    display: flex;
+}
+
+.careerYear {
+    font-size: 2.5rem;
+    font-weight: bold;
+    width: 10vw;
+    text-align: right;
+}
+
+.careerInfo {
+    width: 15vw;
+}
+
+.careerProject {
+    font-weight: bold;
+}
+
+.careerTitles {
+    opacity: 0.6;
+}
+
+.careerContext {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgb(var(--highlightColor));
+}
+
+.careerDescription {
+
+}
+
+/* CONTACT */
 .section.contact {
-    background-color: rgba(41, 41, 41, 0.384);
+    
 }
 
 .footer {
@@ -273,7 +324,7 @@ img.previewCardImage {
     height: 10%;
 
     display: flex;
-    align-items: center; /* Centers text vertically */
-    justify-content: space-between; /* Pushes text to opposite sides */
-    padding: 0 var(--headerHorizontalMargin); /* Uses margin variable */
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--headerHorizontalMargin);
 }
