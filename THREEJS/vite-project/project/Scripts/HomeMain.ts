@@ -46,9 +46,9 @@ const stripeScrollTextDuration = 20;
 
 var previewStripeTextDictionary: { [key in PageSelectorItemType]: string[] };
 const stripeTextsGame = new Array("Nomad Defender","Hyper Shapes", "Anchored Soul", "The Last Trip") as string[];
-const stripeTextsArt = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
-const stripeTextsMusic = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
-const stripeTextsOthers = new Array("Unnamed Project","Unnamed Project", "Unnamed Project", "Unnamed Project") as string[];
+const stripeTextsArt = new Array("Tribute to Miura","Drowning Memories", "Tribute to Miura", "Drowning Memories") as string[];
+const stripeTextsMusic = new Array("Hyper Shapes OST","Hyper Shapes OST", "Hyper Shapes OST", "Hyper Shapes OST") as string[];
+const stripeTextsOthers = new Array("TimeSeeker website","TimeSeeker website", "TimeSeeker website", "TimeSeeker website") as string[];
 
 previewStripeTextDictionary = {
     [PageSelectorItemType.Games]: stripeTextsGame,
