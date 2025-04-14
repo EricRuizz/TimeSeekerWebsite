@@ -1,0 +1,1 @@
+import{g as t,S as e}from"./Transition-DILjdIIr.js";t.registerPlugin(e);document.addEventListener("DOMContentLoaded",()=>{t.to(".background",{y:(document.documentElement.scrollHeight*.02).toString()+"vh",ease:"none",scrollTrigger:{start:"top top",scrub:0}})});
