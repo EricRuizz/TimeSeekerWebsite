@@ -10,12 +10,13 @@ import WaterRippleSimFS from "../../Shaders/WaterRippleSimFS.glsl";
 import WaterRippleRenderFS from "../../Shaders/WaterRippleRenderFS.glsl";
 import WaterRippleRenderVS from "../../Shaders/WaterRippleRenderVS.glsl";
 
+import logoPath from '../../Textures/TimeSeeker_Logo_White_Transparent.png';
+
 /*
     Base implementation CREDITS:
     "Simple Water Ripple effect" by Polygon on Shadertoy
     Shader adaptation and js implementation by Codegrid
 */
-
 
 
 document.addEventListener("DOMContentLoaded", () =>
@@ -87,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () =>
     simScene.add(simQuad);
     scene.add(renderQuad);
 
-    const logoTexture = new THREE.TextureLoader().load('project/Textures/TimeSeeker_Logo_White_Transparent.png');
+    const logoTexture = new THREE.TextureLoader().load(logoPath);
     logoTexture.minFilter = THREE.LinearFilter;
     logoTexture.magFilter = THREE.LinearFilter;
     logoTexture.format = THREE.RGBAFormat;
