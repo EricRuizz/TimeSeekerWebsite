@@ -20,6 +20,11 @@ export default defineConfig({
         art: resolve(__dirname, 'project/HTML/Art.html'),
         music: resolve(__dirname, 'project/HTML/Music.html'),
         others: resolve(__dirname, 'project/HTML/Others.html'),
+
+        nomadDefender: resolve(__dirname, 'project/HTML/Games/NomadDefender.html'),
+        anchoredSoul: resolve(__dirname, 'project/HTML/Games/AnchoredSoul.html'),
+        theLastTrip: resolve(__dirname, 'project/HTML/Games/TheLastTrip.html'),
+        hyperShapes: resolve(__dirname, 'project/HTML/Games/HyperShapes.html'),
       }
     }
   }
