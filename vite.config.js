@@ -1,7 +1,9 @@
 import vitePluginString from 'vite-plugin-string';
 import topLevelAwait from "vite-plugin-top-level-await";
+import { defineConfig } from 'vite';
 
-export default {
+export default defineConfig({
+  base: process.env.NODE_ENV === 'production' ? '/TimeSeekerWebsite/' : '/',
   plugins: [
     vitePluginString(),
     topLevelAwait({
@@ -12,4 +14,4 @@ export default {
   build: {
     target: 'esnext',
   },
-};
+});
