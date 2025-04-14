@@ -1,4 +1,9 @@
 {
+  "homepage": "https://ericruizz.github.io/TimeSeekerWebsite/",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
   "dependencies": {
     "@tweenjs/tween.js": "^25.0.0",
     "dat.gui": "^0.7.9",
