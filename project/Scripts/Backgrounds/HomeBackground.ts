@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () =>
     simScene.add(simQuad);
     scene.add(renderQuad);
 
-    const logoTexture = new THREE.TextureLoader().load('/project/Textures/TimeSeeker_Logo_White_Transparent.png');
+    const logoTexture = new THREE.TextureLoader().load('project/Textures/TimeSeeker_Logo_White_Transparent.png');
     logoTexture.minFilter = THREE.LinearFilter;
     logoTexture.magFilter = THREE.LinearFilter;
     logoTexture.format = THREE.RGBAFormat;
