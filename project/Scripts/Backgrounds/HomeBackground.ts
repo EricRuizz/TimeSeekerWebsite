@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
 
 import WaterRippleSimVS from "../../Shaders/WaterRippleSimVS.glsl";

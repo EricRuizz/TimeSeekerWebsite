@@ -8,8 +8,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-history.replaceState({}, "", "/Games");
-
 
 class GridCell
 {

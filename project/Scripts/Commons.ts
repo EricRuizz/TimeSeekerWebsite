@@ -113,7 +113,16 @@ var modals: Modal[];
 
 document.addEventListener("DOMContentLoaded", function ()
 {
-    history.replaceState({}, "", document.querySelector('meta[name="page-identifier"]')?.getAttribute("content") || "");
+    /*
+    const basePath = process.env.NODE_ENV === 'production' ? '/TimeSeekerWebsite/' : '/';
+    const pageIdentifier = document.querySelector('meta[name="page-identifier"]')?.getAttribute("content");
+
+    if (pageIdentifier)
+        {
+        history.replaceState({}, "", `${basePath}${pageIdentifier}`);
+    }
+    */
+
     
     // Header
     const header = document.querySelector(".header");
