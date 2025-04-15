@@ -1,6 +1,8 @@
 import '/style.css';
 import '/project/CSS/HomeStyle.css';
 
+import { IsHardwareAccelerationOff } from "./Utils";
+
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
@@ -60,31 +62,34 @@ previewStripeTextDictionary = {
 
 document.addEventListener("DOMContentLoaded", () =>
 {
-    //Scroll setup
-    if (ScrollTrigger.isTouch === 1)
+    if(!IsHardwareAccelerationOff())
     {
-        observer = ScrollTrigger.normalizeScroll(true);
-    }
-    //On touch devices, ignore touchstart events if there's an in-progress tween so that touch-scrolling doesn't interrupt and make it wonky
-    document.addEventListener("touchstart", e => {
-        if (scrollTween) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
+        //Scroll setup
+        if (ScrollTrigger.isTouch === 1)
+        {
+            observer = ScrollTrigger.normalizeScroll(true);
         }
-    }, { capture: true, passive: false })
-
-    //Section scroll
-    sections = document.querySelectorAll(".section");
+        //On touch devices, ignore touchstart events if there's an in-progress tween so that touch-scrolling doesn't interrupt and make it wonky
+        document.addEventListener("touchstart", e => {
+            if (scrollTween) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            }
+        }, { capture: true, passive: false })
     
-    sections.forEach((section, i) =>
-    {
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top bottom",
-          end: "+=199%",
-          onToggle: self => self.isActive && !scrollTween && ScrollToSection(i)
+        //Section scroll
+        sections = document.querySelectorAll(".section");
+        
+        sections.forEach((section, i) =>
+        {
+            ScrollTrigger.create({
+              trigger: section,
+              start: "top bottom",
+              end: "+=199%",
+              onToggle: self => self.isActive && !scrollTween && ScrollToSection(i)
+            });
         });
-    });
+    }
 
     //Header
     document.getElementById("timeseekerdev")?.addEventListener("click", () => { ScrollToSection(0) });

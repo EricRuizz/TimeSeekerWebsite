@@ -203,19 +203,4 @@ function LowPerformanceBackground(): void
     centerImg.style.transform = "translate(-50%, -50%)";
     centerImg.style.zIndex = "-1";
     document.body.appendChild(centerImg);
-    
-    const topText = document.createElement("div");
-    topText.style.backgroundColor = "red";
-    topText.style.width = "100%";
-    topText.innerText = "Turn ON Hardware Acceleration for a better experience";
-    topText.style.textAlign = "center";
-    topText.style.position = "fixed";
-    topText.style.top = "20px";
-    topText.style.left = "50%";
-    topText.style.transform = "translateX(-50%)";
-    topText.style.fontSize = "1.5rem";
-    topText.style.fontWeight = "bold";
-    topText.style.color = "black";
-    document.body.appendChild(topText);
-
 }

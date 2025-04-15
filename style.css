@@ -17,6 +17,11 @@
   scrollbar-width: thin;
 }
 
+.disable-blur {
+  /*filter: none !important;*/
+  backdrop-filter: none !important;
+}
+
 .contentH2Title {
   font-size: 1.75rem;
   color: rgb(var(--highlightColor));

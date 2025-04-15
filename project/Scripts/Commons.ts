@@ -1,5 +1,7 @@
 import '/style.css';
 
+import { IsHardwareAccelerationOff } from './Utils';
+
 class ImageCarousel
 {
     private imageCarousel: HTMLElement;
@@ -123,6 +125,10 @@ document.addEventListener("DOMContentLoaded", function ()
     }
     */
 
+    if(IsHardwareAccelerationOff())
+    {
+        LowPerformanceBackground();
+    }
     
     // Header
     const header = document.querySelector(".header");
@@ -144,4 +150,33 @@ document.addEventListener("DOMContentLoaded", function ()
 
     //Modals
     modals = [...document.querySelectorAll(".modal")].map(modal => new Modal(modal as HTMLElement, modal.parentElement!.querySelectorAll(".modalInteractable")! as NodeListOf<HTMLElement>));
+
+    //Enhance performance for no Hardware Acceleration
+    if(IsHardwareAccelerationOff())
+    {
+        document.querySelectorAll<HTMLElement>("*").forEach(el => {
+            const style = getComputedStyle(el);
+            
+            if (style.filter.includes("blur") || style.backdropFilter.includes("blur")) {
+              el.classList.add("disable-blur");
+            }
+        });
+    }
 });
+
+function LowPerformanceBackground(): void
+{
+    const topText = document.createElement("div");
+    topText.style.backgroundColor = "red";
+    topText.style.width = "100%";
+    topText.innerText = "Please turn ON Hardware Acceleration for a better experience";
+    topText.style.textAlign = "center";
+    topText.style.position = "fixed";
+    topText.style.top = "14px";
+    topText.style.left = "50%";
+    topText.style.transform = "translateX(-50%)";
+    topText.style.fontSize = "1.5rem";
+    topText.style.fontWeight = "bold";
+    topText.style.color = "black";
+    document.body.appendChild(topText);
+}
