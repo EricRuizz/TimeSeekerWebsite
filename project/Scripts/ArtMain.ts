@@ -1,6 +1,8 @@
 import '/style.css';
 import '/project/CSS/ArtStyle.css';
 
+import { IsHardwareAccelerationOff } from "./Utils";
+
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -10,13 +12,17 @@ gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener("DOMContentLoaded", () =>
 {
-    gsap.to(".parallaxBackground", {
-        y: (document.documentElement.scrollHeight * 0.02).toString() + "vh",
-        ease: "none",
-        scrollTrigger: {
-            scrub: 0,
-        }
-    });
+    if(!IsHardwareAccelerationOff())
+    {
+        gsap.to(".background", {
+            y: (document.documentElement.scrollHeight * 0.02).toString() + "vh",
+            ease: "none",
+            scrollTrigger: {
+                start: "top top",
+                scrub: 0,
+            },
+        });
+    }
     
     document.querySelectorAll('.previewCell').forEach(preview => {
     

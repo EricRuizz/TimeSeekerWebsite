@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+import { IsHardwareAccelerationOff } from "../Utils";
+
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -12,6 +14,7 @@ import WaterRippleRenderVS from "../../Shaders/WaterRippleRenderVS.glsl";
 
 import logoPath from '../../Textures/TimeSeeker_Logo_White_Transparent.png';
 
+
 /*
     Base implementation CREDITS:
     "Simple Water Ripple effect" by Polygon on Shadertoy
@@ -19,8 +22,16 @@ import logoPath from '../../Textures/TimeSeeker_Logo_White_Transparent.png';
 */
 
 
-document.addEventListener("DOMContentLoaded", () =>
+
+
+document.addEventListener("DOMContentLoaded", () => 
 {
+    if(IsHardwareAccelerationOff())
+    {
+        LowPerformanceBackground();
+        return;
+    }
+
     const scene = new THREE.Scene();
     const simScene = new THREE.Scene();
 
@@ -180,3 +191,31 @@ document.addEventListener("DOMContentLoaded", () =>
 
     animate();
 });
+
+function LowPerformanceBackground(): void
+{
+    const centerImg = document.createElement("img");
+    centerImg.src = logoPath;
+    centerImg.style.position = "fixed";
+    centerImg.style.height = "50%";
+    centerImg.style.top = "50%";
+    centerImg.style.left = "50%";
+    centerImg.style.transform = "translate(-50%, -50%)";
+    centerImg.style.zIndex = "-1";
+    document.body.appendChild(centerImg);
+    
+    const topText = document.createElement("div");
+    topText.style.backgroundColor = "red";
+    topText.style.width = "100%";
+    topText.innerText = "Turn ON Hardware Acceleration for a better experience";
+    topText.style.textAlign = "center";
+    topText.style.position = "fixed";
+    topText.style.top = "20px";
+    topText.style.left = "50%";
+    topText.style.transform = "translateX(-50%)";
+    topText.style.fontSize = "1.5rem";
+    topText.style.fontWeight = "bold";
+    topText.style.color = "black";
+    document.body.appendChild(topText);
+
+}

@@ -8,7 +8,7 @@ const startEachDuration =   0.05 as number;
 const revealDuration =      0.35 as number;
 const revealEachDuration =  0.05 as number;
 
-document.addEventListener("DOMContentLoaded", () =>
+window.addEventListener("load", () =>
 {
     document.querySelectorAll("a").forEach((link) => 
     {

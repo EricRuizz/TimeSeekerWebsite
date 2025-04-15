@@ -18,6 +18,13 @@ body {
     font-weight: normal;
     overflow-x: hidden;
 }
+
+.loadingScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: black;
+}
   
 .section {
     width: 100%;

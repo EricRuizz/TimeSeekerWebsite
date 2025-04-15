@@ -1,6 +1,8 @@
 import '/style.css';
 import '/project/CSS/GamesStyle.css';
 
+import { IsHardwareAccelerationOff } from "./Utils";
+
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -103,13 +105,17 @@ const selectorBarWidthCoef = 0.05 as number;
 
 document.addEventListener("DOMContentLoaded", () =>
 {
+    if(!IsHardwareAccelerationOff())
+    {
+        gsap.to(".background", {
+            y: (document.documentElement.scrollHeight * 0.02).toString() + "vh",
+            ease: "none",
+            scrollTrigger: {
+                start: "top top",
+                scrub: 0,
+            },
+        });
+    }
+    
     gridCells = [...document.querySelectorAll(".cell")].map(cellElement => new GridCell(cellElement));
-
-    gsap.to(".parallaxBackground", {
-        y: (document.documentElement.scrollHeight * 0.02).toString() + "vh",
-        ease: "none",
-        scrollTrigger: {
-            scrub: 0,
-        }
-    });
 });

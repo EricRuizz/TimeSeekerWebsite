@@ -1,6 +1,8 @@
 import '/style.css';
 import '/project/CSS/OthersStyle.css';
 
+import { IsHardwareAccelerationOff } from "./Utils";
+
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -96,13 +98,17 @@ const selectorBarWidthCoef = 0.05 as number;
 
 document.addEventListener("DOMContentLoaded", () =>
 {
-    cells = [...document.querySelectorAll(".previewCell")].map(cellElement => new Cell(cellElement));
+    if(!IsHardwareAccelerationOff())
+    {
+        gsap.to(".background", {
+            y: (document.documentElement.scrollHeight * 0.02).toString() + "vh",
+            ease: "none",
+            scrollTrigger: {
+                start: "top top",
+                scrub: 0,
+            },
+        });
+    }
 
-    gsap.to(".parallaxBackground", {
-        y: (document.documentElement.scrollHeight * 0.02).toString() + "vh",
-        ease: "none",
-        scrollTrigger: {
-            scrub: 0,
-        }
-    });
+    cells = [...document.querySelectorAll(".previewCell")].map(cellElement => new Cell(cellElement));
 });
