@@ -67,7 +67,7 @@ export default class BreathPage extends APage
 
     DoEnter()
     {
-      history.replaceState({}, "", "/Breath");
+      //history.replaceState({}, "", "/Breath");
 
       this.EAApertureUp.start();
       this.contrastEnterTween.start();
@@ -75,7 +75,11 @@ export default class BreathPage extends APage
 
     DoExit()
     {
-      window.location.href = 'project/pages/home.html';
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "/project/HTML/Others.html";
+      }
     }
 
 
@@ -198,7 +202,7 @@ export default class BreathPage extends APage
     async InitMoon()
     {
       const moonGeometry = new THREE.SphereGeometry(10, 30, 30);
-      const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('./project/textures/MoonTexture.jpg') });
+      const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('../textures/MoonTexture.jpg') });
       this.moon = new THREE.Mesh(moonGeometry, moonMaterial);
       this.moon.position.set(0, 150, 200);
       this.moon.rotateX(THREE.MathUtils.degToRad(-40));
@@ -210,7 +214,7 @@ export default class BreathPage extends APage
     async InitSkybox()
     {
       const skyboxGeometry = new THREE.SphereGeometry(500, 32, 32);
-      const skyboxMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('./project/textures/NightSkyTexture_Dark.png'), side: THREE.BackSide });
+      const skyboxMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('../textures/NightSkyTexture_Dark.png'), side: THREE.BackSide });
       this.skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
       this.skybox.position.set(0, 0, 0);
       this.skybox.rotation.y = 180;
@@ -341,7 +345,7 @@ export default class BreathPage extends APage
           displacementScale: { value: 15 },
           displacementStrength: { value: 0.01 },
         },
-        map: new THREE.TextureLoader().load('./project/textures/HoldToEnter.png'),
+        map: new THREE.TextureLoader().load('../textures/HoldToEnter.png'),
       });
       
       this.popupText = new THREE.Mesh(geometry, material);

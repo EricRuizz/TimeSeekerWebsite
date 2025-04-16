@@ -19,7 +19,9 @@
   },
   "dependencies": {
     "gh-pages": "^6.3.0",
+    "gl-noise": "^1.6.1",
     "gsap": "^3.12.7",
-    "three": "^0.175.0"
+    "three": "^0.175.0",
+    "three-custom-shader-material": "^6.3.5"
   }
 }

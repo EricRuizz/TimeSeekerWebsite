@@ -1,0 +1,24 @@
+* {
+    pointer-events: none;
+    cursor: none;
+}
+
+canvas{
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+  
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #000000;
+}
+
+canvas {
+    cursor: none;
+}
+  
+main {
+    position: absolute;
+}
