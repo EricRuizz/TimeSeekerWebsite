@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import vitePluginString from 'vite-plugin-string';
 import topLevelAwait from 'vite-plugin-top-level-await';
-import BreathPage from './project_BreathPage/scripts/APage/BreathPage';
 
 export default defineConfig({
   plugins: [
