@@ -1,0 +1,1 @@
+import"./style-Cj2iKNod.js";import{g as e,S as t,I as r}from"./Transition-mtAMzSHq.js";e.registerPlugin(t);document.addEventListener("DOMContentLoaded",()=>{r()||e.to(".background",{y:(document.documentElement.scrollHeight*.02).toString()+"vh",ease:"none",scrollTrigger:{start:"top top",scrub:0}})});

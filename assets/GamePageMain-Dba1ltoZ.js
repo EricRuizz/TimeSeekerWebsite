@@ -1,1 +1,0 @@
-import{g as e,S as t,I as r}from"./Transition-Dy3AUP3f.js";e.registerPlugin(t);document.addEventListener("DOMContentLoaded",()=>{r()||e.to(".background",{y:(document.documentElement.scrollHeight*.02).toString()+"vh",ease:"none",scrollTrigger:{start:"top top",scrub:0}})});
