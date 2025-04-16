@@ -52,6 +52,14 @@ document.addEventListener("DOMContentLoaded", () =>
         });
     }
 
+    window.addEventListener("pageshow", (event) => {
+        if (event.persisted) {
+            RevealTransition().then(() => {
+                gsap.set(blockClass, { visibility: "hidden" });
+            });
+        }
+    });
+
     function RevealTransition()
     {
         return new Promise((Resolve) =>
