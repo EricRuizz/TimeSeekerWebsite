@@ -33,6 +33,10 @@ import GerstnerFS from '../../shaders/GerstnerFragment.glsl';
 import PopupTextVS from '../../shaders/PopupTextVertex.glsl';
 import PopupTextFS from '../../shaders/PopupTextFragment.glsl';
 
+import moonPath from '../../textures/MoonTexture.jpg';
+import skyPath from '../../textures/NightSkyTexture_Dark.png';
+import holdToEnterPath from '../../textures/HoldToEnter.png';
+
 export default class BreathPage extends APage
 {
     constructor(scene, camera, clock, composer)
@@ -202,7 +206,7 @@ export default class BreathPage extends APage
     async InitMoon()
     {
       const moonGeometry = new THREE.SphereGeometry(10, 30, 30);
-      const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('../textures/MoonTexture.jpg') });
+      const moonMaterial = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(moonPath) });
       this.moon = new THREE.Mesh(moonGeometry, moonMaterial);
       this.moon.position.set(0, 150, 200);
       this.moon.rotateX(THREE.MathUtils.degToRad(-40));
@@ -214,7 +218,7 @@ export default class BreathPage extends APage
     async InitSkybox()
     {
       const skyboxGeometry = new THREE.SphereGeometry(500, 32, 32);
-      const skyboxMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('../textures/NightSkyTexture_Dark.png'), side: THREE.BackSide });
+      const skyboxMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(skyPath), side: THREE.BackSide });
       this.skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
       this.skybox.position.set(0, 0, 0);
       this.skybox.rotation.y = 180;
@@ -345,7 +349,7 @@ export default class BreathPage extends APage
           displacementScale: { value: 15 },
           displacementStrength: { value: 0.01 },
         },
-        map: new THREE.TextureLoader().load('../textures/HoldToEnter.png'),
+        map: new THREE.TextureLoader().load(holdToEnterPath),
       });
       
       this.popupText = new THREE.Mesh(geometry, material);
