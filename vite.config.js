@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import vitePluginString from 'vite-plugin-string';
 import topLevelAwait from 'vite-plugin-top-level-await';
+import BreathPage from './project_BreathPage/scripts/APage/BreathPage';
 
 export default defineConfig({
   plugins: [
@@ -25,6 +26,8 @@ export default defineConfig({
         anchoredSoul: resolve(__dirname, 'project/HTML/Games/AnchoredSoul.html'),
         theLastTrip: resolve(__dirname, 'project/HTML/Games/TheLastTrip.html'),
         hyperShapes: resolve(__dirname, 'project/HTML/Games/HyperShapes.html'),
+
+        oldBreathPage: resolve(__dirname, 'project_BreathPage/pages/home.html'),
       }
     }
   }
